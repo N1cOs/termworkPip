@@ -23,11 +23,6 @@ create table olympiad (
   serial_number varchar(10) unique
 );
 
-create table speciality_description (
-  code_okso   varchar(8) primary key,
-  description text
-);
-
 create table college (
   id           serial primary key,
   name         varchar(40) not null,
@@ -40,7 +35,7 @@ create table speciality (
   id         serial primary key,
   id_college int references college,
   name       varchar(50) not null,
-  code_okso  varchar(8)  not null references speciality_description
+  code_okso  varchar(8)  not null
 );
 
 create table speciality_student (
@@ -73,7 +68,8 @@ create table worker_ac (
 create table messages (
   id_student int references student on delete cascade on update cascade,
   id_worker  int references worker_ac on update cascade,
-  message    text not null
+  message    text not null,
+  date timestamp not null
 );
 
 create table exam (
