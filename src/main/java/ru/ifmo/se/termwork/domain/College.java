@@ -23,5 +23,5 @@ public class College {
     private String description;
 
     @OneToMany(mappedBy = "college", fetch = FetchType.EAGER)
-    private Set<Worker> workers;
+    private Set<Speciality> specialities;
 }

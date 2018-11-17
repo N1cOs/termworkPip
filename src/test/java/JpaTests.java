@@ -1,4 +1,3 @@
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,8 +5,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.domain.College;
+import ru.ifmo.se.termwork.domain.Speciality;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.repository.CollegeRepository;
+import ru.ifmo.se.termwork.repository.SpecialityRepository;
 import ru.ifmo.se.termwork.repository.StudentRepository;
 
 import java.sql.Date;
@@ -20,6 +21,9 @@ public class JpaTests {
 
     @Autowired
     private CollegeRepository collegeRepository;
+
+    @Autowired
+    private SpecialityRepository specialityRepository;
 
     @Test
     public void testStudent(){
@@ -40,7 +44,8 @@ public class JpaTests {
     @Test
     public void testCollege(){
         College itmo = collegeRepository.findById(1).get();
-        System.out.println(itmo.getWorkers());
+        System.out.println(itmo.getSpecialities());
+        System.out.println(itmo.getName());
 
         College msu = new College();
         msu.setName("Moscow State University");
@@ -50,5 +55,14 @@ public class JpaTests {
 
         College save = collegeRepository.save(msu);
         System.out.println(save);
+    }
+
+    @Test
+    public void testSpeciality(){
+        Speciality speciality = new Speciality();
+        speciality.setCollege(collegeRepository.getOne(1));
+        speciality.setName("KT");
+        speciality.setOkso("09.03.00");
+        specialityRepository.save(speciality);
     }
 }
