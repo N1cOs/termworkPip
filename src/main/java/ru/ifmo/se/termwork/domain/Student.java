@@ -3,7 +3,6 @@ package ru.ifmo.se.termwork.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import ru.ifmo.se.termwork.domain.keys.ExamId;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -34,6 +33,6 @@ public class Student {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "id.student", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "id.student", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Exam> exams;
 }

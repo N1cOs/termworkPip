@@ -3,7 +3,6 @@ package ru.ifmo.se.termwork.domain.keys;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.ifmo.se.termwork.domain.Exam;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.domain.Subject;
 

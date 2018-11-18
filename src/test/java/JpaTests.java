@@ -4,20 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
-import ru.ifmo.se.termwork.domain.*;
-import ru.ifmo.se.termwork.domain.keys.ExamId;
+import ru.ifmo.se.termwork.domain.College;
+import ru.ifmo.se.termwork.domain.Speciality;
+import ru.ifmo.se.termwork.domain.Student;
+import ru.ifmo.se.termwork.domain.Subject;
 import ru.ifmo.se.termwork.repository.CollegeRepository;
 import ru.ifmo.se.termwork.repository.SpecialityRepository;
 import ru.ifmo.se.termwork.repository.StudentRepository;
 import ru.ifmo.se.termwork.repository.SubjectRepository;
 
+import javax.transaction.Transactional;
 import java.sql.Date;
-import java.util.Set;
 
+@Transactional
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {JpaConfig.class})
 public class JpaTests {
-
 
     @Autowired
     private StudentRepository studentRepository;
@@ -75,15 +77,10 @@ public class JpaTests {
 
     @Test
     public void testExams(){
-        Student ivan = studentRepository.findById(1).get();
         Subject english = subjectRepository.findByNameIgnoreCase("english");
-
-
-        ExamId englishId = new ExamId();
-        englishId.setSubject(english);
-        englishId.setStudent(ivan);
-        Exam exam = new Exam(englishId, 60);
-
-
+        studentRepository.saveExam(2, english.getId(), 100);
+        studentRepository.updateExam(2, english.getId(), 80);
+        Student student = studentRepository.findById(2).get();
+        student.getExams().forEach(n -> System.out.println(n.getScore()));
     }
 }
