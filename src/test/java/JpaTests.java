@@ -3,20 +3,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.Assert;
 import ru.ifmo.se.termwork.config.JpaConfig;
-import ru.ifmo.se.termwork.domain.College;
-import ru.ifmo.se.termwork.domain.Speciality;
-import ru.ifmo.se.termwork.domain.Student;
-import ru.ifmo.se.termwork.domain.Subject;
-import ru.ifmo.se.termwork.repository.CollegeRepository;
-import ru.ifmo.se.termwork.repository.SpecialityRepository;
-import ru.ifmo.se.termwork.repository.StudentRepository;
-import ru.ifmo.se.termwork.repository.SubjectRepository;
+import ru.ifmo.se.termwork.domain.*;
+import ru.ifmo.se.termwork.repository.*;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
-
-@Transactional
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {JpaConfig.class})
 public class JpaTests {
@@ -32,6 +25,9 @@ public class JpaTests {
 
     @Autowired
     private SubjectRepository subjectRepository;
+
+    @Autowired
+    private OlympiadRepository olympiadRepository;
 
     @Test
     public void testStudent(){
@@ -82,5 +78,21 @@ public class JpaTests {
         studentRepository.updateExam(2, english.getId(), 80);
         Student student = studentRepository.findById(2).get();
         student.getExams().forEach(n -> System.out.println(n.getScore()));
+    }
+
+    @Test
+    public void testOlympiad(){
+        Olympiad olympiad = new Olympiad();
+        olympiad.setLevel(1);
+        olympiad.setSubject(subjectRepository.findByNameIgnoreCase("english"));
+        olympiad.setName("VOSH");
+        olympiad.setSerialNumber("900 764584");
+//        olympiadRepository.save(olympiad);
+        studentRepository.findById(4).get().getOlympiads().add(olympiad);
+
+
+
+//        Olympiad olympiad1 = olympiadRepository.findById(4).get();
+//        System.out.println(olympiad1.getName());
     }
 }

@@ -35,4 +35,12 @@ public class Student {
     @ToString.Exclude
     @OneToMany(mappedBy = "id.student", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Exam> exams;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "student_olympiad",
+            joinColumns = {@JoinColumn(name = "id_student")},
+            inverseJoinColumns = {@JoinColumn(name = "id_olympiad")}
+    )
+    private Set<Olympiad> olympiads;
 }
