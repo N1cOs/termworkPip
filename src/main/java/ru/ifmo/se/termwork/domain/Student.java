@@ -1,9 +1,13 @@
 package ru.ifmo.se.termwork.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import ru.ifmo.se.termwork.domain.keys.ExamId;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Set;
 
 @Entity
 @Data
@@ -28,4 +32,8 @@ public class Student {
     @Column(name = "serial_number")
     private String serialNumber;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "id.student", fetch = FetchType.EAGER)
+    private Set<Exam> exams;
 }

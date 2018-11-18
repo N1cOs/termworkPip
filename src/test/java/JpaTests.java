@@ -4,18 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
-import ru.ifmo.se.termwork.domain.College;
-import ru.ifmo.se.termwork.domain.Speciality;
-import ru.ifmo.se.termwork.domain.Student;
+import ru.ifmo.se.termwork.domain.*;
+import ru.ifmo.se.termwork.domain.keys.ExamId;
 import ru.ifmo.se.termwork.repository.CollegeRepository;
 import ru.ifmo.se.termwork.repository.SpecialityRepository;
 import ru.ifmo.se.termwork.repository.StudentRepository;
+import ru.ifmo.se.termwork.repository.SubjectRepository;
 
 import java.sql.Date;
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {JpaConfig.class})
 public class JpaTests {
+
+
     @Autowired
     private StudentRepository studentRepository;
 
@@ -24,6 +27,9 @@ public class JpaTests {
 
     @Autowired
     private SpecialityRepository specialityRepository;
+
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     @Test
     public void testStudent(){
@@ -52,9 +58,7 @@ public class JpaTests {
         msu.setAbbreviation("MSU");
         msu.setCity("Moscow");
         msu.setDescription("lo lo la lo");
-
-        College save = collegeRepository.save(msu);
-        System.out.println(save);
+        collegeRepository.save(msu);
     }
 
     @Test
@@ -64,5 +68,22 @@ public class JpaTests {
         speciality.setName("KT");
         speciality.setOkso("09.03.00");
         specialityRepository.save(speciality);
+
+        System.out.println(specialityRepository.findById(1).get());
+
+    }
+
+    @Test
+    public void testExams(){
+        Student ivan = studentRepository.findById(1).get();
+        Subject english = subjectRepository.findByNameIgnoreCase("english");
+
+
+        ExamId englishId = new ExamId();
+        englishId.setSubject(english);
+        englishId.setStudent(ivan);
+        Exam exam = new Exam(englishId, 60);
+
+
     }
 }
