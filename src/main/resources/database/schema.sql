@@ -96,3 +96,9 @@ create table per_ach_student (
   id_student    int references student on delete cascade on update cascade,
   constraint unique_ach unique (id_achivement, id_student)
 );
+
+create table student_olympiad(
+  id_student int references student on delete cascade on update cascade,
+  id_olympiad int references olympiad on delete cascade on update cascade,
+  constraint unique_olymp unique (id_student, id_olympiad)
+);
