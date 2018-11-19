@@ -18,7 +18,7 @@ create table subject (
 create table olympiad (
   id            serial primary key,
   id_subj       int references subject (id),
-  name          varchar(50) not null unique,
+  name          varchar(50) not null,
   level         int not null check (level >= 1 and level <= 3),
   serial_number varchar(10) unique
 );
