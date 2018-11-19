@@ -10,6 +10,7 @@ import ru.ifmo.se.termwork.repository.*;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
+
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {JpaConfig.class})
 public class JpaTests {
@@ -74,25 +75,18 @@ public class JpaTests {
     @Test
     public void testExams(){
         Subject english = subjectRepository.findByNameIgnoreCase("english");
-        studentRepository.saveExam(2, english.getId(), 100);
+        studentRepository.addExam(2, english.getId(), 100);
         studentRepository.updateExam(2, english.getId(), 80);
         Student student = studentRepository.findById(2).get();
         student.getExams().forEach(n -> System.out.println(n.getScore()));
     }
 
+
     @Test
+    @Transactional
     public void testOlympiad(){
-        Olympiad olympiad = new Olympiad();
-        olympiad.setLevel(1);
-        olympiad.setSubject(subjectRepository.findByNameIgnoreCase("english"));
-        olympiad.setName("VOSH");
-        olympiad.setSerialNumber("900 764584");
-//        olympiadRepository.save(olympiad);
-        studentRepository.findById(4).get().getOlympiads().add(olympiad);
-
-
-
-//        Olympiad olympiad1 = olympiadRepository.findById(4).get();
-//        System.out.println(olympiad1.getName());
+        studentRepository.addOlympiad(4, 7);
     }
+
+
 }

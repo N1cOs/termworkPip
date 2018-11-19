@@ -3,7 +3,6 @@ package ru.ifmo.se.termwork.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Data

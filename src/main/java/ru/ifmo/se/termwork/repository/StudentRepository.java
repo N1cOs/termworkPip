@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import ru.ifmo.se.termwork.domain.Student;
 
+import javax.transaction.Transactional;
+
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Modifying
     @Query(value = "insert into exam values (?1, ?2, ?3)", nativeQuery = true)
@@ -18,5 +20,14 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Modifying
     @Query(value = "delete from exam where id_student = ?1 and id_sudj = ?2", nativeQuery = true)
     void deleteExam(Integer studentId, Integer subjectId);
+
+    @Modifying
+    @Query(value = "insert into student_olympiad values (?1, ?2)", nativeQuery = true)
+    void addOlympiad(Integer studentId, Integer olympiadId);
+
+    @Modifying
+    @Query(value = "delete from student_olympiad where id_student = ?1 and id_olympiad = ?2",
+            nativeQuery = true)
+    void deleteOlympiad(Integer studentId, Integer olympiadId);
 
 }

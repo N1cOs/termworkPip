@@ -33,9 +33,10 @@ public class Student {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "id.student", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "id.student", fetch = FetchType.EAGER)
     private Set<Exam> exams;
 
+    @ToString.Exclude
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "student_olympiad",
