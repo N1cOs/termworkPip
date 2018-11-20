@@ -96,5 +96,11 @@ public class JpaTests {
         System.out.println(ratings);
     }
 
+    @Test
+    public void testAch(){
+        Student student = studentRepository.findById(1).get();
+        System.out.println(student.getAchievements());
+    }
+
 
 }

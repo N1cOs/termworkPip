@@ -41,8 +41,19 @@ public class Student {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "student_olympiad",
-            joinColumns = {@JoinColumn(name = "id_student")},
-            inverseJoinColumns = {@JoinColumn(name = "id_olympiad")}
+            joinColumns = @JoinColumn(name = "id_student"),
+            inverseJoinColumns = @JoinColumn(name = "id_olympiad")
     )
     private Set<Olympiad> olympiads;
+
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "ach_student",
+            joinColumns = @JoinColumn(name = "id_student"),
+            inverseJoinColumns = @JoinColumn(name = "id_achievement")
+    )
+    private Set<Achievement> achievements;
 }
