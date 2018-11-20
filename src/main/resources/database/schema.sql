@@ -79,20 +79,20 @@ create table exam (
   constraint unique_exam unique (id_student, id_subj)
 );
 
-create table personal_achieves (
+create table achievement (
   id   serial primary key,
   name varchar(30) not null unique
 );
 
-create table per_ach_college (
+create table ach_college (
   id_college     int references college on delete cascade on update cascade,
-  id_achievement int references personal_achieves on delete cascade on update cascade,
+  id_achievement int references achievement on delete cascade on update cascade,
   score          int not null check (score <= 10 and score > 0),
   constraint unique_ach unique (id_college, id_achievement)
 );
 
-create table per_ach_student (
-  id_achivement int references personal_achieves on delete cascade on update cascade,
+create table ach_student (
+  id_achivement int references achievement on delete cascade on update cascade,
   id_student    int references student on delete cascade on update cascade,
   constraint unique_ach unique (id_achivement, id_student)
 );
