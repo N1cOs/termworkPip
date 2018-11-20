@@ -21,8 +21,4 @@ public class RatingId implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_student")
     private Student student;
-
-    @ManyToOne
-    @JoinColumn(name = "id_olymp")
-    private Olympiad olympiad;
 }

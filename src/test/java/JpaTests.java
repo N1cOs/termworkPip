@@ -10,6 +10,7 @@ import ru.ifmo.se.termwork.repository.*;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {JpaConfig.class})
@@ -86,6 +87,13 @@ public class JpaTests {
     @Transactional
     public void testOlympiad(){
         studentRepository.addOlympiad(4, 7);
+    }
+
+    @Test
+    public void testRating(){
+        Speciality vt = specialityRepository.findById(1).get();
+        Set<Rating> ratings = vt.getRatings();
+        System.out.println(ratings);
     }
 
 

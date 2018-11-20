@@ -36,6 +36,7 @@ public class Student {
     @OneToMany(mappedBy = "id.student", fetch = FetchType.EAGER)
     private Set<Exam> exams;
 
+    @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
