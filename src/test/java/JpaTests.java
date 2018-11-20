@@ -31,6 +31,9 @@ public class JpaTests {
     @Autowired
     private OlympiadRepository olympiadRepository;
 
+    @Autowired
+    private AchievementRepository achievementRepository;
+
     @Test
     public void testStudent(){
         Student student = studentRepository.findById(1).get();
@@ -98,8 +101,10 @@ public class JpaTests {
 
     @Test
     public void testAch(){
-        Student student = studentRepository.findById(1).get();
-        System.out.println(student.getAchievements());
+        Student student = studentRepository.findById(5).get();
+        Achievement achievement = achievementRepository.findById(1).get();
+        student.getAchievements().add(achievement);
+
     }
 
 
