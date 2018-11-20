@@ -92,9 +92,9 @@ create table ach_college (
 );
 
 create table ach_student (
-  id_achivement int references achievement on delete cascade on update cascade,
+  id_achievement int references achievement on delete cascade on update cascade,
   id_student    int references student on delete cascade on update cascade,
-  constraint unique_ach unique (id_achivement, id_student)
+  constraint unique_ach unique (id_achievement, id_student)
 );
 
 create table student_olympiad(
