@@ -5,6 +5,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.domain.*;
+import ru.ifmo.se.termwork.domain.keys.ExamId;
 import ru.ifmo.se.termwork.repository.*;
 
 import javax.transaction.Transactional;
@@ -37,15 +38,15 @@ public class JpaTests {
     public void testStudent(){
         Student student = studentRepository.findById(1).get();
 
-//        Student newStudent = new Student();
-//        newStudent.setName("Julia");
-//        newStudent.setSurname("Ivanova");
-//        newStudent.setSurname("Vladimirovna");
-//        newStudent.setBirthDate(Date.valueOf("1999-05-07"));x
-//        newStudent.setEmail("ivanova@gmai.com");
-//        newStudent.setSerialNumber("4040 546908");
-//        newStudent.setPassword("Juli1234");
-//        studentRepository.save(newStudent);
+        Student newStudent = new Student();
+        newStudent.setName("Julia");
+        newStudent.setSurname("Ivanova");
+        newStudent.setSurname("Vladimirovna");
+        newStudent.setBirthDate(Date.valueOf("1999-05-07"));
+        newStudent.setEmail("ivanova@gmai.com");
+        newStudent.setSerialNumber("4040 546908");
+        newStudent.setPassword("Juli1234");
+        studentRepository.save(newStudent);
     }
 
     @Test
@@ -76,11 +77,14 @@ public class JpaTests {
 
     @Test
     public void testExams(){
-        Subject english = subjectRepository.findByNameIgnoreCase("english");
-        studentRepository.addExam(2, english.getId(), 100);
-        studentRepository.updateExam(2, english.getId(), 80);
-        Student student = studentRepository.findById(2).get();
-        student.getExams().forEach(n -> System.out.println(n.getScore()));
+        Subject math = subjectRepository.findByNameIgnoreCase("math");
+        Student student = studentRepository.findById(3).get();
+        Exam exam = new Exam(new ExamId(student, math), 60);
+        student.getExams().add(exam);
+//        studentRepository.addExam(2, english.getId(), 100);
+//        studentRepository.updateExam(2, english.getId(), 80);
+//        Student student = studentRepository.findById(2).get();
+//        student.getExams().forEach(n -> System.out.println(n.getScore()));
     }
 
 
@@ -94,7 +98,7 @@ public class JpaTests {
     public void testRating(){
         Speciality vt = specialityRepository.findById(1).get();
         Set<Rating> ratings = vt.getRatings();
-        System.out.println(ratings);
+        ratings.forEach(n -> System.out.println(n.getOlympiad()));
     }
 
     @Test

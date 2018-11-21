@@ -14,7 +14,7 @@ public class Rating {
     @EmbeddedId
     private RatingId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_olymp")
     private Olympiad olympiad;
 
