@@ -78,9 +78,11 @@ public class JpaTests {
     @Test
     public void testExams(){
         Subject math = subjectRepository.findByNameIgnoreCase("math");
-        Student student = studentRepository.findById(3).get();
+        Student student = studentRepository.findStudentWithScoresById(3);
         Exam exam = new Exam(new ExamId(student, math), 60);
         student.getExams().add(exam);
+        System.out.println("...saving");
+        studentRepository.save(student);
 //        studentRepository.addExam(2, english.getId(), 100);
 //        studentRepository.updateExam(2, english.getId(), 80);
 //        Student student = studentRepository.findById(2).get();
@@ -107,6 +109,12 @@ public class JpaTests {
         Achievement achievement = achievementRepository.findById(1).get();
         student.getAchievements().add(achievement);
 
+    }
+
+    @Test
+    public void testReqs(){
+        Speciality vt = specialityRepository.findWithReqsById(1);
+        System.out.println(vt.getRequirements());
     }
 
 

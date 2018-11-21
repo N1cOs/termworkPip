@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import ru.ifmo.se.termwork.domain.Student;
 
-import javax.transaction.Transactional;
-
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Modifying
     @Query(value = "insert into exam values (?1, ?2, ?3)", nativeQuery = true)

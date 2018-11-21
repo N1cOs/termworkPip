@@ -9,6 +9,15 @@ import java.util.Set;
 
 @Entity
 @Data
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "speciality.ratings", attributeNodes = {
+                @NamedAttributeNode("ratings")
+        }),
+        @NamedEntityGraph(name = "speciality.req", attributeNodes = {
+                @NamedAttributeNode("requirements")
+        }),
+        @NamedEntityGraph(name = "speciality.all", includeAllAttributes = true)
+})
 public class Speciality {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +34,11 @@ public class Speciality {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "id.speciality", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "id.speciality")
     private Set<Rating> ratings;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "id.speciality")
+    private Set<Requirement> requirements;
 }
