@@ -1,12 +1,20 @@
 package ru.ifmo.se.termwork.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "worker_ac")
 @Data
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "worker.messages", attributeNodes = {
+          @NamedAttributeNode("messages")
+        })
+})
 public class Worker {
 
     @Id
@@ -30,6 +38,11 @@ public class Worker {
 
     @Column(name = "head_worker")
     private boolean isHeadWorker;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "worker")
+    private Set<Message> messages;
 
 }
 

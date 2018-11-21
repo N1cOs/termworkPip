@@ -5,7 +5,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.domain.*;
-import ru.ifmo.se.termwork.domain.keys.ExamId;
 import ru.ifmo.se.termwork.repository.*;
 
 import javax.transaction.Transactional;
@@ -18,6 +17,9 @@ public class JpaTests {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private WorkerRepository workerRepository;
 
     @Autowired
     private CollegeRepository collegeRepository;
@@ -33,6 +35,9 @@ public class JpaTests {
 
     @Autowired
     private AchievementRepository achievementRepository;
+
+    @Autowired
+    private MessageRepository messageRepository;
 
     @Test
     public void testStudent(){
@@ -77,12 +82,14 @@ public class JpaTests {
 
     @Test
     public void testExams(){
-        Subject math = subjectRepository.findByNameIgnoreCase("math");
-        Student student = studentRepository.findStudentWithScoresById(3);
-        Exam exam = new Exam(new ExamId(student, math), 60);
-        student.getExams().add(exam);
-        System.out.println("...saving");
-        studentRepository.save(student);
+        Student student = studentRepository.findStudentWithScoresById(2);
+        System.out.println(student.getExams());
+//        Subject math = subjectRepository.findByNameIgnoreCase("math");
+//        Student student = studentRepository.findStudentWithScoresById(3);
+//        Exam exam = new Exam(new ExamId(student, math), 60);
+//        student.getExams().add(exam);
+//        System.out.println("...saving");
+//        studentRepository.save(student);
 //        studentRepository.addExam(2, english.getId(), 100);
 //        studentRepository.updateExam(2, english.getId(), 80);
 //        Student student = studentRepository.findById(2).get();
@@ -121,6 +128,31 @@ public class JpaTests {
     public void testCollegeScores(){
         College itmo = collegeRepository.findWithScoresById(1);
         System.out.println(itmo.getAchievementsScore());
+    }
+
+    @Test
+    public void testMessages(){
+//        Student student = studentRepository.findWithMessagesById(1);
+//        Worker worker = workerRepository.findWithMessagesById(1);
+        messageRepository.findAllByStudentIdAndWorkerIdOrderByDate(1, 1).
+                forEach(n -> System.out.println(n.getMessage()));
+//        Worker worker = workerRepository.findById(1).orElse(null);
+//        Student student = studentRepository.findById(1).orElse(null);
+//        MessageId id = new MessageId(worker, student);
+//
+//        Message message1 = new Message();
+//        message1.setId(id);
+//        message1.setDate(new Timestamp(100000000000l));
+//        message1.setMessage("hello this test");
+//
+//        Message message2 = new Message();
+//        message2.setId(id);
+//        message2.setDate(new Timestamp(1000000000000000000l));
+//        message2.setMessage("am, what is going on?");
+//
+//        System.out.println(message1.hashCode() == message2.hashCode());
+
+
     }
 
 

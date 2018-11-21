@@ -37,4 +37,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @EntityGraph("student.ratings")
     Student findStudentWithRatingsById(Integer id);
+
+    @EntityGraph("student.messages")
+    Student findWithMessagesById(Integer id);
 }

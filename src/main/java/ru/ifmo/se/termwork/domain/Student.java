@@ -20,6 +20,9 @@ import java.util.Set;
         }),
         @NamedEntityGraph(name = "student.ratings", attributeNodes = {
                 @NamedAttributeNode("ratings")
+        }),
+        @NamedEntityGraph(name = "student.messages", attributeNodes = {
+                @NamedAttributeNode("messages")
         })
 })
 public class Student {
@@ -73,4 +76,9 @@ public class Student {
     @ToString.Exclude
     @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL)
     private Set<Rating> ratings;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Set<Message> messages;
 }
