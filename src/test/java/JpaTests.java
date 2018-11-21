@@ -3,7 +3,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.Assert;
 import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.domain.*;
 import ru.ifmo.se.termwork.repository.*;
@@ -37,17 +36,16 @@ public class JpaTests {
     @Test
     public void testStudent(){
         Student student = studentRepository.findById(1).get();
-        System.out.println(student.getName());
 
-        Student newStudent = new Student();
-        newStudent.setName("Julia");
-        newStudent.setSurname("Ivanova");
-        newStudent.setSurname("Vladimirovna");
-        newStudent.setBirthDate(Date.valueOf("1999-05-07"));
-        newStudent.setEmail("ivanova@gmai.com");
-        newStudent.setSerialNumber("4040 546908");
-        newStudent.setPassword("Juli1234");
-        studentRepository.save(newStudent);
+//        Student newStudent = new Student();
+//        newStudent.setName("Julia");
+//        newStudent.setSurname("Ivanova");
+//        newStudent.setSurname("Vladimirovna");
+//        newStudent.setBirthDate(Date.valueOf("1999-05-07"));x
+//        newStudent.setEmail("ivanova@gmai.com");
+//        newStudent.setSerialNumber("4040 546908");
+//        newStudent.setPassword("Juli1234");
+//        studentRepository.save(newStudent);
     }
 
     @Test

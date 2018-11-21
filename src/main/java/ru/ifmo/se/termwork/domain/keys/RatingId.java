@@ -1,7 +1,6 @@
 package ru.ifmo.se.termwork.domain.keys;
 
 import lombok.Data;
-import ru.ifmo.se.termwork.domain.Olympiad;
 import ru.ifmo.se.termwork.domain.Speciality;
 import ru.ifmo.se.termwork.domain.Student;
 

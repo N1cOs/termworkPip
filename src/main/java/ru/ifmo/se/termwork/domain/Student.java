@@ -10,6 +10,18 @@ import java.util.Set;
 
 @Entity
 @Data
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "student.scores", attributeNodes = {
+                @NamedAttributeNode("exams"),
+                @NamedAttributeNode("achievements")
+        }),
+        @NamedEntityGraph(name = "student.olympiads", attributeNodes = {
+                @NamedAttributeNode("olympiads")
+        }),
+        @NamedEntityGraph(name = "student.ratings", attributeNodes = {
+                @NamedAttributeNode("ratings")
+        })
+})
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +45,12 @@ public class Student {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "id.student", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL)
     private Set<Exam> exams;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "student_olympiad",
             joinColumns = @JoinColumn(name = "id_student"),
@@ -49,11 +61,16 @@ public class Student {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "ach_student",
             joinColumns = @JoinColumn(name = "id_student"),
             inverseJoinColumns = @JoinColumn(name = "id_achievement")
     )
     private Set<Achievement> achievements;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL)
+    private Set<Rating> ratings;
 }
