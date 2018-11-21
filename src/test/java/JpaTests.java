@@ -117,5 +117,11 @@ public class JpaTests {
         System.out.println(vt.getRequirements());
     }
 
+    @Test
+    public void testCollegeScores(){
+        College itmo = collegeRepository.findWithScoresById(1);
+        System.out.println(itmo.getAchievementsScore());
+    }
+
 
 }

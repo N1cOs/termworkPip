@@ -7,4 +7,7 @@ import ru.ifmo.se.termwork.domain.College;
 public interface CollegeRepository extends JpaRepository<College, Integer> {
     @EntityGraph("college.specialities")
     College findWithSpecialitiesById(Integer id);
+
+    @EntityGraph("college.scores")
+    College findWithScoresById(Integer id);
 }

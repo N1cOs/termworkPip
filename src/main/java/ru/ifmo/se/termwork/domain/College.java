@@ -12,6 +12,9 @@ import java.util.Set;
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "college.specialities", attributeNodes = {
                 @NamedAttributeNode("specialities")
+        }),
+        @NamedEntityGraph(name = "college.scores", attributeNodes = {
+                @NamedAttributeNode("achievementsScore")
         })
 })
 public class College {
@@ -31,4 +34,9 @@ public class College {
     @ToString.Exclude
     @OneToMany(mappedBy = "college")
     private Set<Speciality> specialities;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "id.college")
+    private Set<CollegeAchievement> achievementsScore;
 }
