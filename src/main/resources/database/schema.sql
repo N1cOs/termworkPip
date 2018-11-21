@@ -51,7 +51,7 @@ create table requirements (
   id_spec             int references speciality on delete cascade on update cascade,
   id_subj             int references subject on delete cascade on update cascade,
   min_score           int check (min_score >= 0 and min_score <= 100),
-  min_level_olymp_bvi int check (min_level_olymp_bvi <= 3 and min_level_olymp_bvi >= 1)
+  min_level_olymp_bvi int check (min_level_olymp_bvi <= 3 and min_level_olymp_bvi >= 0)
 );
 
 create table worker_ac (
