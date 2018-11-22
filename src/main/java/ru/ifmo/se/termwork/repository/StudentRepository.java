@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import ru.ifmo.se.termwork.domain.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
+
+    Student findByEmailIgnoreCaseOrPhone(String email, String phone);
+
     @Modifying
     @Query(value = "insert into exam values (?1, ?2, ?3)", nativeQuery = true)
     void addExam(Integer studentId, Integer subjectId, Integer score);

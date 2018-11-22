@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import ru.ifmo.se.termwork.repository.*;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
@@ -41,31 +43,37 @@ public class JpaTests {
 
     @Test
     public void testStudent(){
-        Student student = studentRepository.findById(1).get();
-
-        Student newStudent = new Student();
-        newStudent.setName("Julia");
-        newStudent.setSurname("Ivanova");
-        newStudent.setSurname("Vladimirovna");
-        newStudent.setBirthDate(Date.valueOf("1999-05-07"));
-        newStudent.setEmail("ivanova@gmai.com");
-        newStudent.setSerialNumber("4040 546908");
-        newStudent.setPassword("Juli1234");
-        studentRepository.save(newStudent);
+        Student student = studentRepository.
+                findByEmailIgnoreCaseOrPhone("ivanova@gmaiL.com", "+79112938535");
+        System.out.println(student);
+//        Student newStudent = new Student();
+//        newStudent.setName("Julia");
+//        newStudent.setSurname("Ivanova");
+//        newStudent.setSurname("Vladimirovna");
+//        newStudent.setBirthDate(Date.valueOf("1999-05-07"));
+//        newStudent.setEmail("ivanova@gmai.com");
+//        newStudent.setSerialNumber("4040 546908");
+//        newStudent.setPassword("Juli1234");
+//        studentRepository.save(newStudent);
     }
 
     @Test
     public void testCollege(){
-        College itmo = collegeRepository.findById(1).get();
-        System.out.println(itmo.getSpecialities());
-        System.out.println(itmo.getName());
+        List<College> colleges = collegeRepository.
+                findAllByNameLikeIgnoreCaseOrAbbreviationLikeIgnoreCase("mosc%", "it%");
+        System.out.println(colleges);
 
-        College msu = new College();
-        msu.setName("Moscow State University");
-        msu.setAbbreviation("MSU");
-        msu.setCity("Moscow");
-        msu.setDescription("lo lo la lo");
-        collegeRepository.save(msu);
+
+//        College itmo = collegeRepository.findById(1).get();
+//        System.out.println(itmo.getSpecialities());
+//        System.out.println(itmo.getName());
+//
+//        College msu = new College();
+//        msu.setName("Moscow State University");
+//        msu.setAbbreviation("MSU");
+//        msu.setCity("Moscow");
+//        msu.setDescription("lo lo la lo");
+//        collegeRepository.save(msu);
     }
 
     @Test
