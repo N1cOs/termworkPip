@@ -3,6 +3,7 @@ package ru.ifmo.se.termwork.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import ru.ifmo.se.termwork.domain.keys.ExamId;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -50,7 +51,7 @@ public class Student {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Exam> exams;
 
     @EqualsAndHashCode.Exclude
@@ -83,4 +84,18 @@ public class Student {
     @ToString.Exclude
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Set<Message> messages;
+
+    public void addExam(Subject subject, Integer score){
+        Exam exam = new Exam(new ExamId(this, subject), score);
+        exams.add(exam);
+    }
+
+    public void updateExam(Subject subject, Integer score){
+        exams.stream().filter(exam -> exam.getId().getSubject().equals(subject)).
+                findFirst().get().setScore(score);
+    }
+
+    public void deleteExam(Subject subject){
+        exams.removeIf(e -> e.getId().getSubject().equals(subject));
+    }
 }

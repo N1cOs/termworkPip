@@ -1,4 +1,3 @@
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,10 +5,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.domain.*;
+import ru.ifmo.se.termwork.domain.keys.ExamId;
 import ru.ifmo.se.termwork.repository.*;
 
 import javax.transaction.Transactional;
-import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -91,7 +90,16 @@ public class JpaTests {
     @Test
     public void testExams(){
         Student student = studentRepository.findStudentWithScoresById(2);
-        System.out.println(student.getExams());
+        Subject math = subjectRepository.findByNameIgnoreCase("math");
+        student.deleteExam(math);
+        studentRepository.save(student);
+//        student.getExams().stream().filter(n -> n.getId().getSubject().
+//                equals(subjects.get(0))).forEach(n -> n.setScore(89));
+//        studentRepository.save(student);
+//        studentRepository.save(student);
+//        Exam exam = new Exam(new ExamId(student, russian), 52);
+//        student.getExams().add(exam);
+//        studentRepository.save(student);
 //        Subject math = subjectRepository.findByNameIgnoreCase("math");
 //        Student student = studentRepository.findStudentWithScoresById(3);
 //        Exam exam = new Exam(new ExamId(student, math), 60);
@@ -108,7 +116,7 @@ public class JpaTests {
     @Test
     @Transactional
     public void testOlympiad(){
-        studentRepository.addOlympiad(4, 7);
+
     }
 
     @Test

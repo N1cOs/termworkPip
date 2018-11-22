@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories("ru.ifmo.se.termwork.repository")
-@PropertySource("classpath:/application.properties")
+@PropertySource("application.properties")
 public class JpaConfig {
 
     @Autowired
