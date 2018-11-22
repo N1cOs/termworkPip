@@ -134,8 +134,8 @@ public class JpaTests {
     public void testMessages(){
 //        Student student = studentRepository.findWithMessagesById(1);
 //        Worker worker = workerRepository.findWithMessagesById(1);
-        messageRepository.findAllByStudentIdAndWorkerIdOrderByDate(1, 1).
-                forEach(n -> System.out.println(n.getMessage()));
+        messageRepository.findAllWithAttributesByStudentIdAndWorkerIdOrderByDate(1, 1).
+                forEach(n -> System.out.println(n.getStudent().getName()));
 //        Worker worker = workerRepository.findById(1).orElse(null);
 //        Student student = studentRepository.findById(1).orElse(null);
 //        MessageId id = new MessageId(worker, student);

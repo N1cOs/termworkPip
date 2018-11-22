@@ -4,7 +4,7 @@ import lombok.Data;
 import ru.ifmo.se.termwork.domain.keys.RatingId;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "speciality_student")
@@ -23,5 +23,5 @@ public class Rating {
     private boolean originals;
 
     @Column(name = "submission_date")
-    private Timestamp submissionDate;
+    private Date submissionDate;
 }
