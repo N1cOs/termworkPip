@@ -2,11 +2,7 @@ package ru.ifmo.se.termwork.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import ru.ifmo.se.termwork.domain.Student;
-
-import javax.transaction.Transactional;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 
