@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +90,7 @@ public class JpaTests {
 
     @Test
     public void testExams(){
-        Student student = studentRepository.findStudentWithScoresById(2);
+        Student student = studentRepository.findWithScoresById(2);
         Subject math = subjectRepository.findByNameIgnoreCase("math");
         student.deleteExam(math);
         studentRepository.save(student);
@@ -114,8 +115,13 @@ public class JpaTests {
 
 
     @Test
-    @Transactional
     public void testOlympiad(){
+        Olympiad vosh = olympiadRepository.findByNameIgnoreCaseAndSubjectId("vosh", 1);
+        Student student = studentRepository.findWithOlympiadsById(2);
+
+        student.getOlympiads().remove(vosh);
+        studentRepository.save(student);
+
 
     }
 
@@ -129,7 +135,7 @@ public class JpaTests {
     @Test
     public void testAch(){
         Achievement essay = achievementRepository.findByNameIgnoreCase("essay");
-        Student student = studentRepository.findStudentWithScoresById(2);
+        Student student = studentRepository.findWithScoresById(2);
         student.getAchievements().removeIf(a -> a.equals(essay));
         studentRepository.save(student);
     }

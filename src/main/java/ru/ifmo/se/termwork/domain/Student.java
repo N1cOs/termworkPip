@@ -12,8 +12,10 @@ import java.util.Set;
 @Entity
 @Data
 @NamedEntityGraphs({
-        @NamedEntityGraph(name = "student.scores", attributeNodes = {
-                @NamedAttributeNode("exams"),
+        @NamedEntityGraph(name = "student.exams", attributeNodes = {
+                @NamedAttributeNode("exams")
+        }),
+        @NamedEntityGraph(name = "student.achievements", attributeNodes = {
                 @NamedAttributeNode("achievements")
         }),
         @NamedEntityGraph(name = "student.olympiads", attributeNodes = {
@@ -24,6 +26,10 @@ import java.util.Set;
         }),
         @NamedEntityGraph(name = "student.messages", attributeNodes = {
                 @NamedAttributeNode("messages")
+        }),
+        @NamedEntityGraph(name = "student.scores", attributeNodes = {
+                @NamedAttributeNode("exams"),
+                @NamedAttributeNode("achievements")
         })
 })
 public class Student {

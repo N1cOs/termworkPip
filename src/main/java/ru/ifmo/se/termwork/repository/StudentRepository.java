@@ -12,14 +12,20 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     Student findByEmailIgnoreCaseOrPhone(String email, String phone);
 
+    @EntityGraph("student.exams")
+    Student findWithExamsById(Integer id);
+
+    @EntityGraph("student.achievements")
+    Student findWithAchievementsById(Integer id);
+
     @EntityGraph("student.scores")
-    Student findStudentWithScoresById(Integer id);
+    Student findWithScoresById(Integer id);
 
     @EntityGraph("student.olympiads")
-    Student findStudentWithOlympiadsById(Integer id);
+    Student findWithOlympiadsById(Integer id);
 
     @EntityGraph("student.ratings")
-    Student findStudentWithRatingsById(Integer id);
+    Student findWithRatingsById(Integer id);
 
     @EntityGraph("student.messages")
     Student findWithMessagesById(Integer id);

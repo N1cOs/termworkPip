@@ -20,7 +20,8 @@ create table olympiad (
   id_subj       int references subject (id),
   name          varchar(50) not null,
   level         int not null check (level >= 1 and level <= 3),
-  serial_number varchar(10) unique
+  serial_number varchar(10) unique,
+  constraint unique_olympiad unique(id_subj, name)
 );
 
 create table college (
