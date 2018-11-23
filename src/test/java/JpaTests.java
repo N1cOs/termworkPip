@@ -128,10 +128,10 @@ public class JpaTests {
 
     @Test
     public void testAch(){
-        Student student = studentRepository.findById(5).get();
-        Achievement achievement = achievementRepository.findById(1).get();
-        student.getAchievements().add(achievement);
-
+        Achievement essay = achievementRepository.findByNameIgnoreCase("essay");
+        Student student = studentRepository.findStudentWithScoresById(2);
+        student.getAchievements().removeIf(a -> a.equals(essay));
+        studentRepository.save(student);
     }
 
     @Test
