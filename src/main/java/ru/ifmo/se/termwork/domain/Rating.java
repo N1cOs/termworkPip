@@ -1,6 +1,9 @@
 package ru.ifmo.se.termwork.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.ifmo.se.termwork.domain.keys.RatingId;
 
 import javax.persistence.*;
@@ -9,12 +12,15 @@ import java.util.Date;
 @Entity
 @Table(name = "speciality_student")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Rating {
 
     @EmbeddedId
     private RatingId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_olymp")
     private Olympiad olympiad;
 

@@ -1,6 +1,8 @@
 package ru.ifmo.se.termwork.domain.keys;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.ifmo.se.termwork.domain.Speciality;
 import ru.ifmo.se.termwork.domain.Student;
 
@@ -11,6 +13,8 @@ import java.io.Serializable;
 
 @Embeddable
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RatingId implements Serializable {
 
     @ManyToOne

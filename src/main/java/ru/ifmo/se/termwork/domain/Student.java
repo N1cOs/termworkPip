@@ -4,9 +4,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import ru.ifmo.se.termwork.domain.keys.ExamId;
+import ru.ifmo.se.termwork.domain.keys.RatingId;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -83,7 +84,7 @@ public class Student {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings;
 
     @EqualsAndHashCode.Exclude
@@ -104,4 +105,15 @@ public class Student {
     public void deleteExam(Subject subject){
         exams.removeIf(e -> e.getId().getSubject().equals(subject));
     }
+
+    public void applyFor(Speciality speciality, Olympiad olympiad, Integer priority, boolean originals){
+        Rating rating = Rating.builder().id(new RatingId(speciality, this)).olympiad(olympiad).
+                priority(priority).originals(originals).submissionDate(new Date()).build();
+        ratings.add(rating);
+    }
+
+    public void cancelApplication(Speciality speciality){
+        ratings.removeIf(s -> s.getId().getSpeciality().equals(speciality));
+    }
+
 }

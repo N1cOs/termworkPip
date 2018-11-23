@@ -128,8 +128,9 @@ public class JpaTests {
     @Test
     public void testRating(){
         Speciality vt = specialityRepository.findById(1).get();
-        Set<Rating> ratings = vt.getRatings();
-        ratings.forEach(n -> System.out.println(n.getOlympiad()));
+        Student student = studentRepository.findWithRatingsById(1);
+        student.cancelApplication(vt);
+        studentRepository.save(student);
     }
 
     @Test
