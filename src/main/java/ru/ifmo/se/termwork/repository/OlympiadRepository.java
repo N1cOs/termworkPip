@@ -16,7 +16,7 @@ public interface OlympiadRepository extends JpaRepository<Olympiad, Integer> {
     /**
      * Returns the olympiad by its name and id of the subject
      *
-     * @param name      name of the olympiad
+     * @param name name of the olympiad
      * @param subjectId id of the subject
      * @return the olympiad
      */

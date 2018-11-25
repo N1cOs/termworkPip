@@ -17,8 +17,8 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
     List<Message> findAllByStudentIdAndWorkerIdOrderByDate(Integer studentId, Integer workerId);
 
     /**
-     * Returns all the student and worker messages from database
-     * with links to student and worker specified by their (student and worker's) id
+     * Returns student's and worker's messages from a database
+     * with links to student and worker specified by their id
      *
      * @param studentId id of the student
      * @param workerId  if of the worker

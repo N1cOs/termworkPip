@@ -7,10 +7,10 @@ import ru.ifmo.se.termwork.domain.Achievement;
 public interface AchievementRepository extends JpaRepository<Achievement, Integer> {
 
     /**
-     * The method that performs a search for achievements by achievement name
+     * Returns achievement by its name
      *
-     * @param name the name
-     * @return the achievement named as the name we are looking for
+     * @param name achievement's name
+     * @return the achievement which name corresponds to the parameter
      */
     Achievement findByNameIgnoreCase(String name);
 }

@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface CollegeRepository extends JpaRepository<College, Integer> {
     /**
-     * Returns the college from database with the speciality specified by id
+     * Returns the college from a database with specialities specified by id
+     * @see ru.ifmo.se.termwork.domain.Speciality
      *
      * @param id id of the college
      * @return the College
@@ -17,7 +18,8 @@ public interface CollegeRepository extends JpaRepository<College, Integer> {
     College findWithSpecialitiesById(Integer id);
 
     /**
-     * Returns the college from database with the scores specified by id
+     * Returns the college from a database with college's achievements  specified by id
+     * @see ru.ifmo.se.termwork.domain.CollegeAchievement
      *
      * @param id id of the college
      * @return the College
@@ -26,9 +28,9 @@ public interface CollegeRepository extends JpaRepository<College, Integer> {
     College findWithScoresById(Integer id);
 
     /**
-     * Returns the list of colleges by their name and abbreviation
+     * Returns the list of colleges which name or abbreviation corresponds to the parameters
      *
-     * @param name         name of the college
+     * @param name name of the college
      * @param abbreviation abbreviation of the college
      * @return the list of colleges
      */

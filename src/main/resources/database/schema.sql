@@ -68,9 +68,9 @@ create table worker_ac (
 
 create table messages (
   id bigserial primary key,
-  id_student int references student on delete cascade on update cascade,
-  id_worker  int references worker_ac on update cascade,
-  is_from_student boolean,
+  id_student int not null references student on delete cascade on update cascade,
+  id_worker  int not null references worker_ac on update cascade,
+  is_from_student boolean not null,
   message    text not null,
   date timestamp not null
 );

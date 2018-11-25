@@ -13,10 +13,11 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
      * @param phone phone of the student
      * @return the student
      */
-    Student findByEmailIgnoreCaseOrPhone(String email, String phone);
+    Student findByEmailOrPhone(String email, String phone);
 
     /**
-     * Returns the student from database with his or her exams by his or her
+     * Returns the student from a database with exams by specified id
+     * @see ru.ifmo.se.termwork.domain.Exam
      *
      * @param id id of the student
      * @return the student
@@ -25,7 +26,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Student findWithExamsById(Integer id);
 
     /**
-     * Returns the student from database with his or her achievements by his or her id
+     * Returns the student from a database with achievements by specified id
+     * @see ru.ifmo.se.termwork.domain.Achievement
      *
      * @param id id of the student
      * @return the student
@@ -34,16 +36,19 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Student findWithAchievementsById(Integer id);
 
     /**
-     * Returns the student from database with his or her scores by his or her id
+     * Returns the student from a database with exams and achievements by specified id
+     * @see ru.ifmo.se.termwork.domain.Exam
+     * @see ru.ifmo.se.termwork.domain.Achievement
      *
      * @param id id of the student
-     * @return
+     * @return the student
      */
     @EntityGraph("student.scores")
     Student findWithScoresById(Integer id);
 
     /**
-     * Returns the student from database with his or her olympiads by his or her id
+     * Returns the student from a database with olympiad by specified id
+     * @see ru.ifmo.se.termwork.domain.Olympiad
      *
      * @param id id of the student
      * @return the student
@@ -53,7 +58,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
 
     /**
-     * Returns the student from database with his or her ratings by his or her id
+     * Returns the student from a database with ratings by specified id
+     * @see ru.ifmo.se.termwork.domain.Rating
      *
      * @param id id of the student
      * @return the student
@@ -63,7 +69,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
 
     /**
-     * Returns the student from database with his or her messages by his or her id
+     * Returns the student from a database with messages by specified id
+     * @see ru.ifmo.se.termwork.domain.Message
      *
      * @param id id of the student
      * @return the student
