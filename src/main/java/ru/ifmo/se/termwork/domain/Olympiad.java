@@ -4,6 +4,10 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * Domain object that represents a student's olympiad
+ */
+
 @Entity
 @Data
 public class Olympiad {

@@ -10,6 +10,10 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
+/**
+ * Domain object which represents a matriculant
+ */
+
 @Entity
 @Data
 @NamedEntityGraphs({

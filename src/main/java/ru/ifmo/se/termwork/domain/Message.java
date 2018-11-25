@@ -5,6 +5,10 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * Domain object that represents a message between matriculant and university's worker
+ */
+
 @Entity
 @Table(name = "messages")
 @Data

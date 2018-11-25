@@ -8,6 +8,11 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * Domain object which represents requirements on specified speciality (e.g. minimum score or
+ * minimum level of olympiad by certain subject)
+ */
+
 @Entity
 @Data
 @Table(name = "requirements")

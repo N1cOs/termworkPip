@@ -7,6 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Domain object which represents a personal achievement
+ */
+
 @Entity
 @Data
 public class Achievement {

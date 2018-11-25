@@ -9,6 +9,10 @@ import ru.ifmo.se.termwork.domain.keys.RatingId;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * Domain object that represents an application on certain speciality by specified student
+ */
+
 @Entity
 @Table(name = "speciality_student")
 @Data

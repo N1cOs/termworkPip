@@ -8,6 +8,7 @@ import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.domain.*;
 import ru.ifmo.se.termwork.repository.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -42,7 +43,7 @@ public class JpaTests {
     @Test
     public void testStudent(){
         Student student = studentRepository.
-                findByEmailIgnoreCaseOrPhone("ivanova@gmaiL.com", "+79112938535");
+                findByEmailOrPhone(null, "+79112938535");
         System.out.println(student);
 //        Student newStudent = new Student();
 //        newStudent.setName("Julia");
@@ -131,8 +132,16 @@ public class JpaTests {
 
     @Test
     public void testMessages(){
-        messageRepository.findAllWithAttributesByStudentIdAndWorkerIdOrderByDate(1, 1).
-                forEach(n -> System.out.println(n.getStudent().getName()));
+        Student student = studentRepository.findById(1).get();
+        Worker worker = workerRepository.findById(1).get();
+
+        Message message = new Message();
+        message.setStudent(student);
+        message.setWorker(worker);
+        message.setDate(new Date());
+        message.setFromStudent(true);
+        message.setMessage("test test test");
+        messageRepository.save(message);
     }
 
 

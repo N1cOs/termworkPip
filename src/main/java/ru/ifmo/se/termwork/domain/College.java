@@ -7,6 +7,10 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * Domain object which represents an university
+ */
+
 @Entity
 @Data
 @NamedEntityGraphs({

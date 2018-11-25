@@ -7,6 +7,10 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * Domain object which represents a worker of the specified selection committee
+ */
+
 @Entity
 @Table(name = "worker_ac")
 @Data

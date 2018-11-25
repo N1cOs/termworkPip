@@ -7,6 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Domain object that represents an examination subject
+ */
+
 @Entity
 @Data
 public class Subject {

@@ -7,6 +7,10 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * Domain object which represents how many scores that college gives for specified achievement
+ */
+
 @Entity
 @Table(name = "ach_college")
 @Data
