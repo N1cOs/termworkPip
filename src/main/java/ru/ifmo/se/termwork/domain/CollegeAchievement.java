@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * Domain object which represents how many scores that college gives for specified achievement
+ * Domain object which represents the amount of scores that college gives for specified achievement
  */
 
 @Entity
