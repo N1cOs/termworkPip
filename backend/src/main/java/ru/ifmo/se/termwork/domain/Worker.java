@@ -12,7 +12,6 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name = "worker_ac")
 @Data
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "worker.messages", attributeNodes = {

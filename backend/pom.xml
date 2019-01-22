@@ -4,14 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>backend</artifactId>
+    <groupId>ru.ifmo.se</groupId>
+    <artifactId>termwork</artifactId>
+    <version>1.0</version>
+
     <packaging>war</packaging>
 
-    <parent>
-        <groupId>ru.ifmo.se</groupId>
-        <artifactId>termwork</artifactId>
-        <version>1.0</version>
-    </parent>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -46,7 +44,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.4.jre7</version>
+            <version>42.2.5</version>
         </dependency>
 
         <dependency>
@@ -70,6 +68,8 @@
     </dependencies>
 
     <build>
+        <finalName>uniss</finalName>
+
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -81,11 +81,11 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>src/main/resources/front</outputDirectory>
+                            <outputDirectory>src/main/resources/static</outputDirectory>
                             <overwrite>true</overwrite>
                             <resources>
                                 <resource>
-                                    <directory>${project.parent.basedir}/frontend/target/dist</directory>
+                                    <directory>${project.basedir}/frontend/target/dist</directory>
                                 </resource>
                             </resources>
                         </configuration>

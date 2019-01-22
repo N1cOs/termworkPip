@@ -55,7 +55,7 @@ create table requirements (
   min_level_olymp_bvi int check (min_level_olymp_bvi <= 3 and min_level_olymp_bvi >= 0)
 );
 
-create table worker_ac (
+create table worker (
   id          serial primary key,
   id_college  int references college on delete cascade on update cascade,
   surname     varchar(50) not null,
@@ -69,7 +69,7 @@ create table worker_ac (
 create table messages (
   id bigserial primary key,
   id_student int not null references student on delete cascade on update cascade,
-  id_worker  int not null references worker_ac on update cascade,
+  id_worker  int not null references worker on update cascade,
   is_from_student boolean not null,
   message    text not null,
   date timestamp not null
@@ -91,13 +91,13 @@ create table ach_college (
   id_college     int references college on delete cascade on update cascade,
   id_achievement int references achievement on delete cascade on update cascade,
   score          int not null check (score <= 10 and score > 0),
-  constraint unique_ach unique (id_college, id_achievement)
+  constraint unique_ach_college unique (id_college, id_achievement)
 );
 
 create table ach_student (
   id_achievement int references achievement on delete cascade on update cascade,
   id_student    int references student on delete cascade on update cascade,
-  constraint unique_ach unique (id_achievement, id_student)
+  constraint unique_ach_student unique (id_achievement, id_student)
 );
 
 create table student_olympiad(

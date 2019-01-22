@@ -99,7 +99,6 @@ public class JpaTests {
         student.getOlympiads().remove(vosh);
         studentRepository.save(student);
 
-
     }
 
     @Test
