@@ -89,12 +89,6 @@
             <build>
                 <finalName>uniss</finalName>
 
-                <resources>
-                    <resource>
-                        <directory>${project.basedir/static}</directory>
-                    </resource>
-                </resources>
-
                 <plugins>
                     <plugin>
                         <artifactId>maven-resources-plugin</artifactId>
@@ -107,7 +101,7 @@
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${project.basedir}/static</outputDirectory>
+                                    <outputDirectory>${project.basedir}/src/main/webapp/static</outputDirectory>
                                     <overwrite>true</overwrite>
                                     <resources>
                                         <resource>
