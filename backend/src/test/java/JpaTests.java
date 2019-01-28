@@ -143,5 +143,11 @@ public class JpaTests {
         messageRepository.save(message);
     }
 
+    @Test
+    public void testSignCheck(){
+        Student student = studentRepository.findBySerialNumber("0123 456789");
+        System.out.println(student);
+    }
+
 
 }
