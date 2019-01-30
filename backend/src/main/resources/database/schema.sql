@@ -105,3 +105,58 @@ create table student_olympiad(
   id_olympiad int references olympiad on delete cascade on update cascade,
   constraint unique_olymp unique (id_student, id_olympiad)
 );
+
+
+create or replace function is_valid_email(user_email text, is_student boolean) returns boolean as
+$$
+declare
+  student_row student%rowtype;
+  worker_row worker%rowtype;
+begin
+  if is_student then
+    for worker_row in select * from worker loop
+      if worke_row.email = user_email then
+        return false;
+      end if;
+    end loop;
+  else
+    for student_row in select * from student loop
+      if student_row.email = user_email then
+        return false;
+      end if;
+    end loop;
+  end if;
+  return true;
+end;
+$$ language plpgsql;
+
+
+create or replace function valid_student_email() returns trigger as
+$$
+begin
+  if not is_valid_email(new.email, true) then
+    raise exception 'Invalid student email %, this email belongs to the worker', new.email;
+  end if;
+  return new;
+end;
+$$ language plpgsql;
+
+create or replace function valid_worker_email() returns trigger as
+$$
+begin
+  if not is_valid_email(new.email, false) then
+    raise exception 'Invalid worker email %, that email belongs to the student', new.email;
+  end if;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger valid_student_email
+before insert or update on student
+for each row
+execute procedure valid_student_email();
+
+create trigger valid_worker_email
+before insert or update on worker
+for each row
+execute procedure valid_worker_email();
