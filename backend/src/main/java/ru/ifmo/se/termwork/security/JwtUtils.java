@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtils {
 
-    private final static String EMAIL_CLAIM_NAME = "email";
+    private final static String ID_CLAIM_NAME = "userId";
 
     private final static String ROLES_CLAIM_NAME = "roles";
 
@@ -44,23 +44,23 @@ public class JwtUtils {
     public UserDetails getAuthentication(String token){
         try{
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            String email = claims.getBody().get(EMAIL_CLAIM_NAME, String.class);
+            Integer id = claims.getBody().get(ID_CLAIM_NAME, Integer.class);
             List<String> strRoles = (List<String>) claims.getBody().get(ROLES_CLAIM_NAME);
             List<SimpleGrantedAuthority> roles =
                     strRoles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-            return new User(email, "password", roles);
+            return new User(id.toString(), "password", roles);
         } catch (JwtException e){
             throw new BadCredentialsException("Token is invalid");
         }
     }
 
 
-    public String getToken(String mail, List<String> roles) {
+    public String getToken(int userId, List<String> roles) {
         Date expirationDate = Date.from(Instant.now().plus(validityInMinutes, ChronoUnit.MINUTES));
         return Jwts.builder()
                 .setIssuedAt(new Date())
                 .setExpiration(expirationDate)
-                .claim(EMAIL_CLAIM_NAME, mail)
+                .claim(ID_CLAIM_NAME, userId)
                 .claim(ROLES_CLAIM_NAME, roles)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();

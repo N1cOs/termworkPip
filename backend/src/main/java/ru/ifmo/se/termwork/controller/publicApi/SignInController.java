@@ -46,16 +46,20 @@ public class SignInController {
         Worker worker = workerRepository.findByEmailAndPassword(email, hashPassword);
 
         ArrayList<String> roles = new ArrayList<>();
+        int id;
         if(worker != null) {
             roles.add(Authorities.WORKER);
+            id = worker.getId();
             if(worker.isHeadWorker())
                 roles.add(Authorities.HEAD_WORKER);
         }
-        else if(student != null)
+        else if(student != null) {
             roles.add(Authorities.STUDENT);
+            id = student.getId();
+        }
         else
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        return ResponseEntity.ok(jwtUtils.getToken(email, roles));
+        return ResponseEntity.ok(jwtUtils.getToken(id, roles));
     }
 }
