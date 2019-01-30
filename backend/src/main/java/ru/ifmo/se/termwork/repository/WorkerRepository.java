@@ -15,5 +15,5 @@ public interface WorkerRepository extends JpaRepository<Worker, Integer> {
     @EntityGraph("worker.messages")
     Worker findWithMessagesById(Integer id);
 
-    Worker findByEmailAndPassword(String email, String password);
+    Worker findByEmail(String email);
 }

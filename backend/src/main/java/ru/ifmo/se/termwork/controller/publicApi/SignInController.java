@@ -40,24 +40,29 @@ public class SignInController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity signIn(@RequestBody @Valid UserDTO user) {
-        String hashPassword = passwordEncoder.encode(user.getPassword());
         String email = user.getUsername();
-        Student student = studentRepository.findByEmailAndPassword(email, hashPassword);
-        Worker worker = workerRepository.findByEmailAndPassword(email, hashPassword);
+        Student student = studentRepository.findByEmail(email);
+        Worker worker = workerRepository.findByEmail(email);
 
-        ArrayList<String> roles = new ArrayList<>();
         int id;
+        String hashPassword;
+        ArrayList<String> roles = new ArrayList<>();
         if(worker != null) {
+            hashPassword = worker.getPassword();
             roles.add(Authorities.WORKER);
             id = worker.getId();
             if(worker.isHeadWorker())
                 roles.add(Authorities.HEAD_WORKER);
         }
         else if(student != null) {
+            hashPassword = student.getPassword();
             roles.add(Authorities.STUDENT);
             id = student.getId();
         }
         else
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        if(!passwordEncoder.matches(user.getPassword(), hashPassword))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         return ResponseEntity.ok(jwtUtils.getToken(id, roles));
