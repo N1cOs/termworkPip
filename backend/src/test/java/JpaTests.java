@@ -43,7 +43,7 @@ public class JpaTests {
     @Test
     public void testStudent(){
         Student student = studentRepository.
-                findByEmailOrPhone(null, "+79112938535");
+                findByEmail("+79112938535");
         System.out.println(student);
 //        Student newStudent = new Student();
 //        newStudent.setName("Julia");
@@ -141,6 +141,12 @@ public class JpaTests {
         message.setFromStudent(true);
         message.setMessage("test test test");
         messageRepository.save(message);
+    }
+
+    @Test
+    public void testSignCheck(){
+        Student student = studentRepository.findBySerialNumber("0123 456789");
+        System.out.println(student);
     }
 
 

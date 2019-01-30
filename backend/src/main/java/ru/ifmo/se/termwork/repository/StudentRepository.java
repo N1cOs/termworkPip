@@ -10,10 +10,11 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
      * Returns the student specified by its email and phone
      *
      * @param email email of the student
-     * @param phone phone of the student
      * @return the student
      */
-    Student findByEmailOrPhone(String email, String phone);
+    Student findByEmail(String email);
+
+    Student findByEmailAndPassword(String email, String password);
 
     /**
      * Returns the student from a database with exams by specified id
@@ -77,4 +78,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
      */
     @EntityGraph("student.messages")
     Student findWithMessagesById(Integer id);
+
+    Student findBySerialNumber(String serialNumber);
+
 }
