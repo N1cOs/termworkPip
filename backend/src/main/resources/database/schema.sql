@@ -1,14 +1,35 @@
-create table student (
-  id            serial primary key,
+create table app_user(
+  id serial primary key,
   surname       varchar(50) not null,
   name          varchar(30) not null,
   patronymic    varchar(50),
-  date_birth    date not null,
   email         varchar(60) not null unique,
   phone         varchar(20) unique,
   password      varchar(60) not null,
+  is_enabled    boolean default true
+);
+
+create table student (
+  id    int references app_user unique on delete cascade on update cascade,
+  date_birth    date not null,
   serial_number varchar(60) not null unique
 );
+
+create table worker (
+  id          int references app_user unique on delete cascade on update cascade,
+  id_college  int references college on delete cascade on update cascade
+);
+
+create table authority(
+  id serial primary key,
+  name varchar(40) not null
+);
+
+create table user_authorities(
+  id_user int references app_user,
+  id_authority int references authority
+);
+
 
 create table subject (
   id   serial primary key,
@@ -41,7 +62,7 @@ create table speciality (
 
 create table speciality_student (
   id_spec         int references speciality on delete cascade on update cascade,
-  id_student      int references student on delete cascade on update cascade,
+  id_student      int references student(id_student) on delete cascade on update cascade,
   id_olymp        int references olympiad on update cascade,
   priority        int not null check (priority >= 1 and priority <= 3) default 1,
   originals       boolean not null default false,
@@ -55,28 +76,16 @@ create table requirements (
   min_level_olymp_bvi int check (min_level_olymp_bvi <= 3 and min_level_olymp_bvi >= 0)
 );
 
-create table worker (
-  id          serial primary key,
-  id_college  int references college on delete cascade on update cascade,
-  surname     varchar(50) not null,
-  name        varchar(30) not null,
-  patronymic  varchar(50),
-  email       varchar(60) not null unique,
-  password    varchar(60) not null,
-  head_worker boolean not null default false
-);
-
 create table messages (
-  id bigserial primary key,
-  id_student int not null references student on delete cascade on update cascade,
-  id_worker  int not null references worker on update cascade,
-  is_from_student boolean not null,
-  message    text not null,
+  id_user_1 int references app_user,
+  id_user_2 int references app_user,
+  id_sender int references app_user,
+  message   text not null,
   date timestamp not null
 );
 
 create table exam (
-  id_student int references student on delete cascade on update cascade,
+  id_student int references student(id_student) on delete cascade on update cascade,
   id_subj    int references subject on update cascade,
   score      int check (score <= 100 and score >= 0),
   constraint unique_exam unique (id_student, id_subj)
@@ -96,12 +105,12 @@ create table ach_college (
 
 create table ach_student (
   id_achievement int references achievement on delete cascade on update cascade,
-  id_student    int references student on delete cascade on update cascade,
+  id_student    int references student(id_student) on delete cascade on update cascade,
   constraint unique_ach_student unique (id_achievement, id_student)
 );
 
 create table student_olympiad(
-  id_student int references student on delete cascade on update cascade,
+  id_student int references student(id_student) on delete cascade on update cascade,
   id_olympiad int references olympiad on delete cascade on update cascade,
   constraint unique_olymp unique (id_student, id_olympiad)
 );
