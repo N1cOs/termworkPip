@@ -23,4 +23,55 @@ import java.util.List;
 @Log4j
 public class JpaTests {
 
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private WorkerRepository workerRepository;
+
+    @Autowired
+    private CollegeRepository collegeRepository;
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    @Test
+    public void testStudent() throws ParseException {
+//        Student student = new Student();
+//        student.setName("Nick");
+//        student.setSurname("Karmatskikh");
+//        student.setEmail("admin@admin.com");
+//        student.setPassword(passwordEncoder.encode("1234"));
+//        student.setEnabled(true);
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        student.setBirthDate(dateFormat.parse("2000-02-26"));
+//        student.setSerialNumber("0123 456789");
+//        studentRepository.save(student);
+        Student student = studentRepository.findBySerialNumber("0123 456789").orElseThrow(IllegalArgumentException::new);
+        log.info(student.getName());
+    }
+
+    @Test
+    public void testCollege(){
+        College college = new College();
+        college.setName("ITMO");
+        college.setCity("St-Petersburg");
+        college.setAbbreviation("ITMO");
+        college.setDescription("la la la");
+        collegeRepository.save(college);
+    }
+
+    @Test
+    public void testWorker(){
+        College college = collegeRepository.findById(1).orElseThrow(IllegalArgumentException::new);
+        Worker worker = new Worker();
+        worker.setName("test");
+        worker.setSurname("worker");
+        worker.setEmail("worker@worker.com");
+        worker.setPassword(passwordEncoder.encode("1234"));
+        worker.setEnabled(true);
+        worker.setCollege(college);
+        workerRepository.save(worker);
+    }
+
+
 }

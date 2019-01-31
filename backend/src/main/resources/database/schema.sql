@@ -1,5 +1,6 @@
 create table app_user(
   id serial primary key,
+  type int not null,
   surname       varchar(50) not null,
   name          varchar(30) not null,
   patronymic    varchar(50),
@@ -7,11 +8,11 @@ create table app_user(
   phone         varchar(20) unique,
   password      varchar(60) not null,
   is_enabled    boolean default true,
---   Worker fields
+--   Worker's fields
   id_college    int references college on delete cascade on update cascade,
---   Student fields
+--   Student's fields
   date_birth    date,
-  serial_number varchar(60) unique
+  serial_number varchar(10) unique
 );
 
 create table college (
@@ -107,3 +108,26 @@ create table student_olympiad(
   id_olympiad int references olympiad on delete cascade on update cascade,
   constraint unique_olymp unique (id_student, id_olympiad)
 );
+
+-- ToDo: added else if instead of else
+create or replace function valid_user() returns trigger as
+$$
+begin
+-- value 2 means worker, 1 means student
+  if new.type = 2 then
+    if (not new.date_birth is null) or (not new.serial_number is null) then
+      raise exception 'Worker can''t have date_birth or serial_number';
+    end if;
+  else
+    if new.serial_number is null or new.date_birth is null then
+      raise exception 'Student must have birth date and serial number';
+    end if;
+  end if;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger valid_user
+  before insert or update on app_user
+  for each row
+execute procedure valid_user();
