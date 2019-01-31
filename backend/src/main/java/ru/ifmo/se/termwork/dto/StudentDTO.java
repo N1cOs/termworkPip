@@ -12,6 +12,7 @@ public class StudentDTO {
     @NotNull
     private String surname;
 
+    @NotNull
     private String name;
 
     private String patronymic;

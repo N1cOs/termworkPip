@@ -5,6 +5,11 @@ import lombok.Data;
 @Data
 public class OlympiadDTO {
 
+    private int id;
+
+    private String subjectName;
+    private int subjectId;
+
     private String name;
 
     private int level;

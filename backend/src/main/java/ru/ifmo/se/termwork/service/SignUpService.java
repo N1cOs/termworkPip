@@ -8,4 +8,5 @@ public interface SignUpService {
 
     boolean signUp(StudentDTO studentDTO);
 
+
 }

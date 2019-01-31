@@ -1,13 +1,19 @@
 import lombok.extern.log4j.Log4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.domain.*;
+import ru.ifmo.se.termwork.dto.StudentDTO;
 import ru.ifmo.se.termwork.repository.*;
+//import ru.ifmo.se.termwork.service.Mapper;
+import ru.ifmo.se.termwork.service.mapper.StudentMapper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -147,6 +153,36 @@ public class JpaTests {
     public void testSignCheck(){
         Student student = studentRepository.findBySerialNumber("0123 456789");
         System.out.println(student);
+    }
+
+
+    @Test
+    public void testMapper(){
+        StudentMapper mapper = Mappers.getMapper(StudentMapper.class);
+
+//        ExampleDTO exampleDTO = new ExampleDTO();
+//        exampleDTO.setLimit(432);
+//        exampleDTO.setName("ЫЫЫ");
+//        ExampleEntity exampleEntity = Mapper.INSTANCE.exampleDtoToExampleEntity(exampleDTO);
+//        System.out.println(exampleEntity);
+
+        // given
+        StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setName("name");
+        studentDTO.setSurname("sur");
+        studentDTO.setPatronymic("patr");
+        try {
+            studentDTO.setBirthDate(new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy").parse("Mon Nov 02 03:00:00 MSK 1998"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        studentDTO.setEmail("a@a.com");
+        studentDTO.setPhone("+79090909909");
+        studentDTO.setPassword("jnj999");
+        studentDTO.setSerialNumber("9999 909090");
+        Student student = mapper.studentDtoToStudent(studentDTO);
+        System.out.println(student);
+
     }
 
 
