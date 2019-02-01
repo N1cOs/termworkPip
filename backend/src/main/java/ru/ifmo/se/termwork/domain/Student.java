@@ -92,5 +92,4 @@ public class Student extends User {
     public void cancelApplication(Speciality speciality){
         ratings.removeIf(s -> s.getId().getSpeciality().equals(speciality));
     }
-
 }
