@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.ifmo.se.termwork.security.Role;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -15,8 +16,8 @@ import java.util.stream.Collectors;
 @Data
 @Entity
 @Table(name = "app_user")
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.INTEGER)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.INTEGER)
 public class User implements UserDetails {
 
     @Id
@@ -46,6 +47,13 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "id_authority")
     )
     private Set<Authority> roles;
+
+
+    public void setRoles(Role... roles){
+        for(Role role : roles){
+            this.roles.add(role.getAuthority());
+        }
+    }
 
 
     @Override

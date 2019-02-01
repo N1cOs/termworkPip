@@ -2,7 +2,6 @@ import lombok.extern.log4j.Log4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
@@ -10,13 +9,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.domain.*;
 import ru.ifmo.se.termwork.repository.*;
-import ru.ifmo.se.termwork.security.Authorities;
+import ru.ifmo.se.termwork.security.Role;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {JpaConfig.class})
@@ -47,7 +42,8 @@ public class JpaTests {
 //        student.setSerialNumber("0123 456789");
 //        studentRepository.save(student);
         Student student = studentRepository.findBySerialNumber("0123 456789").orElseThrow(IllegalArgumentException::new);
-        log.info(student.getName());
+        student.setRoles(Role.STUDENT);
+        studentRepository.save(student);
     }
 
     @Test

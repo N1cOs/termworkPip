@@ -24,7 +24,7 @@ create table college (
 );
 
 create table authority(
-  id serial primary key,
+  id serial primary key check (id in (1, 2, 3)),
   name varchar(40) not null
 );
 
@@ -109,22 +109,23 @@ create table student_olympiad(
   constraint unique_olymp unique (id_student, id_olympiad)
 );
 
--- ToDo: added else if instead of else
 create or replace function valid_user() returns trigger as
 $$
 begin
--- value 2 means worker, 1 means student
+  -- value 2 means worker, 1 means student
   if new.type = 2 then
     if (not new.date_birth is null) or (not new.serial_number is null) then
       raise exception 'Worker can''t have date_birth or serial_number';
     end if;
-  else
+  elseif new.type = 1 then
     if new.serial_number is null or new.date_birth is null then
       raise exception 'Student must have birth date and serial number';
     end if;
+  else
+    raise exception 'Type value can be 1 or 2';
   end if;
   return new;
-end;
+  end;
 $$ language plpgsql;
 
 create trigger valid_user
