@@ -1,15 +1,15 @@
 package ru.ifmo.se.termwork.controller.protectedApi;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.termwork.domain.User;
 import ru.ifmo.se.termwork.dto.CredentialDto;
+import ru.ifmo.se.termwork.dto.ExceptionDto;
 import ru.ifmo.se.termwork.service.ChangeCredentialsService;
 
 import javax.validation.Valid;
@@ -33,5 +33,10 @@ public class ChangeCredentialsController {
                                       @RequestBody @Valid CredentialDto credentialDTO){
         changeCredentialsService.changeEmail(user.getId(), credentialDTO);
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity handleBadRequest(AccessDeniedException e){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionDto(e.getMessage()));
     }
 }

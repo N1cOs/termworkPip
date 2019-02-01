@@ -14,10 +14,7 @@ import org.springframework.security.web.authentication.AnonymousAuthenticationFi
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import ru.ifmo.se.termwork.security.JwtAuthenticationFilter;
-import ru.ifmo.se.termwork.security.JwtAuthenticationProvider;
-import ru.ifmo.se.termwork.security.NoRedirectStrategy;
-import ru.ifmo.se.termwork.security.Role;
+import ru.ifmo.se.termwork.security.*;
 
 @Configuration
 @EnableWebSecurity
@@ -37,14 +34,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
                 .authenticationProvider(jwtAuthenticationProvider)
                 .addFilterBefore(restFilter(), AnonymousAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers(STUDENT_URLS).hasAuthority(Role.STUDENT.getValue())
-                .antMatchers(WORKER_URLS).hasAuthority(Role.WORKER.getValue())
-                .and()
+                    .antMatchers(STUDENT_URLS).hasAuthority(Role.STUDENT.getValue())
+                    .antMatchers(WORKER_URLS).hasAuthority(Role.WORKER.getValue())
+                    .and()
                 .formLogin().disable()
                 .logout().disable()
                 .csrf().disable()
