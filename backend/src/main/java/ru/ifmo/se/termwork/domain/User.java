@@ -48,6 +48,13 @@ public class User implements UserDetails {
     )
     private Set<Authority> roles;
 
+    private Collection<? extends GrantedAuthority> authorities;
+
+    public User(int id, Collection<? extends GrantedAuthority> authorities){
+        this.id = id;
+        this.authorities = authorities;
+    }
+
 
     public void setRoles(Role... roles){
         for(Role role : roles){
@@ -58,7 +65,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(s -> new SimpleGrantedAuthority(s.getName())).collect(Collectors.toList());
+        if(authorities != null)
+            return authorities;
+        authorities = roles.stream().map(s -> new SimpleGrantedAuthority(s.getName())).collect(Collectors.toList());
+        return authorities;
     }
 
     @Override
