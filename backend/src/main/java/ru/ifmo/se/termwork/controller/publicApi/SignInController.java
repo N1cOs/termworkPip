@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ifmo.se.termwork.domain.Authority;
 import ru.ifmo.se.termwork.domain.User;
-import ru.ifmo.se.termwork.dto.UserDTO;
+import ru.ifmo.se.termwork.dto.UserDto;
 import ru.ifmo.se.termwork.repository.UserRepository;
 import ru.ifmo.se.termwork.security.JwtUtils;
 
@@ -36,7 +36,7 @@ public class SignInController {
     @PostMapping(path = "/sign-in",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity signIn(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity signIn(@RequestBody @Valid UserDto userDTO) {
         User user = userRepository.findByEmail(userDTO.getUsername()).
                 orElseThrow(() -> new BadCredentialsException("Email is invalid"));
 

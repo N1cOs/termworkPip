@@ -5,7 +5,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.termwork.domain.User;
-import ru.ifmo.se.termwork.dto.CredentialDTO;
+import ru.ifmo.se.termwork.dto.CredentialDto;
 import ru.ifmo.se.termwork.repository.UserRepository;
 import ru.ifmo.se.termwork.service.ChangeCredentialsService;
 
@@ -19,7 +19,7 @@ public class SimpleChangeCredentialsService implements ChangeCredentialsService 
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void changeEmail(int userId, CredentialDTO credential) {
+    public void changeEmail(int userId, CredentialDto credential) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AccessDeniedException("User not found"));
         if(passwordEncoder.matches(credential.getPassword(), user.getPassword())){
             user.setEmail(credential.getNewValue());
@@ -30,7 +30,7 @@ public class SimpleChangeCredentialsService implements ChangeCredentialsService 
     }
 
     @Override
-    public void changePassword(int userId, CredentialDTO credential) {
+    public void changePassword(int userId, CredentialDto credential) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AccessDeniedException("User not found"));
         if(passwordEncoder.matches(credential.getPassword(), user.getPassword())){
             user.setPassword(passwordEncoder.encode(credential.getNewValue()));

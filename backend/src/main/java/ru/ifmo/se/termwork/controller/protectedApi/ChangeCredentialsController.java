@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ifmo.se.termwork.domain.User;
-import ru.ifmo.se.termwork.dto.CredentialDTO;
+import ru.ifmo.se.termwork.dto.CredentialDto;
 import ru.ifmo.se.termwork.service.ChangeCredentialsService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/change")
@@ -21,14 +23,14 @@ public class ChangeCredentialsController {
 
     @PutMapping(value = "/password", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity changePassword(@AuthenticationPrincipal User user,
-                                         @RequestBody CredentialDTO credentialDTO){
+                                         @RequestBody @Valid CredentialDto credentialDTO){
         changeCredentialsService.changePassword(user.getId(), credentialDTO);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/email", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity changeEmail(@AuthenticationPrincipal User user,
-                                      @RequestBody CredentialDTO credentialDTO){
+                                      @RequestBody @Valid CredentialDto credentialDTO){
         changeCredentialsService.changeEmail(user.getId(), credentialDTO);
         return ResponseEntity.ok().build();
     }

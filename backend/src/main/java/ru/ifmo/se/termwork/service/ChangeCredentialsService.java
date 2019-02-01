@@ -1,9 +1,9 @@
 package ru.ifmo.se.termwork.service;
 
-import ru.ifmo.se.termwork.dto.CredentialDTO;
+import ru.ifmo.se.termwork.dto.CredentialDto;
 
 public interface ChangeCredentialsService {
-    void changeEmail(int userId, CredentialDTO credential);
+    void changeEmail(int userId, CredentialDto credential);
 
-    void changePassword(int userId, CredentialDTO credential);
+    void changePassword(int userId, CredentialDto credential);
 }

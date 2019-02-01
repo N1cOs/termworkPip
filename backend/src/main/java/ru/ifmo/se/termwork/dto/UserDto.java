@@ -5,9 +5,11 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class UserDTO {
+public class UserDto {
+
     @NotNull
     private String username;
+
     @NotNull
     private String password;
 }
