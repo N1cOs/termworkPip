@@ -3,6 +3,7 @@ package ru.ifmo.se.termwork.domain;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "app_user")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.INTEGER)
@@ -48,6 +50,8 @@ public class User implements UserDetails {
     )
     private Set<Authority> roles;
 
+    @Transient
+    @Getter(AccessLevel.NONE)
     private Collection<? extends GrantedAuthority> authorities;
 
     public User(int id, Collection<? extends GrantedAuthority> authorities){
@@ -55,13 +59,11 @@ public class User implements UserDetails {
         this.authorities = authorities;
     }
 
-
     public void setRoles(Role... roles){
         for(Role role : roles){
             this.roles.add(role.getAuthority());
         }
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
