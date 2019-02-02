@@ -11,6 +11,8 @@ import ru.ifmo.se.termwork.security.Role;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,7 +50,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_authority")
     )
-    private Set<Authority> roles;
+    private Set<Authority> roles = new HashSet<>();
 
     @Transient
     @Getter(AccessLevel.NONE)

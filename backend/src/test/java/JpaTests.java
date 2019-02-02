@@ -12,6 +12,7 @@ import ru.ifmo.se.termwork.repository.*;
 import ru.ifmo.se.termwork.security.Role;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {JpaConfig.class})
@@ -31,17 +32,14 @@ public class JpaTests {
 
     @Test
     public void testStudent() throws ParseException {
-//        Student student = new Student();
-//        student.setName("Nick");
-//        student.setSurname("Karmatskikh");
-//        student.setEmail("admin@admin.com");
-//        student.setPassword(passwordEncoder.encode("1234"));
-//        student.setEnabled(true);
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        student.setBirthDate(dateFormat.parse("2000-02-26"));
-//        student.setSerialNumber("0123 456789");
-//        studentRepository.save(student);
-        Student student = studentRepository.findBySerialNumber("0123 456789").orElseThrow(IllegalArgumentException::new);
+        Student student = new Student();
+        student.setName("Nick");
+        student.setSurname("Karmatskikh");
+        student.setEmail("admin@admin.com");
+        student.setPassword(passwordEncoder.encode("5678"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        student.setBirthDate(dateFormat.parse("2000-02-26"));
+        student.setSerialNumber("0123 456789");
         student.setRoles(Role.STUDENT);
         studentRepository.save(student);
     }
