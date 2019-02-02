@@ -60,7 +60,7 @@ public class JpaTests {
     public void testWorker(){
         College college = collegeRepository.findById(1).orElseThrow(IllegalArgumentException::new);
         Worker worker = new Worker();
-        worker.setName("test");
+        worker.setName("lal");
         worker.setSurname("worker");
         worker.setEmail("worker@worker.com");
         worker.setPassword(passwordEncoder.encode("1234"));

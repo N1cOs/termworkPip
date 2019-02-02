@@ -9,8 +9,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.termwork.domain.User;
 import ru.ifmo.se.termwork.dto.CredentialDto;
-import ru.ifmo.se.termwork.dto.ExceptionDto;
 import ru.ifmo.se.termwork.service.ChangeCredentialsService;
+import ru.ifmo.se.termwork.service.MessageService;
 
 import javax.validation.Valid;
 
@@ -20,6 +20,9 @@ public class ChangeCredentialsController {
 
     @Autowired
     private ChangeCredentialsService changeCredentialsService;
+
+    @Autowired
+    private MessageService messageService;
 
     @PutMapping(value = "/password", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity changePassword(@AuthenticationPrincipal User user,
@@ -37,6 +40,6 @@ public class ChangeCredentialsController {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity handleBadRequest(AccessDeniedException e){
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionDto(e.getMessage()));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(messageService.getAsExceptionDto(e.getMessage()));
     }
 }

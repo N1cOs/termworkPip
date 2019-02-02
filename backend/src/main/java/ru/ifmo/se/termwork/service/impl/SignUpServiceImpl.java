@@ -12,7 +12,6 @@ public class SignUpServiceImpl implements SignUpService {
     @Autowired
     private StudentRepository studentRepository;
 
-
     @Override
     public boolean isExists(String serialNumber) {
         return studentRepository.findBySerialNumber(serialNumber).isPresent();

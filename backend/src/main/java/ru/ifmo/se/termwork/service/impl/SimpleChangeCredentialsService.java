@@ -20,23 +20,23 @@ public class SimpleChangeCredentialsService implements ChangeCredentialsService 
 
     @Override
     public void changeEmail(int userId, CredentialDto credential) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new AccessDeniedException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AccessDeniedException("exception.userNotFound"));
         if(passwordEncoder.matches(credential.getPassword(), user.getPassword())){
             user.setEmail(credential.getNewValue());
             userRepository.save(user);
         }
         else
-            throw new AccessDeniedException("Password is incorrect");
+            throw new AccessDeniedException("exception.password");
     }
 
     @Override
     public void changePassword(int userId, CredentialDto credential) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new AccessDeniedException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AccessDeniedException("exception.userNotFound"));
         if(passwordEncoder.matches(credential.getPassword(), user.getPassword())){
             user.setPassword(passwordEncoder.encode(credential.getNewValue()));
             userRepository.save(user);
         }
         else
-            throw new AccessDeniedException("Password is incorrect");
+            throw new AccessDeniedException("exception.password");
     }
 }
