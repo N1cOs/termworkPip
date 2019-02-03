@@ -14,7 +14,10 @@ import org.springframework.security.web.authentication.AnonymousAuthenticationFi
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import ru.ifmo.se.termwork.security.*;
+import ru.ifmo.se.termwork.security.JwtAuthenticationFilter;
+import ru.ifmo.se.termwork.security.JwtAuthenticationProvider;
+import ru.ifmo.se.termwork.security.NoRedirectStrategy;
+import ru.ifmo.se.termwork.security.Role;
 
 @Configuration
 @EnableWebSecurity

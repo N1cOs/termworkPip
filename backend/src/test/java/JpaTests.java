@@ -7,8 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
-import ru.ifmo.se.termwork.domain.*;
-import ru.ifmo.se.termwork.repository.*;
+import ru.ifmo.se.termwork.domain.College;
+import ru.ifmo.se.termwork.domain.Student;
+import ru.ifmo.se.termwork.domain.Worker;
+import ru.ifmo.se.termwork.repository.CollegeRepository;
+import ru.ifmo.se.termwork.repository.StudentRepository;
+import ru.ifmo.se.termwork.repository.WorkerRepository;
 import ru.ifmo.se.termwork.security.Role;
 
 import java.text.ParseException;

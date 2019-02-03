@@ -8,7 +8,8 @@ import javax.validation.constraints.Min;
 @Data
 public class ExamDto {
 
-    private String subject;
+    @Min(1)
+    private int subjectId;
 
     @Min(0)
     @Max(100)

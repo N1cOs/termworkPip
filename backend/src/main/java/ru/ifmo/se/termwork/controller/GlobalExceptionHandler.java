@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.ifmo.se.termwork.service.MessageService;
 
 @ControllerAdvice
-@Log4j
 public class GlobalExceptionHandler {
 
     @Autowired

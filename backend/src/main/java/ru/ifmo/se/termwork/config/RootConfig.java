@@ -19,6 +19,7 @@ public class RootConfig {
                 ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
                 messageSource.setBasename("classpath:l10n/messages");
                 messageSource.setDefaultEncoding("UTF-8");
+                messageSource.setUseCodeAsDefaultMessage(true);
                 return messageSource;
         }
 }
