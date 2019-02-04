@@ -17,7 +17,6 @@ public class StudentDto {
 
     private String patronymic;
 
-    @NotNull
     private Date birthDate;
 
     private String serialNumber;
@@ -25,15 +24,13 @@ public class StudentDto {
     @NotNull
     private String email;
 
-    @NotNull
     private String phone;
 
-    @NotNull
     private String password;
 
     private List<ExamDto> exams;
 
-    private List<OlympiadDto> olympiads;
+    private List<Integer> olympiadsId;
 
-    private List<String> achievements;
+    private List<Integer> achievementsId;
 }

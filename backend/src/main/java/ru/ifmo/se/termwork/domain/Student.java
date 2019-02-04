@@ -8,6 +8,7 @@ import ru.ifmo.se.termwork.domain.keys.RatingId;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -42,7 +43,7 @@ public class Student extends User {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Exam> exams;
+    private Set<Exam> exams = new HashSet<>();
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

@@ -3,6 +3,7 @@ package ru.ifmo.se.termwork.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Domain object that represents a student's olympiad
@@ -10,7 +11,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class Olympiad {
+public class Olympiad implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
