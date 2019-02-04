@@ -17,14 +17,18 @@ public class StudentDto {
 
     private String patronymic;
 
+    @NotNull
     private Date birthDate;
 
     private String serialNumber;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String phone;
 
+    @NotNull
     private String password;
 
     private List<ExamDto> exams;
