@@ -8,21 +8,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.config.RootConfig;
-import ru.ifmo.se.termwork.domain.Achievement;
-import ru.ifmo.se.termwork.domain.College;
-import ru.ifmo.se.termwork.domain.Student;
-import ru.ifmo.se.termwork.domain.Worker;
+import ru.ifmo.se.termwork.domain.*;
 import ru.ifmo.se.termwork.dto.ExamDto;
-import ru.ifmo.se.termwork.repository.CollegeRepository;
-import ru.ifmo.se.termwork.repository.StudentRepository;
-import ru.ifmo.se.termwork.repository.WorkerRepository;
+import ru.ifmo.se.termwork.repository.*;
 import ru.ifmo.se.termwork.security.Role;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {RootConfig.class})
@@ -75,5 +69,27 @@ public class JpaTests {
         worker.setEnabled(true);
         worker.setCollege(college);
         workerRepository.save(worker);
+    }
+
+    @Autowired
+    OlympiadRepository olympiadRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+
+    @Test
+    public  void  testComplicatedUser(){
+        Student student = new Student();
+        student.setName("aa");
+        student.setBirthDate(new Date());
+        student.setSerialNumber("1111 111111");
+        student.setSurname("ssss");
+        student.setEmail("aaa@aaa.c");
+        student.setPassword("aaaassssich");
+        List<Integer> l = new ArrayList<>();
+        l.add(1);
+        student.setOlympiads(new HashSet<>(olympiadRepository.findAllById(l)));
+        studentRepository.save(student);
     }
 }
