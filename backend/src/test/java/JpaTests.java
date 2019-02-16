@@ -81,12 +81,12 @@ public class JpaTests {
     @Test
     public  void  testComplicatedUser(){
         Student student = new Student();
-        student.setName("aa");
+        student.setName("aea");
         student.setBirthDate(new Date());
-        student.setSerialNumber("1111 111111");
-        student.setSurname("ssss");
-        student.setEmail("aaa@aaa.c");
-        student.setPassword("aaaassssich");
+        student.setSerialNumber("5111 111111");
+        student.setSurname("ssess");
+        student.setEmail("aaa@aeaa.c");
+        student.setPassword("aaasssich");
         List<Integer> l = new ArrayList<>();
         l.add(1);
         student.setOlympiads(new HashSet<>(olympiadRepository.findAllById(l)));
