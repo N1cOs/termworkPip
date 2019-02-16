@@ -13,4 +13,8 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
      * @return the subject
      */
     Optional<Subject> findByNameIgnoreCase(String name);
+
+    default Subject formSubject(int id) {
+        return findById(id).get();
+    }
 }

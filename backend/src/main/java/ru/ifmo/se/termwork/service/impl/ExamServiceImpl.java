@@ -15,7 +15,6 @@ import ru.ifmo.se.termwork.service.MessageService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ExamServiceImpl implements ExamService {

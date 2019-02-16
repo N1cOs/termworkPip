@@ -5,4 +5,5 @@ import ru.ifmo.se.termwork.domain.Exam;
 import ru.ifmo.se.termwork.domain.keys.ExamId;
 
 public interface ExamRepository extends JpaRepository<Exam, ExamId> {
+
 }
