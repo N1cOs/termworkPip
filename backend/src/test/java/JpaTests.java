@@ -10,6 +10,7 @@ import ru.ifmo.se.termwork.config.JpaConfig;
 import ru.ifmo.se.termwork.config.RootConfig;
 import ru.ifmo.se.termwork.domain.*;
 import ru.ifmo.se.termwork.dto.ExamDto;
+import ru.ifmo.se.termwork.dto.StudentDto;
 import ru.ifmo.se.termwork.repository.*;
 import ru.ifmo.se.termwork.security.Role;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
@@ -81,15 +82,32 @@ public class JpaTests {
     @Test
     public  void  testComplicatedUser(){
         Student student = new Student();
+        student.setName("aa");
+        student.setBirthDate(new Date());
+        student.setSerialNumber("1111 111111");
+        student.setSurname("ssss");
+        student.setEmail("aaa@aaa.c");
+        student.setPassword("aaaassssich");
+        List<Integer> l = new ArrayList<>();
+        l.add(1);
+        student.setOlympiads(new HashSet<>(olympiadRepository.findAllById(l)));
+        studentRepository.save(student);
+    }
+
+    @Autowired
+    StudentMapper studentMapper;
+    @Autowired SubjectRepository subjectRepository;
+    @Autowired AchievementRepository achievementRepository;
+
+    @Test
+    public  void testStudentMapper(){
+        StudentDto student = new StudentDto();
         student.setName("aea");
         student.setBirthDate(new Date());
         student.setSerialNumber("5111 111111");
         student.setSurname("ssess");
         student.setEmail("aaa@aeaa.c");
         student.setPassword("aaasssich");
-        List<Integer> l = new ArrayList<>();
-        l.add(1);
-        student.setOlympiads(new HashSet<>(olympiadRepository.findAllById(l)));
-        studentRepository.save(student);
+        System.out.println(studentMapper.toStudent(student,subjectRepository, achievementRepository, olympiadRepository));
     }
 }

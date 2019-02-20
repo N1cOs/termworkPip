@@ -1,6 +1,8 @@
 package ru.ifmo.se.termwork.service.mappers;
 
 import org.mapstruct.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.ifmo.se.termwork.domain.Achievement;
 import ru.ifmo.se.termwork.domain.Olympiad;
 import ru.ifmo.se.termwork.domain.Student;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public interface StudentMapper {
 
     @Mappings({
+            @Mapping(target = "password", source = "password", qualifiedByName = "getPassword"),
             @Mapping(target = "exams", ignore = true),
             @Mapping(target = "achievements", source = "achievementsId", qualifiedByName = "getAchievements"),
             @Mapping(target = "olympiads", source = "olympiadsId", qualifiedByName = "getOlympiads")
@@ -58,5 +61,11 @@ public interface StudentMapper {
     default Set<Olympiad> map(List<Integer> olympiadsId,
                               @Context OlympiadRepository olympiadRepository){
         return new HashSet<>(olympiadRepository.findAllById(olympiadsId));
+    }
+
+    @Named("getPassword")
+    default String map(String password){
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
     }
 }
