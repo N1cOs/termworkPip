@@ -1,8 +1,7 @@
 package ru.ifmo.se.termwork.service.mappers;
 
 import org.mapstruct.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import ru.ifmo.se.termwork.domain.Achievement;
 import ru.ifmo.se.termwork.domain.Olympiad;
 import ru.ifmo.se.termwork.domain.Student;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 public interface StudentMapper {
 
     @Mappings({
-            @Mapping(target = "password", source = "password", qualifiedByName = "getPassword"),
             @Mapping(target = "exams", ignore = true),
             @Mapping(target = "achievements", source = "achievementsId", qualifiedByName = "getAchievements"),
             @Mapping(target = "olympiads", source = "olympiadsId", qualifiedByName = "getOlympiads")
@@ -35,14 +33,14 @@ public interface StudentMapper {
 
     @AfterMapping
     default void setExams(@MappingTarget Student student, StudentDto studentDto,
-                     @Context SubjectRepository subjectRepository){
+                          @Context SubjectRepository subjectRepository) {
         List<ExamDto> examDtoList = studentDto.getExams();
         List<Subject> subjects = subjectRepository.findAllById(examDtoList.stream().
                 map(ExamDto::getSubjectId).collect(Collectors.toList()));
-        for(Subject subject : subjects){
+        for (Subject subject : subjects) {
             int score = -1;
-            for(ExamDto examDto : examDtoList){
-                if(examDto.getSubjectId() == subject.getId()){
+            for (ExamDto examDto : examDtoList) {
+                if (examDto.getSubjectId() == subject.getId()) {
                     score = examDto.getScore();
                     break;
                 }
@@ -53,19 +51,14 @@ public interface StudentMapper {
 
     @Named("getAchievements")
     default Set<Achievement> map(List<Integer> achievementsId,
-                                 @Context AchievementRepository achievementRepository){
+                                 @Context AchievementRepository achievementRepository) {
         return new HashSet<>(achievementRepository.findAllById(achievementsId));
     }
 
     @Named("getOlympiads")
     default Set<Olympiad> map(List<Integer> olympiadsId,
-                              @Context OlympiadRepository olympiadRepository){
+                              @Context OlympiadRepository olympiadRepository) {
         return new HashSet<>(olympiadRepository.findAllById(olympiadsId));
     }
 
-    @Named("getPassword")
-    default String map(String password){
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password);
-    }
 }

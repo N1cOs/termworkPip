@@ -1,6 +1,8 @@
 package ru.ifmo.se.termwork.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.dto.StudentDto;
@@ -29,6 +31,9 @@ public class SignUpServiceImpl implements SignUpService {
     @Autowired
     private AchievementRepository achievementRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public boolean isExists(String serialNumber) {
         return studentRepository.findBySerialNumber(serialNumber).isPresent();
@@ -38,6 +43,8 @@ public class SignUpServiceImpl implements SignUpService {
     public void signUp(StudentDto studentDto) {
         Student student = studentMapper.
                 toStudent(studentDto, subjectRepository, achievementRepository, olympiadRepository);
+        String encodedPassword = passwordEncoder.encode(student.getPassword());
+        student.setPassword(encodedPassword);
         studentRepository.save(student);
     }
 }

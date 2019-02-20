@@ -34,6 +34,6 @@ public class SignUpController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity signUp(@RequestBody StudentDto studentDto) {
         signUpService.signUp(studentDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
