@@ -3,7 +3,6 @@ package ru.ifmo.se.termwork.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -17,7 +16,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableJpaRepositories("ru.ifmo.se.termwork.repository")
-@PropertySource("classpath:application.properties")
 public class JpaConfig {
 
     @Autowired
@@ -37,10 +35,10 @@ public class JpaConfig {
     @Bean
     public DataSource getDataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getProperty("driverName"));
-        dataSource.setUrl(environment.getProperty("url"));
-        dataSource.setUsername(environment.getProperty("databaseUser"));
-        dataSource.setPassword(environment.getProperty("password"));
+        dataSource.setDriverClassName(environment.getProperty("database.driver"));
+        dataSource.setUrl(environment.getProperty("database.url"));
+        dataSource.setUsername(environment.getProperty("database.user"));
+        dataSource.setPassword(environment.getProperty("database.password"));
         return dataSource;
     }
 

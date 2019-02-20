@@ -1,7 +1,9 @@
 package ru.ifmo.se.termwork.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.RequiredArgsConstructor;
+import org.jivesoftware.smackx.iqregister.AccountManager;
+import org.jxmpp.jid.parts.Localpart;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.termwork.domain.Student;
@@ -13,26 +15,28 @@ import ru.ifmo.se.termwork.repository.SubjectRepository;
 import ru.ifmo.se.termwork.service.SignUpService;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
+@RequiredArgsConstructor
 public class SignUpServiceImpl implements SignUpService {
 
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    @Autowired
-    private StudentMapper studentMapper;
+    private final StudentMapper studentMapper;
 
-    @Autowired
-    private SubjectRepository subjectRepository;
+    private final SubjectRepository subjectRepository;
 
-    @Autowired
-    private OlympiadRepository olympiadRepository;
+    private final OlympiadRepository olympiadRepository;
 
-    @Autowired
-    private AchievementRepository achievementRepository;
+    private final AchievementRepository achievementRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    private final TaskExecutor taskExecutor;
+
+    private final AccountManager accountManager;
 
     @Override
     public boolean isExists(String serialNumber) {
@@ -45,6 +49,25 @@ public class SignUpServiceImpl implements SignUpService {
                 toStudent(studentDto, subjectRepository, achievementRepository, olympiadRepository);
         String encodedPassword = passwordEncoder.encode(student.getPassword());
         student.setPassword(encodedPassword);
+
         studentRepository.save(student);
+        signUpJabber(studentDto);
+    }
+
+    private void signUpJabber(StudentDto studentDto){
+        String email = studentDto.getEmail();
+        String password = studentDto.getPassword();
+        Localpart username = Localpart.fromOrNull(email.substring(0, email.lastIndexOf('@')));
+
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put("email", email);
+        taskExecutor.execute(() -> {
+            try{
+                accountManager.createAccount(username, password, attributes);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        });
     }
 }

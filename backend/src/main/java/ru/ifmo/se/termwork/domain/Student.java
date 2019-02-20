@@ -47,7 +47,7 @@ public class Student extends User {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "ach_student",
             joinColumns = @JoinColumn(name = "id_student"),
@@ -57,7 +57,7 @@ public class Student extends User {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "student_olympiad",
             joinColumns = @JoinColumn(name = "id_student"),
