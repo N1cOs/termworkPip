@@ -139,3 +139,110 @@ insert into subject(name) values ('Русский язык'), ('Математи
                                  ('Физика'), ('Химия'), ('История'), ('Обществознание'),('Информатика'),
                                  ('Биология'), ('География'), ('Английский язык'), ('Немецкий язык'),
                                  ('Французский язык'), ('Испанский язык'), ('Литература');
+
+insert into app_user
+values (50, 'eee', 'eeeee', 'test', 'email yyyy', '999', '43fr', false, 2, '1999-01-01', '1111 222222', 1);
+
+-- Triggers
+
+drop function is_email_used(f_email varchar);
+drop function is_phone_used(f_phone varchar);
+drop function is_serial_number_used(f_serial_number varchar);
+drop trigger valid_user_data ON app_user;
+drop function valid_user_data();
+
+create function is_email_used(f_email varchar(60))
+  returns boolean AS
+$$
+DECLARE
+  email_from_db varchar(60) = (SELECT email
+                               FROM app_user
+                               where app_user.email = f_email);
+BEGIN
+  if email_from_db IS NOT NULL THEN
+    return true;
+  end if;
+  return false;
+END;
+$$ LANGUAGE plpgsql;
+
+
+create function is_phone_used(f_phone varchar(20))
+  returns boolean AS
+$$
+DECLARE
+  phone_from_db varchar(20) = (SELECT phone
+                               FROM app_user
+                               where app_user.phone = f_phone);
+BEGIN
+  if phone_from_db IS NOT NULL THEN
+    return true;
+  end if;
+  return false;
+END;
+$$ LANGUAGE plpgsql;
+
+create function is_serial_number_used(f_serial_number varchar(11))
+  returns boolean AS
+$$
+DECLARE
+  serial_number_from_db varchar(11) = (SELECT serial_number
+                                       FROM app_user
+                                       where app_user.serial_number = f_serial_number);
+BEGIN
+  if serial_number_from_db IS NOT NULL THEN
+    return true;
+  end if;
+  return false;
+END;
+$$ LANGUAGE plpgsql;
+
+create function valid_user_data() returns trigger AS
+$$
+DECLARE
+  code             int = 0;
+  codeEmail        int = 1;
+  codePhone        int = 2;
+  codeSerialNumber int = 4;
+
+
+BEGIN
+  if is_email_used(new.email) THEN
+    code = code + codeEmail;
+  end if;
+  if is_phone_used(new.phone) THEN
+    code = code + codePhone;
+  end if;
+  if is_serial_number_used(new.serial_number) THEN
+    code = code + codeSerialNumber;
+  end if;
+  case
+    --     everything's fine
+    when code = 0 then code = null ;
+    --     email
+    when code = 1 then code = 23030;
+    --     phone
+    when code = 2 then code = 23032;
+    --     serial number
+    when code = 4 then code = 23031;
+    --     e + p
+    when code = 3 then code = 23034;
+    --     e + s_n
+    when code = 5 then code = 23033;
+    --     p + s_n
+    when code = 6 then code = 23035;
+    --     e + p + s_n
+    when code = 7 then code = 23036;
+    end case;
+  if code is not null then
+    raise using errcode = code;
+  end if;
+  return new;
+end;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER valid_user_data
+  BEFORE INSERT OR UPDATE
+  ON app_user
+  FOR EACH ROW
+EXECUTE PROCEDURE valid_user_data();
