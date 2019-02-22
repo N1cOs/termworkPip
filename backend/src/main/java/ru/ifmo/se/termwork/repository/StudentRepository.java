@@ -7,9 +7,26 @@ import ru.ifmo.se.termwork.domain.Student;
 import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
+    /**
+     * Saves a given student. Database can throw exceptions with error codes:
+     *
+     * 23030 - email constraint violation
+     * 23031 - serial number constraint violation
+     * 23032 - phone constraint violation
+     * 23033 - email and phone constraint violation
+     * 23034 - email and serial number constraint violation
+     * 23035 - phone and serial number constraint violation
+     * 23036 - email, phone and serial number constraint violation
+     *
+     * @param entity must not be {@literal null}.
+     * @return the saved entity will never be {@literal null}.
+     * @see SqlError
+     */
+    @Override
+    <S extends Student> S save(S entity);
 
     /**
-     * Returns the student specified by its email and phone
+     * Returns the student specified by its email
      *
      * @param email email of the student
      * @return the student
@@ -69,4 +86,21 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
      */
     @EntityGraph("student.ratings")
     Optional<Student> findWithRatingsById(Integer id);
+
+    interface SqlError{
+
+        int EMAIL = 23030;
+
+        int SERIAL_NUMBER = 23031;
+
+        int PHONE = 23032;
+
+        int EMAIl_PHONE = 23033;
+
+        int EMAIL_SERIAL_NUMBER = 23034;
+
+        int SERIAL_NUMBER_PHONE = 23036;
+
+        int ALL = 23036;
+    }
 }

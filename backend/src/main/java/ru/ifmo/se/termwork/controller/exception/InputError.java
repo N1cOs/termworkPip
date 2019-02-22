@@ -1,13 +1,13 @@
-package ru.ifmo.se.termwork.dto;
+package ru.ifmo.se.termwork.controller.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
-public class ExceptionDto {
+public class InputError {
 
-    @NonNull
+    private String field;
+
     private String info;
 }

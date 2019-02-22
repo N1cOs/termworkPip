@@ -8,7 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.termwork.domain.User;
 import ru.ifmo.se.termwork.dto.ExamDto;
-import ru.ifmo.se.termwork.dto.ExceptionDto;
+import ru.ifmo.se.termwork.controller.exception.InputError;
 import ru.ifmo.se.termwork.service.ExamService;
 import ru.ifmo.se.termwork.service.MessageService;
 
@@ -60,7 +60,7 @@ public class ExamController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity handleException(IllegalArgumentException e){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionDto(e.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new InputError(e.getMessage()));
     }
 
     private boolean isValid(List<ExamDto> exams){

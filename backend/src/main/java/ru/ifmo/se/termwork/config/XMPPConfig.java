@@ -36,7 +36,7 @@ public class XMPPConfig {
                 .build();
         XMPPTCPConnection connection = new XMPPTCPConnection(config);
         connection.setReplyTimeout(10000);
-        connection.connect();
+        connection.connect().login();
         return connection;
     }
 }

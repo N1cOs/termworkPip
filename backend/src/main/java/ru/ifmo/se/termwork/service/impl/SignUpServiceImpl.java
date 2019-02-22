@@ -6,6 +6,7 @@ import org.jxmpp.jid.parts.Localpart;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.ifmo.se.termwork.controller.exception.InputError;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.dto.StudentDto;
 import ru.ifmo.se.termwork.repository.AchievementRepository;
@@ -15,12 +16,15 @@ import ru.ifmo.se.termwork.repository.SubjectRepository;
 import ru.ifmo.se.termwork.service.SignUpService;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class SignUpServiceImpl implements SignUpService {
+
+    private final static Map<Integer, InputError> errors;
 
     private final StudentRepository studentRepository;
 
@@ -38,9 +42,14 @@ public class SignUpServiceImpl implements SignUpService {
 
     private final AccountManager accountManager;
 
-    @Override
-    public boolean isExists(String serialNumber) {
-        return studentRepository.findBySerialNumber(serialNumber).isPresent();
+    static {
+        Map<Integer, InputError> inputErrors = new HashMap<>();
+        inputErrors.put(StudentRepository.SqlError.EMAIL,
+                new InputError("email", "exception.signUp.email"));
+
+        //ToDo: add serial number and phone
+
+        errors = Collections.unmodifiableMap(inputErrors);
     }
 
     @Override
@@ -50,6 +59,7 @@ public class SignUpServiceImpl implements SignUpService {
         String encodedPassword = passwordEncoder.encode(student.getPassword());
         student.setPassword(encodedPassword);
 
+        //ToDo: exception handling
         studentRepository.save(student);
         signUpJabber(studentDto);
     }
