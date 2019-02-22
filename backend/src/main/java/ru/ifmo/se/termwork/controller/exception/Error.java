@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Error {
 
-    private String message;
+    private String info;
 
     private List<InputError> inputErrors;
 }

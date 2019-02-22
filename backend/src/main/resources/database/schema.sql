@@ -139,19 +139,9 @@ insert into subject(name) values ('Русский язык'), ('Математи
                                  ('Физика'), ('Химия'), ('История'), ('Обществознание'),('Информатика'),
                                  ('Биология'), ('География'), ('Английский язык'), ('Немецкий язык'),
                                  ('Французский язык'), ('Испанский язык'), ('Литература');
-
-insert into app_user
-values (50, 'eee', 'eeeee', 'test', 'email yyyy', '999', '43fr', false, 2, '1999-01-01', '1111 222222', 1);
-
 -- Triggers
 
-drop function is_email_used(f_email varchar);
-drop function is_phone_used(f_phone varchar);
-drop function is_serial_number_used(f_serial_number varchar);
-drop trigger valid_user_data ON app_user;
-drop function valid_user_data();
-
-create function is_email_used(f_email varchar(60))
+create or replace function is_email_used(f_email varchar(60))
   returns boolean AS
 $$
 DECLARE
@@ -167,7 +157,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-create function is_phone_used(f_phone varchar(20))
+create or replace function is_phone_used(f_phone varchar(20))
   returns boolean AS
 $$
 DECLARE
@@ -182,7 +172,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-create function is_serial_number_used(f_serial_number varchar(11))
+create or replace function is_serial_number_used(f_serial_number varchar(11))
   returns boolean AS
 $$
 DECLARE
@@ -197,15 +187,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-create function valid_user_data() returns trigger AS
+create or replace function valid_user_data() returns trigger AS
 $$
 DECLARE
   code             int = 0;
   codeEmail        int = 1;
   codePhone        int = 2;
   codeSerialNumber int = 4;
-
-
 BEGIN
   if is_email_used(new.email) THEN
     code = code + codeEmail;

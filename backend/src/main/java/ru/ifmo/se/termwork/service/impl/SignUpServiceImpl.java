@@ -1,9 +1,6 @@
 package ru.ifmo.se.termwork.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.jivesoftware.smackx.iqregister.AccountManager;
-import org.jxmpp.jid.parts.Localpart;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.termwork.controller.exception.InputError;
@@ -13,6 +10,7 @@ import ru.ifmo.se.termwork.repository.AchievementRepository;
 import ru.ifmo.se.termwork.repository.OlympiadRepository;
 import ru.ifmo.se.termwork.repository.StudentRepository;
 import ru.ifmo.se.termwork.repository.SubjectRepository;
+import ru.ifmo.se.termwork.service.JabberService;
 import ru.ifmo.se.termwork.service.SignUpService;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
 
@@ -38,9 +36,7 @@ public class SignUpServiceImpl implements SignUpService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final TaskExecutor taskExecutor;
-
-    private final AccountManager accountManager;
+    private final JabberService jabberService;
 
     static {
         Map<Integer, InputError> inputErrors = new HashMap<>();
@@ -61,23 +57,14 @@ public class SignUpServiceImpl implements SignUpService {
 
         //ToDo: exception handling
         studentRepository.save(student);
-        signUpJabber(studentDto);
+        saveToJabber(studentDto.getEmail(), studentDto.getPassword());
     }
 
-    private void signUpJabber(StudentDto studentDto){
-        String email = studentDto.getEmail();
-        String password = studentDto.getPassword();
-        Localpart username = Localpart.fromOrNull(email.substring(0, email.lastIndexOf('@')));
-
+    private void saveToJabber(String email, String password){
+        String username = email.substring(0, email.lastIndexOf('@'));
         Map<String, String> attributes = new HashMap<>();
         attributes.put("email", email);
-        taskExecutor.execute(() -> {
-            try{
-                accountManager.createAccount(username, password, attributes);
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        });
+        attributes.put("name", username);
+        jabberService.signUp(username, password, attributes);
     }
 }

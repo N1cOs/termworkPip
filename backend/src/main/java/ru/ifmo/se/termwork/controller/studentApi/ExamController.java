@@ -6,11 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import ru.ifmo.se.termwork.controller.exception.ApiException;
 import ru.ifmo.se.termwork.domain.User;
 import ru.ifmo.se.termwork.dto.ExamDto;
-import ru.ifmo.se.termwork.controller.exception.InputError;
 import ru.ifmo.se.termwork.service.ExamService;
-import ru.ifmo.se.termwork.service.MessageService;
 
 import javax.validation.Validator;
 import java.util.List;
@@ -25,9 +24,6 @@ public class ExamController {
     @Autowired
     private Validator validator;
 
-    @Autowired
-    private MessageService messageService;
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addExams(@AuthenticationPrincipal User user,
                                   @RequestBody List<ExamDto> exams){
@@ -35,7 +31,7 @@ public class ExamController {
             examService.saveExams(user.getId(), exams);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         }
-        throw new IllegalArgumentException(messageService.getMessage("exception.exam.invalidFormat"));
+        throw new ApiException(HttpStatus.BAD_REQUEST, "exception.exam.invalidFormat");
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +41,7 @@ public class ExamController {
             examService.saveExams(user.getId(), exams);
             return ResponseEntity.ok().build();
         }
-        throw new IllegalArgumentException(messageService.getMessage("exception.exam.invalidFormat"));
+        throw new ApiException(HttpStatus.BAD_REQUEST, "exception.exam.invalidFormat");
     }
 
     @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -55,16 +51,10 @@ public class ExamController {
             examService.deleteExams(user.getId(), exams);
             return ResponseEntity.ok().build();
         }
-        throw new IllegalArgumentException(messageService.getMessage("exception.exam.invalidFormat"));
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity handleException(IllegalArgumentException e){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new InputError(e.getMessage()));
+        throw new ApiException(HttpStatus.BAD_REQUEST, "exception.exam.invalidFormat");
     }
 
     private boolean isValid(List<ExamDto> exams){
         return exams.stream().noneMatch(l -> validator.validate(l).size() > 0);
     }
-
 }

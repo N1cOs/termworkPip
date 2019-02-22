@@ -4,10 +4,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 
 import java.util.concurrent.Executors;
 
+@EnableAsync
 @Configuration
 @PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = {"ru.ifmo.se.termwork.config", "ru.ifmo.se.termwork.service"},
@@ -23,12 +25,5 @@ public class RootConfig {
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
-    }
-
-    @Bean
-    public TaskExecutor taskExecutor(){
-        ConcurrentTaskExecutor taskExecutor = new ConcurrentTaskExecutor();
-        taskExecutor.setConcurrentExecutor(Executors.newFixedThreadPool(4));
-        return taskExecutor;
     }
 }
