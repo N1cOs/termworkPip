@@ -1,6 +1,8 @@
 package ru.ifmo.se.termwork.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.termwork.controller.exception.InputError;
@@ -18,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@Log4j
 @Service
 @RequiredArgsConstructor
 public class SignUpServiceImpl implements SignUpService {
@@ -42,8 +45,18 @@ public class SignUpServiceImpl implements SignUpService {
         Map<Integer, InputError> inputErrors = new HashMap<>();
         inputErrors.put(StudentRepository.SqlError.EMAIL,
                 new InputError("email", "exception.signUp.email"));
-
-        //ToDo: add serial number and phone
+        inputErrors.put(StudentRepository.SqlError.EMAIl_PHONE,
+                new InputError("email, phone", "exception.signUp.email_phone"));
+        inputErrors.put(StudentRepository.SqlError.EMAIL_SERIAL_NUMBER,
+                new InputError("email", "exception.signUp.email_serialNumber"));
+        inputErrors.put(StudentRepository.SqlError.SERIAL_NUMBER,
+                new InputError("email", "exception.signUp.serialNumber"));
+        inputErrors.put(StudentRepository.SqlError.PHONE,
+                new InputError("email", "exception.signUp.phone"));
+        inputErrors.put(StudentRepository.SqlError.SERIAL_NUMBER_PHONE,
+                new InputError("email", "exception.signUp.phone_serialNumber"));
+        inputErrors.put(StudentRepository.SqlError.ALL,
+                new InputError("email", "exception.signUp.all"));
 
         errors = Collections.unmodifiableMap(inputErrors);
     }
@@ -56,11 +69,17 @@ public class SignUpServiceImpl implements SignUpService {
         student.setPassword(encodedPassword);
 
         //ToDo: exception handling
-        studentRepository.save(student);
+        try {
+            studentRepository.save(student);
+        } catch (DataIntegrityViolationException ex) {
+            String code = ex.getMessage();
+            log.error(code);
+        }
+
         saveToJabber(studentDto.getEmail(), studentDto.getPassword());
     }
 
-    private void saveToJabber(String email, String password){
+    private void saveToJabber(String email, String password) {
         String username = email.substring(0, email.lastIndexOf('@'));
         Map<String, String> attributes = new HashMap<>();
         attributes.put("email", email);

@@ -5,4 +5,5 @@ import ru.ifmo.se.termwork.dto.StudentDto;
 public interface SignUpService {
 
     void signUp(StudentDto studentDTO);
+
 }

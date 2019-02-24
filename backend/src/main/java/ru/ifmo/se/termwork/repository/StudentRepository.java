@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     /**
      * Saves a given student. Database can throw exceptions with error codes:
-     *
+     * <p>
      * 23030 - email constraint violation
      * 23031 - serial number constraint violation
      * 23032 - phone constraint violation
@@ -37,41 +37,41 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     /**
      * Returns the student from a database with exams by specified id
-     * @see ru.ifmo.se.termwork.domain.Exam
      *
      * @param id id of the student
      * @return the student
+     * @see ru.ifmo.se.termwork.domain.Exam
      */
     @EntityGraph("student.exams")
     Optional<Student> findWithExamsById(Integer id);
 
     /**
      * Returns the student from a database with achievements by specified id
-     * @see ru.ifmo.se.termwork.domain.Achievement
      *
      * @param id id of the student
      * @return the student
+     * @see ru.ifmo.se.termwork.domain.Achievement
      */
     @EntityGraph("student.achievements")
     Optional<Student> findWithAchievementsById(Integer id);
 
     /**
      * Returns the student from a database with exams and achievements by specified id
-     * @see ru.ifmo.se.termwork.domain.Exam
-     * @see ru.ifmo.se.termwork.domain.Achievement
      *
      * @param id id of the student
      * @return the student
+     * @see ru.ifmo.se.termwork.domain.Exam
+     * @see ru.ifmo.se.termwork.domain.Achievement
      */
     @EntityGraph("student.scores")
     Optional<Student> findWithScoresById(Integer id);
 
     /**
      * Returns the student from a database with olympiad by specified id
-     * @see ru.ifmo.se.termwork.domain.Olympiad
      *
      * @param id id of the student
      * @return the student
+     * @see ru.ifmo.se.termwork.domain.Olympiad
      */
     @EntityGraph("student.olympiads")
     Optional<Student> findWithOlympiadsById(Integer id);
@@ -79,15 +79,15 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     /**
      * Returns the student from a database with ratings by specified id
-     * @see ru.ifmo.se.termwork.domain.Rating
      *
      * @param id id of the student
      * @return the student
+     * @see ru.ifmo.se.termwork.domain.Rating
      */
     @EntityGraph("student.ratings")
     Optional<Student> findWithRatingsById(Integer id);
 
-    interface SqlError{
+    interface SqlError {
 
         int EMAIL = 23030;
 
@@ -103,4 +103,5 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
         int ALL = 23036;
     }
+
 }
