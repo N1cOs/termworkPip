@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.postgresql.util.PSQLException;
 import org.springframework.core.NestedExceptionUtils;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import ru.ifmo.se.termwork.service.JabberService;
 import ru.ifmo.se.termwork.service.SignUpService;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 @Log4j
@@ -67,19 +65,19 @@ public class SignUpServiceImpl implements SignUpService {
     void chooseState(String sqlState) throws ApiException{
         switch (sqlState){
             case "23030":
-                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL)));
+                throw new ApiException(HttpStatus.FORBIDDEN, errors.get(StudentRepository.SqlError.EMAIL).getInfo());
             case "23031":
-                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.SERIAL_NUMBER)));
+                throw new ApiException(HttpStatus.FORBIDDEN, errors.get(StudentRepository.SqlError.SERIAL_NUMBER).getInfo());
             case "23032":
-                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.PHONE)));
+                throw new ApiException(HttpStatus.FORBIDDEN, errors.get(StudentRepository.SqlError.PHONE).getInfo());
             case "23033":
-                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL)));
+                throw new ApiException(HttpStatus.FORBIDDEN, errors.get(StudentRepository.SqlError.EMAIL).getInfo());
             case "23034":
-                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL_SERIAL_NUMBER)));
+                throw new ApiException(HttpStatus.FORBIDDEN, errors.get(StudentRepository.SqlError.EMAIL_SERIAL_NUMBER).getInfo());
             case "23035":
-                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.SERIAL_NUMBER_PHONE)));
+                throw new ApiException(HttpStatus.FORBIDDEN, errors.get(StudentRepository.SqlError.SERIAL_NUMBER_PHONE).getInfo());
             case "23036":
-                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.ALL)));
+                throw new ApiException(HttpStatus.FORBIDDEN, errors.get(StudentRepository.SqlError.ALL).getInfo());
         }
     }
 
