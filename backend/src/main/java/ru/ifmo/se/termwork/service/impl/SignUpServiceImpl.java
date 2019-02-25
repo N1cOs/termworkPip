@@ -48,50 +48,38 @@ public class SignUpServiceImpl implements SignUpService {
         Map<Integer, InputError> inputErrors = new HashMap<>();
         inputErrors.put(StudentRepository.SqlError.EMAIL,
                 new InputError("email", "exception.signUp.email"));
-//        inputErrors.put(StudentRepository.SqlError.EMAIl_PHONE,
-//                new InputError("email, phone", "exception.signUp.email_phone"));
-//        inputErrors.put(StudentRepository.SqlError.EMAIL_SERIAL_NUMBER,
-//                new InputError("email, serial number", "exception.signUp.email_serialNumber"));
+        inputErrors.put(StudentRepository.SqlError.EMAIl_PHONE,
+                new InputError("email, phone", "exception.signUp.email_phone"));
+        inputErrors.put(StudentRepository.SqlError.EMAIL_SERIAL_NUMBER,
+                new InputError("email, serial number", "exception.signUp.email_serialNumber"));
         inputErrors.put(StudentRepository.SqlError.SERIAL_NUMBER,
                 new InputError("serial number", "exception.signUp.serialNumber"));
         inputErrors.put(StudentRepository.SqlError.PHONE,
                 new InputError("phone", "exception.signUp.phone"));
-//        inputErrors.put(StudentRepository.SqlError.SERIAL_NUMBER_PHONE,
-//                new InputError("phone, serial number", "exception.signUp.phone_serialNumber"));
-//        inputErrors.put(StudentRepository.SqlError.ALL,
-//                new InputError("email, phone and serial number", "exception.signUp.all"));
+        inputErrors.put(StudentRepository.SqlError.SERIAL_NUMBER_PHONE,
+                new InputError("phone, serial number", "exception.signUp.phone_serialNumber"));
+        inputErrors.put(StudentRepository.SqlError.ALL,
+                new InputError("email, phone and serial number", "exception.signUp.all"));
 
         errors = Collections.unmodifiableMap(inputErrors);
     }
 
-    private void chooseState(String sqlState) throws ApiException{
+    void chooseState(String sqlState) throws ApiException{
         switch (sqlState){
             case "23030":
-                throw new ApiException(HttpStatus.FORBIDDEN,
-                        Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL)));
+                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL)));
             case "23031":
-                throw new ApiException(HttpStatus.FORBIDDEN,
-                        Arrays.asList(errors.get(StudentRepository.SqlError.SERIAL_NUMBER)));
+                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.SERIAL_NUMBER)));
             case "23032":
-                throw new ApiException(HttpStatus.FORBIDDEN,
-                        Arrays.asList(errors.get(StudentRepository.SqlError.PHONE)));
+                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.PHONE)));
             case "23033":
-                throw new ApiException(HttpStatus.FORBIDDEN,
-                        Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL),
-                                errors.get(StudentRepository.SqlError.PHONE)));
+                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL)));
             case "23034":
-                throw new ApiException(HttpStatus.FORBIDDEN,
-                        Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL),
-                                errors.get(StudentRepository.SqlError.SERIAL_NUMBER)));
+                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL_SERIAL_NUMBER)));
             case "23035":
-                throw new ApiException(HttpStatus.FORBIDDEN,
-                        Arrays.asList(errors.get(StudentRepository.SqlError.SERIAL_NUMBER),
-                                errors.get(StudentRepository.SqlError.PHONE)));
+                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.SERIAL_NUMBER_PHONE)));
             case "23036":
-                throw new ApiException(HttpStatus.FORBIDDEN,
-                        Arrays.asList(errors.get(StudentRepository.SqlError.EMAIL),
-                                errors.get(StudentRepository.SqlError.SERIAL_NUMBER),
-                                errors.get(StudentRepository.SqlError.PHONE)));
+                throw new ApiException(HttpStatus.FORBIDDEN, Arrays.asList(errors.get(StudentRepository.SqlError.ALL)));
         }
     }
 
@@ -104,7 +92,7 @@ public class SignUpServiceImpl implements SignUpService {
 
         //ToDo: exception handling
         try {
-            studentRepository.saveAndFlush(student);
+            studentRepository.save(student);
         } catch (Exception ex) {
             PSQLException psqlException = (PSQLException) NestedExceptionUtils.getMostSpecificCause(ex);
             chooseState(psqlException.getSQLState());
