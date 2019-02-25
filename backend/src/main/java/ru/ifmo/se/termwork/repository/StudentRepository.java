@@ -99,7 +99,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
         int EMAIL_SERIAL_NUMBER = 23034;
 
-        int SERIAL_NUMBER_PHONE = 23036;
+        int SERIAL_NUMBER_PHONE = 23035;
 
         int ALL = 23036;
     }
