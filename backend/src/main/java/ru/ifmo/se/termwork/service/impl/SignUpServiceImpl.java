@@ -9,10 +9,7 @@ import ru.ifmo.se.termwork.controller.exception.ApiException;
 import ru.ifmo.se.termwork.controller.exception.InputError;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.dto.StudentDto;
-import ru.ifmo.se.termwork.repository.AchievementRepository;
-import ru.ifmo.se.termwork.repository.OlympiadRepository;
-import ru.ifmo.se.termwork.repository.StudentRepository;
-import ru.ifmo.se.termwork.repository.SubjectRepository;
+import ru.ifmo.se.termwork.repository.*;
 import ru.ifmo.se.termwork.service.JabberService;
 import ru.ifmo.se.termwork.service.SignUpService;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
@@ -26,15 +23,17 @@ public class SignUpServiceImpl implements SignUpService {
 
     private final static Map<Integer, InputError> ERRORS;
 
-    private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
 
-    private final StudentMapper studentMapper;
+    private final StudentRepository studentRepository;
 
     private final SubjectRepository subjectRepository;
 
     private final OlympiadRepository olympiadRepository;
 
     private final AchievementRepository achievementRepository;
+
+    private final StudentMapper studentMapper;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -51,7 +50,10 @@ public class SignUpServiceImpl implements SignUpService {
         ERRORS = Collections.unmodifiableMap(inputErrors);
     }
 
-
+    @Override
+    public boolean isEmailExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
 
     @Override
     public void signUp(StudentDto studentDto) {

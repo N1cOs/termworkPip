@@ -43,7 +43,7 @@ public class SignInController {
         if(!passwordEncoder.matches(userDTO.getPassword(), user.getPassword()))
             throw new ApiException(HttpStatus.UNAUTHORIZED, "exception.password");
 
-        List<String> roles = user.getRoles().stream().map(Authority::getName).collect(Collectors.toList());
+        List<String> roles = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
         return ResponseEntity.ok(jwtUtils.getToken(user.getId(), roles));
     }
 }

@@ -6,4 +6,6 @@ public interface SignUpService {
 
     void signUp(StudentDto studentDTO);
 
+    boolean isEmailExists(String email);
+
 }

@@ -4,17 +4,13 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.ifmo.se.termwork.security.Role;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -50,28 +46,25 @@ public class User implements UserDetails, Serializable {
             joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_authority")
     )
-    private Set<Authority> roles = new HashSet<>();
+    private Set<Authority> authorities = new HashSet<>();
 
-    @Transient
-    @Getter(AccessLevel.NONE)
-    private Collection<? extends GrantedAuthority> authorities;
-
-    public User(int id, Collection<? extends GrantedAuthority> authorities){
+    public User(int id, Set<Authority> authorities){
         this.id = id;
         this.authorities = authorities;
     }
 
     public void setRoles(Role... roles){
         for(Role role : roles){
-            this.roles.add(role.getAuthority());
+            this.authorities.add(role.getAuthority());
         }
     }
 
+    public boolean hasRole(Role role){
+        return authorities.contains(role.getAuthority());
+    }
+
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(authorities != null)
-            return authorities;
-        authorities = roles.stream().map(s -> new SimpleGrantedAuthority(s.getName())).collect(Collectors.toList());
+    public Set<Authority> getAuthorities() {
         return authorities;
     }
 

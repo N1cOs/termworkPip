@@ -2,8 +2,8 @@ package ru.ifmo.se.termwork.security;
 
 import io.jsonwebtoken.*;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import ru.ifmo.se.termwork.domain.Authority;
 import ru.ifmo.se.termwork.domain.User;
 
 import javax.annotation.PostConstruct;
@@ -14,8 +14,8 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
@@ -44,10 +44,13 @@ public class JwtUtils {
         try{
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             Integer id = claims.getBody().get(ID_CLAIM_NAME, Integer.class);
-            List<String> strRoles = (List<String>) claims.getBody().get(ROLES_CLAIM_NAME);
-            List<SimpleGrantedAuthority> roles =
-                    strRoles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-            return new User(id, roles);
+            List<String> strAuthorities = (List<String>) claims.getBody().get(ROLES_CLAIM_NAME);
+            HashSet<Authority> authorities = new HashSet<>();
+            for(String authority : strAuthorities){
+                String role = authority.substring("ROLE_".length());
+                authorities.add(Role.valueOf(role).getAuthority());
+            }
+            return new User(id, authorities);
         } catch (JwtException e){
             throw new BadCredentialsException("Token is invalid");
         }
