@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.ifmo.se.termwork.controller.exception.ApiException;
 import ru.ifmo.se.termwork.domain.User;
 import ru.ifmo.se.termwork.dto.WorkerDto;
+import ru.ifmo.se.termwork.repository.UserRepository;
 import ru.ifmo.se.termwork.security.Role;
-import ru.ifmo.se.termwork.service.LinkService;
 import ru.ifmo.se.termwork.service.SignUpService;
 
 @RestController
@@ -24,7 +24,7 @@ public class AddWorkerController {
     private SignUpService signUpService;
 
     @Autowired
-    private LinkService linkService;
+    private UserRepository userRepository;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addWorker(@AuthenticationPrincipal User user,
@@ -35,10 +35,9 @@ public class AddWorkerController {
         if(workerDto.getEmail() == null)
             throw new ApiException(HttpStatus.BAD_REQUEST, "exception.email");
 
-        if(signUpService.isEmailExists(workerDto.getEmail()))
+        if(userRepository.findByEmail(workerDto.getEmail()).isPresent())
             throw new ApiException(HttpStatus.BAD_REQUEST, "exception.signUp.email");
-
-        linkService.generateWorkerSignUpLink(user.getId(), workerDto.getEmail());
+        signUpService.addWorkerSignUp(user.getId(), workerDto.getEmail());
         return ResponseEntity.ok().build();
     }
 

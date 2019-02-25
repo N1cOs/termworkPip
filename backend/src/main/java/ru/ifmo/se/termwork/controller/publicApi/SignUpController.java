@@ -6,8 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.termwork.dto.StudentDto;
+import ru.ifmo.se.termwork.dto.WorkerDto;
 import ru.ifmo.se.termwork.service.LinkService;
 import ru.ifmo.se.termwork.service.SignUpService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/public/sign-up")
@@ -25,10 +28,13 @@ public class SignUpController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping(path = "/{uuid}")
-    public String signUpWorker(@PathVariable String uuid){
-        if(linkService.isValid(uuid))
-            return "valid";
-        return "invalid";
+    @PostMapping(path = "/{uuid}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity signUpWorker(@PathVariable String uuid,
+                               @RequestBody @Valid WorkerDto workerDto){
+        if(!linkService.isValid(uuid))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        signUpService.signUp(workerDto, uuid);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

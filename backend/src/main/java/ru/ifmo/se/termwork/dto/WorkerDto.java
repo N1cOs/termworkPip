@@ -17,5 +17,6 @@ public class WorkerDto {
 
     private String patronymic;
 
-    private int collegeId;
+    @NotNull
+    private String password;
 }

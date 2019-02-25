@@ -1,21 +1,31 @@
 package ru.ifmo.se.termwork.service.impl;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.termwork.controller.exception.ApiException;
 import ru.ifmo.se.termwork.controller.exception.InputError;
+import ru.ifmo.se.termwork.domain.College;
 import ru.ifmo.se.termwork.domain.Student;
+import ru.ifmo.se.termwork.domain.Worker;
 import ru.ifmo.se.termwork.dto.StudentDto;
+import ru.ifmo.se.termwork.dto.WorkerDto;
 import ru.ifmo.se.termwork.repository.*;
+import ru.ifmo.se.termwork.security.Role;
 import ru.ifmo.se.termwork.service.JabberService;
+import ru.ifmo.se.termwork.service.LinkService;
 import ru.ifmo.se.termwork.service.SignUpService;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
+import ru.ifmo.se.termwork.service.mappers.WorkerMapper;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +33,11 @@ public class SignUpServiceImpl implements SignUpService {
 
     private final static Map<Integer, InputError> ERRORS;
 
-    private final UserRepository userRepository;
+    private final static Map<String, WorkerInfo> waitingWorkers = new ConcurrentHashMap<>();
 
     private final StudentRepository studentRepository;
+
+    private final WorkerRepository workerRepository;
 
     private final SubjectRepository subjectRepository;
 
@@ -35,7 +47,11 @@ public class SignUpServiceImpl implements SignUpService {
 
     private final StudentMapper studentMapper;
 
+    private final WorkerMapper workerMapper;
+
     private final PasswordEncoder passwordEncoder;
+
+    private final LinkService linkService;
 
     private final JabberService jabberService;
 
@@ -50,9 +66,34 @@ public class SignUpServiceImpl implements SignUpService {
         ERRORS = Collections.unmodifiableMap(inputErrors);
     }
 
+    //ToDo: add sending emails
+    @Async
     @Override
-    public boolean isEmailExists(String email) {
-        return userRepository.findByEmail(email).isPresent();
+    public void addWorkerSignUp(int headWorkerId, String workerEmail) {
+        Worker headWorker = workerRepository.findById(headWorkerId).
+                orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.userNotFound"));
+        String link = linkService.generateLink();
+
+        WorkerInfo workerInfo = new WorkerInfo(workerEmail, headWorker.getCollege());
+        waitingWorkers.put(link, workerInfo);
+    }
+
+    @Override
+    public void signUp(WorkerDto workerDto, String link) {
+        WorkerInfo workerInfo = waitingWorkers.get(link);
+        Worker worker = workerMapper.toWorker(workerDto);
+        String encodedPassword = passwordEncoder.encode(worker.getPassword());
+
+        worker.setPassword(encodedPassword);
+        worker.setCollege(workerInfo.college);
+        worker.setEmail(workerInfo.email);
+        worker.setRoles(Role.WORKER);
+
+        workerRepository.save(worker);
+        saveToJabber(workerInfo.email, workerDto.getPassword());
+
+        linkService.destroyLink(link);
+        waitingWorkers.remove(link);
     }
 
     @Override
@@ -61,6 +102,7 @@ public class SignUpServiceImpl implements SignUpService {
                 toStudent(studentDto, subjectRepository, achievementRepository, olympiadRepository);
         String encodedPassword = passwordEncoder.encode(student.getPassword());
         student.setPassword(encodedPassword);
+        student.setRoles(Role.STUDENT);
 
         try {
             studentRepository.save(student);
@@ -110,5 +152,14 @@ public class SignUpServiceImpl implements SignUpService {
         attributes.put("email", email);
         attributes.put("name", username);
         jabberService.signUp(username, password, attributes);
+    }
+
+    @EqualsAndHashCode
+    @AllArgsConstructor
+    private static class WorkerInfo{
+
+        String email;
+
+        College college;
     }
 }

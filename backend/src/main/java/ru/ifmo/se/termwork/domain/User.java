@@ -40,7 +40,7 @@ public class User implements UserDetails, Serializable {
     @Column(name = "is_enabled")
     private boolean isEnabled = true;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_authority",
             joinColumns = @JoinColumn(name = "id_user"),
