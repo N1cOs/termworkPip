@@ -49,7 +49,7 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @EqualsAndHashCode
-    private static class Link{
+    private class Link{
 
         String uuid;
 

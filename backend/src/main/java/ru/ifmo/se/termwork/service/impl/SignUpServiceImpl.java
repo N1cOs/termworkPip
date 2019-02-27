@@ -156,7 +156,7 @@ public class SignUpServiceImpl implements SignUpService {
 
     @EqualsAndHashCode
     @AllArgsConstructor
-    private static class WorkerInfo{
+    private class WorkerInfo{
 
         String email;
 

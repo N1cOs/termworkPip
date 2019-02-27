@@ -37,6 +37,8 @@ public class Speciality {
     @Column(name = "code_okso")
     private String okso;
 
+    private int places;
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "id.speciality")
