@@ -12,8 +12,9 @@ public interface InputErrors {
     }
 
     interface Invalid{
-        InputError EMAIL = new InputError("email", "exception.email");
 
-        InputError PASSWORD = new InputError("password", "exception.password");
+        InputError EMAIL = new InputError("email", "exception.email.notFound");
+
+        InputError PASSWORD = new InputError("password", "exception.password.invalid");
     }
 }

@@ -21,6 +21,7 @@ import ru.ifmo.se.termwork.service.SignUpService;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
 import ru.ifmo.se.termwork.service.mappers.WorkerMapper;
 import ru.ifmo.se.termwork.support.exception.ApiException;
+import ru.ifmo.se.termwork.support.exception.ClientException;
 import ru.ifmo.se.termwork.support.exception.InputError;
 import ru.ifmo.se.termwork.support.exception.InputErrors;
 
@@ -75,7 +76,7 @@ public class SignUpServiceImpl implements SignUpService {
     @Override
     public void addWorkerSignUp(int headWorkerId, String workerEmail) {
         Worker headWorker = workerRepository.findById(headWorkerId).
-                orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.userNotFound"));
+                orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.user.notFound"));
         String link = linkService.generateLink();
 
         WorkerInfo workerInfo = new WorkerInfo(workerEmail, headWorker.getCollege());
@@ -124,34 +125,34 @@ public class SignUpServiceImpl implements SignUpService {
     private void throwExceptionUponState(String sqlState) throws ApiException{
         switch (Integer.parseInt(sqlState)) {
             case StudentRepository.SqlError.EMAIL:
-                throw new ApiException(HttpStatus.BAD_REQUEST,
+                throw new ClientException(HttpStatus.BAD_REQUEST,
                         ERRORS.get(StudentRepository.SqlError.EMAIL));
 
             case StudentRepository.SqlError.SERIAL_NUMBER:
-                throw new ApiException(HttpStatus.BAD_REQUEST,
+                throw new ClientException(HttpStatus.BAD_REQUEST,
                         ERRORS.get(StudentRepository.SqlError.SERIAL_NUMBER));
 
             case StudentRepository.SqlError.PHONE:
-                throw new ApiException(HttpStatus.BAD_REQUEST,
+                throw new ClientException(HttpStatus.BAD_REQUEST,
                         ERRORS.get(StudentRepository.SqlError.PHONE));
 
             case StudentRepository.SqlError.EMAIl_PHONE:
-                throw new ApiException(HttpStatus.BAD_REQUEST,
+                throw new ClientException(HttpStatus.BAD_REQUEST,
                         ERRORS.get(StudentRepository.SqlError.EMAIL),
                         ERRORS.get(StudentRepository.SqlError.PHONE));
 
             case StudentRepository.SqlError.EMAIL_SERIAL_NUMBER:
-                throw new ApiException(HttpStatus.BAD_REQUEST,
+                throw new ClientException(HttpStatus.BAD_REQUEST,
                         ERRORS.get(StudentRepository.SqlError.EMAIL),
                         ERRORS.get(StudentRepository.SqlError.SERIAL_NUMBER));
 
             case StudentRepository.SqlError.SERIAL_NUMBER_PHONE:
-                throw new ApiException(HttpStatus.BAD_REQUEST,
+                throw new ClientException(HttpStatus.BAD_REQUEST,
                         ERRORS.get(StudentRepository.SqlError.SERIAL_NUMBER),
                         ERRORS.get(StudentRepository.SqlError.PHONE));
 
             case StudentRepository.SqlError.ALL:
-                throw new ApiException(HttpStatus.BAD_REQUEST, new ArrayList<>(ERRORS.values()));
+                throw new ClientException(HttpStatus.BAD_REQUEST, new ArrayList<>(ERRORS.values()));
         }
     }
 

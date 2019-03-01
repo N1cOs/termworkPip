@@ -36,7 +36,7 @@ public class JabberServiceImpl implements JabberService {
         Localpart login = Localpart.fromOrNull(username);
         try {
             accountManager.createAccount(login, password, attributes);
-            sendMessage(username, messageService.getMessage("jabber.bot.signUp"));
+            sendMessage(username, messageService.getClientMessage("jabber.bot.signUp"));
         } catch (Exception e) {
             log.error("Jabber Exception", e);
         }

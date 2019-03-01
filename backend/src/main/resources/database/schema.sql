@@ -259,7 +259,7 @@ end;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER valid_user_data
-  BEFORE INSERT OR UPDATE
+  BEFORE INSERT
   ON app_user
   FOR EACH ROW
 EXECUTE PROCEDURE valid_user_data();

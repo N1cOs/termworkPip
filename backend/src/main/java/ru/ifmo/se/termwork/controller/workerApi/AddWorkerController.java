@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ifmo.se.termwork.support.exception.ApiException;
 import ru.ifmo.se.termwork.domain.User;
 import ru.ifmo.se.termwork.dto.WorkerDto;
 import ru.ifmo.se.termwork.repository.UserRepository;
 import ru.ifmo.se.termwork.security.Role;
 import ru.ifmo.se.termwork.service.SignUpService;
+import ru.ifmo.se.termwork.support.exception.ApiException;
+import ru.ifmo.se.termwork.support.exception.ClientException;
+import ru.ifmo.se.termwork.support.exception.InputErrors;
 
 @RestController
 @RequestMapping("/worker/sign-up")
@@ -30,13 +32,13 @@ public class AddWorkerController {
     public ResponseEntity addWorker(@AuthenticationPrincipal User user,
                                  @RequestBody WorkerDto workerDto){
         if(!user.hasRole(Role.HEAD_WORKER))
-            throw new ApiException(HttpStatus.FORBIDDEN, "exception.signUp.notHeadWorker");
+            throw new ClientException(HttpStatus.FORBIDDEN, "exception.signUp.notHeadWorker");
 
         if(workerDto.getEmail() == null)
             throw new ApiException(HttpStatus.BAD_REQUEST, "exception.email");
 
         if(userRepository.findByEmail(workerDto.getEmail()).isPresent())
-            throw new ApiException(HttpStatus.BAD_REQUEST, "exception.signUp.email");
+            throw new ClientException(HttpStatus.BAD_REQUEST, InputErrors.Duplicate.EMAIL);
         signUpService.addWorkerSignUp(user.getId(), workerDto.getEmail());
         return ResponseEntity.ok().build();
     }

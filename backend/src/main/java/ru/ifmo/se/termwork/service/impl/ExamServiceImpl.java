@@ -3,7 +3,6 @@ package ru.ifmo.se.termwork.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.termwork.support.exception.ApiException;
 import ru.ifmo.se.termwork.domain.Exam;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.domain.Subject;
@@ -13,6 +12,7 @@ import ru.ifmo.se.termwork.repository.ExamRepository;
 import ru.ifmo.se.termwork.repository.StudentRepository;
 import ru.ifmo.se.termwork.repository.SubjectRepository;
 import ru.ifmo.se.termwork.service.ExamService;
+import ru.ifmo.se.termwork.support.exception.ApiException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class ExamServiceImpl implements ExamService {
 
     private List<Exam> getExams(int studentId, List<ExamDto> exams){
         Student student = studentRepository.findById(studentId).
-                orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.userNotFound"));
+                orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.user.notFound"));
         List<Subject> subjects = subjectRepository.findAll();
         ArrayList<Exam> examsEntity = new ArrayList<>();
 

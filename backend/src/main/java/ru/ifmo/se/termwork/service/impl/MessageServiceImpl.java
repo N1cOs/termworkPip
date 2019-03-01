@@ -1,6 +1,7 @@
 package ru.ifmo.se.termwork.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -12,17 +13,32 @@ import java.util.Locale;
 public class MessageServiceImpl implements MessageService {
 
     @Autowired
-    private MessageSource messageSource;
+    @Qualifier("apiMessages")
+    private MessageSource apiMessageSource;
+
+    @Autowired
+    @Qualifier("clientMessages")
+    private MessageSource clientMessageSource;
 
     @Override
-    public String getMessage(String code) {
-        Locale locale = LocaleContextHolder.getLocale();
-        return messageSource.getMessage(code, null, locale);
+    public String getApiMessage(String code) {
+        return apiMessageSource.getMessage(code, null, Locale.ENGLISH);
     }
 
     @Override
-    public String getMessage(String code, Object[] args) {
+    public String getApiMessage(String code, Object[] args) {
+        return apiMessageSource.getMessage(code, args, Locale.ENGLISH);
+    }
+
+    @Override
+    public String getClientMessage(String code) {
         Locale locale = LocaleContextHolder.getLocale();
-        return messageSource.getMessage(code, args, locale);
+        return clientMessageSource.getMessage(code, null, locale);
+    }
+
+    @Override
+    public String getClientMessage(String code, Object[] args) {
+        Locale locale = LocaleContextHolder.getLocale();
+        return clientMessageSource.getMessage(code, args, locale);
     }
 }

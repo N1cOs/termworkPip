@@ -16,10 +16,19 @@ import org.springframework.scheduling.annotation.EnableScheduling;
         })
 public class RootConfig {
 
-    @Bean
-    public MessageSource messageSource() {
+    @Bean(name = "apiMessages")
+    public MessageSource apiMessageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/messages");
+        messageSource.setBasename("classpath:messages/api_messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setUseCodeAsDefaultMessage(true);
+        return messageSource;
+    }
+
+    @Bean(name = "clientMessages")
+    public MessageSource clientMessageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages/client_messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;

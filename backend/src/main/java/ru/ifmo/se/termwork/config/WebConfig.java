@@ -12,7 +12,7 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import ru.ifmo.se.termwork.support.resolver.JsonParamArgumentResolver;
 
 import javax.validation.Validator;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,12 +33,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public AcceptHeaderLocaleResolver localeResolver(){
-        Locale defaultLocale = new Locale("en");
-        List<Locale> locales = Arrays.asList(defaultLocale, new Locale("ru"));
+        Locale defaultLocale = new Locale("ru");
+        List<Locale> locales = Collections.singletonList(defaultLocale);
 
         AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
-        localeResolver.setSupportedLocales(locales);
         localeResolver.setDefaultLocale(defaultLocale);
+        localeResolver.setSupportedLocales(locales);
         return localeResolver;
     }
 
