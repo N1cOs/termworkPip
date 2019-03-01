@@ -1,4 +1,4 @@
-package ru.ifmo.se.termwork.controller.exception;
+package ru.ifmo.se.termwork.support.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

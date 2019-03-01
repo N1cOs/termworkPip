@@ -3,7 +3,7 @@ package ru.ifmo.se.termwork.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.termwork.controller.exception.ApiException;
+import ru.ifmo.se.termwork.support.exception.ApiException;
 import ru.ifmo.se.termwork.domain.Exam;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.domain.Subject;

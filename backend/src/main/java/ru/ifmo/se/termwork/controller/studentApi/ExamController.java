@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.ifmo.se.termwork.controller.exception.ApiException;
+import ru.ifmo.se.termwork.support.exception.ApiException;
 import ru.ifmo.se.termwork.domain.User;
 import ru.ifmo.se.termwork.dto.ExamDto;
 import ru.ifmo.se.termwork.service.ExamService;

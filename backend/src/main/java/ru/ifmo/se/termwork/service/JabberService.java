@@ -8,8 +8,8 @@ public interface JabberService {
 
     /**
      *
-     * @param username username or email of user
-     * @param body body for the message
+     * @param username email or username
+     * @param body content for the message
      */
     void sendMessage(String username, String body);
 }

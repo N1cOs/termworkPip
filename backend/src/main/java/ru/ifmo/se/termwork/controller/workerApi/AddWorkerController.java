@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ifmo.se.termwork.controller.exception.ApiException;
+import ru.ifmo.se.termwork.support.exception.ApiException;
 import ru.ifmo.se.termwork.domain.User;
 import ru.ifmo.se.termwork.dto.WorkerDto;
 import ru.ifmo.se.termwork.repository.UserRepository;

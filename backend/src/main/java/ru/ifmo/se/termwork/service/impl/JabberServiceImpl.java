@@ -9,10 +9,8 @@ import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.termwork.controller.exception.ApiException;
 import ru.ifmo.se.termwork.service.JabberService;
 import ru.ifmo.se.termwork.service.MessageService;
 
@@ -41,7 +39,6 @@ public class JabberServiceImpl implements JabberService {
             sendMessage(username, messageService.getMessage("jabber.bot.signUp"));
         } catch (Exception e) {
             log.error("Jabber Exception", e);
-            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "exception.xmpp.connection");
         }
     }
 
@@ -56,7 +53,6 @@ public class JabberServiceImpl implements JabberService {
             chat.send(body);
         } catch (Exception e) {
             log.error("Jabber bot exception", e);
-            e.printStackTrace();
         }
     }
 }

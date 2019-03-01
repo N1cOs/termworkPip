@@ -1,9 +1,11 @@
-package ru.ifmo.se.termwork.controller.exception;
+package ru.ifmo.se.termwork.support.exception;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -29,6 +31,11 @@ public class ApiException extends RuntimeException {
         this.status = status;
         this.message = message;
         this.messageArgs = args;
+    }
+
+    public ApiException(HttpStatus status, InputError... inputError){
+        this.status = status;
+        this.inputErrors = Arrays.asList(inputError);
     }
 
     public ApiException(HttpStatus status, List<InputError> inputErrors) {

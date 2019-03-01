@@ -1,10 +1,12 @@
-package ru.ifmo.se.termwork.controller.exception;
+package ru.ifmo.se.termwork.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.ifmo.se.termwork.service.MessageService;
+import ru.ifmo.se.termwork.support.exception.ApiException;
+import ru.ifmo.se.termwork.support.exception.Error;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

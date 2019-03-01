@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.termwork.controller.exception.ApiException;
-import ru.ifmo.se.termwork.controller.exception.InputError;
 import ru.ifmo.se.termwork.domain.College;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.domain.Worker;
@@ -22,9 +20,15 @@ import ru.ifmo.se.termwork.service.LinkService;
 import ru.ifmo.se.termwork.service.SignUpService;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
 import ru.ifmo.se.termwork.service.mappers.WorkerMapper;
+import ru.ifmo.se.termwork.support.exception.ApiException;
+import ru.ifmo.se.termwork.support.exception.InputError;
+import ru.ifmo.se.termwork.support.exception.InputErrors;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -58,11 +62,11 @@ public class SignUpServiceImpl implements SignUpService {
     static {
         Map<Integer, InputError> inputErrors = new HashMap<>();
         inputErrors.put(StudentRepository.SqlError.EMAIL,
-                new InputError("email", "exception.signUp.email"));
+                InputErrors.Duplicate.EMAIL);
         inputErrors.put(StudentRepository.SqlError.SERIAL_NUMBER,
-                new InputError("serial_number", "exception.signUp.serialNumber"));
+                InputErrors.Duplicate.SERIAL_NUMBER);
         inputErrors.put(StudentRepository.SqlError.PHONE,
-                new InputError("phone", "exception.signUp.phone"));
+                InputErrors.Duplicate.PHONE);
         ERRORS = Collections.unmodifiableMap(inputErrors);
     }
 
@@ -121,28 +125,33 @@ public class SignUpServiceImpl implements SignUpService {
         switch (Integer.parseInt(sqlState)) {
             case StudentRepository.SqlError.EMAIL:
                 throw new ApiException(HttpStatus.BAD_REQUEST,
-                        Collections.singletonList(ERRORS.get(StudentRepository.SqlError.EMAIL)));
+                        ERRORS.get(StudentRepository.SqlError.EMAIL));
+
             case StudentRepository.SqlError.SERIAL_NUMBER:
                 throw new ApiException(HttpStatus.BAD_REQUEST,
-                        Collections.singletonList(ERRORS.get(StudentRepository.SqlError.SERIAL_NUMBER)));
+                        ERRORS.get(StudentRepository.SqlError.SERIAL_NUMBER));
+
             case StudentRepository.SqlError.PHONE:
                 throw new ApiException(HttpStatus.BAD_REQUEST,
-                        Collections.singletonList(ERRORS.get(StudentRepository.SqlError.PHONE)));
+                        ERRORS.get(StudentRepository.SqlError.PHONE));
+
             case StudentRepository.SqlError.EMAIl_PHONE:
                 throw new ApiException(HttpStatus.BAD_REQUEST,
-                        Arrays.asList(ERRORS.get(StudentRepository.SqlError.EMAIL),
-                                ERRORS.get(StudentRepository.SqlError.PHONE)));
+                        ERRORS.get(StudentRepository.SqlError.EMAIL),
+                        ERRORS.get(StudentRepository.SqlError.PHONE));
+
             case StudentRepository.SqlError.EMAIL_SERIAL_NUMBER:
                 throw new ApiException(HttpStatus.BAD_REQUEST,
-                        Arrays.asList(ERRORS.get(StudentRepository.SqlError.EMAIL),
-                                ERRORS.get(StudentRepository.SqlError.SERIAL_NUMBER)));
+                        ERRORS.get(StudentRepository.SqlError.EMAIL),
+                        ERRORS.get(StudentRepository.SqlError.SERIAL_NUMBER));
+
             case StudentRepository.SqlError.SERIAL_NUMBER_PHONE:
                 throw new ApiException(HttpStatus.BAD_REQUEST,
-                        Arrays.asList(ERRORS.get(StudentRepository.SqlError.SERIAL_NUMBER),
-                                ERRORS.get(StudentRepository.SqlError.PHONE)));
+                        ERRORS.get(StudentRepository.SqlError.SERIAL_NUMBER),
+                        ERRORS.get(StudentRepository.SqlError.PHONE));
+
             case StudentRepository.SqlError.ALL:
-                throw new ApiException(HttpStatus.BAD_REQUEST,
-                        new ArrayList<>(ERRORS.values()));
+                throw new ApiException(HttpStatus.BAD_REQUEST, new ArrayList<>(ERRORS.values()));
         }
     }
 
