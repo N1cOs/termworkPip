@@ -25,7 +25,7 @@ public class ClientException extends RuntimeException {
         this.message = message;
     }
 
-    public ClientException(HttpStatus status, String message, Object[] args) {
+    public ClientException(HttpStatus status, String message, Object... args) {
         super(message);
         this.status = status;
         this.message = message;

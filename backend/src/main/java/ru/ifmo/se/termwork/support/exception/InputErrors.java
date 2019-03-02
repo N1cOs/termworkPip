@@ -17,4 +17,5 @@ public interface InputErrors {
 
         InputError PASSWORD = new InputError("password", "exception.password.invalid");
     }
+
 }

@@ -9,6 +9,7 @@ import ru.ifmo.se.termwork.domain.keys.RatingId;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Data
@@ -30,6 +31,12 @@ import java.util.Set;
         @NamedEntityGraph(name = "student.scores", attributeNodes = {
                 @NamedAttributeNode("exams"),
                 @NamedAttributeNode("achievements")
+        }),
+        @NamedEntityGraph(name = "student.forApplying", attributeNodes = {
+                @NamedAttributeNode("exams"),
+                @NamedAttributeNode("olympiads"),
+                @NamedAttributeNode("ratings")
+
         })
 })
 public class Student extends User {
@@ -75,19 +82,20 @@ public class Student extends User {
         exams.add(exam);
     }
 
-    public void updateExam(Subject subject, Integer score){
-        exams.stream().filter(exam -> exam.getId().getSubject().equals(subject)).
-                findFirst().get().setScore(score);
-    }
-
-    public void deleteExam(Subject subject){
-        exams.removeIf(e -> e.getId().getSubject().equals(subject));
-    }
-
     public void applyFor(Speciality speciality, Olympiad olympiad, Integer priority, boolean originals){
-        Rating rating = Rating.builder().id(new RatingId(speciality, this)).olympiad(olympiad).
-                priority(priority).originals(originals).submissionDate(new Date()).build();
-        ratings.add(rating);
+        Optional<Rating> existRating = ratings.stream().
+                filter(r -> r.getId().getSpeciality().equals(speciality)).findFirst();
+        if(existRating.isPresent()){
+            Rating rating = existRating.get();
+            rating.setOlympiad(olympiad);
+            rating.setPriority(priority);
+            rating.setOriginals(originals);
+        }
+        else{
+            Rating rating = Rating.builder().id(new RatingId(speciality, this)).olympiad(olympiad).
+                    priority(priority).originals(originals).submissionDate(new Date()).build();
+            ratings.add(rating);
+        }
     }
 
     public void cancelApplication(Speciality speciality){

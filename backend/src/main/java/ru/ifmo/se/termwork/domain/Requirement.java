@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Data
-@Table(name = "requirements")
+@Table(name = "requirement")
 public class Requirement {
 
     @EmbeddedId

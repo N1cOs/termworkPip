@@ -87,6 +87,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @EntityGraph("student.ratings")
     Optional<Student> findWithRatingsById(Integer id);
 
+    @EntityGraph("student.forApplying")
+    Optional<Student> findForApplyingById(Integer id);
+
     interface SqlError {
 
         int EMAIL = 23030;

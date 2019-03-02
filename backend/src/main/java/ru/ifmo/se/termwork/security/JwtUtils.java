@@ -59,13 +59,14 @@ public class JwtUtils {
 
     public String getToken(int userId, List<String> roles) {
         Date expirationDate = Date.from(Instant.now().plus(validityInMinutes, ChronoUnit.MINUTES));
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setIssuedAt(new Date())
                 .setExpiration(expirationDate)
                 .claim(ID_CLAIM_NAME, userId)
                 .claim(ROLES_CLAIM_NAME, roles)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+        return token;
     }
 
 }
