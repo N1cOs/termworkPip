@@ -31,7 +31,7 @@ public class ApplyingServiceImpl implements ApplyingService {
 
         Speciality speciality = specialityRepository.findWithAllById(claimDto.getSpecialityId()).
                 orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.speciality.notFound",
-                        new Object[]{claimDto.getSpecialityId()}));
+                        claimDto.getSpecialityId()));
 
         Set<Rating> ratings = student.getRatings();
         if(ratings.size() >= 5)
@@ -44,7 +44,7 @@ public class ApplyingServiceImpl implements ApplyingService {
         if(claimDto.getOlympiadId() != -1 ){
             Olympiad selectedOlympiad = olympiadRepository.findById(claimDto.getOlympiadId()).
                     orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.olympiad.notFound",
-                            new Object[]{claimDto.getOlympiadId()}));
+                            claimDto.getOlympiadId()));
 
             if(speciality.getRequirements().
                     stream().filter(r -> r.getId().getSubject().equals(selectedOlympiad.getSubject())).
@@ -67,6 +67,18 @@ public class ApplyingServiceImpl implements ApplyingService {
         }
 
         student.applyFor(speciality, olympiad, claimDto.getPriority(), claimDto.isOriginals());
+        studentRepository.save(student);
+    }
+
+    @Override
+    public void cancelApplication(int studentId, int specialityId) {
+        Student student = studentRepository.findWithRatingsById(studentId).
+                orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.user.notFound"));
+
+        Speciality speciality = specialityRepository.findById(specialityId).
+                orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.speciality.notFound",
+                        specialityId));
+        student.cancelApplication(speciality);
         studentRepository.save(student);
     }
 }

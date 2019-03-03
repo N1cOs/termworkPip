@@ -8,7 +8,6 @@ import javax.validation.constraints.Min;
 @Data
 public class ClaimDto {
 
-    @Min(1)
     private int specialityId;
 
     @Min(value = 1)

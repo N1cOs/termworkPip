@@ -20,7 +20,7 @@ public class ApiException extends RuntimeException {
         this.message = message;
     }
 
-    public ApiException(HttpStatus status, String message, Object[] args) {
+    public ApiException(HttpStatus status, String message, Object... args) {
         super(message);
         this.status = status;
         this.message = message;
