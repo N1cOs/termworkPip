@@ -2,6 +2,7 @@ package ru.ifmo.se.termwork.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import ru.ifmo.se.termwork.domain.College;
 
 import java.util.List;
@@ -28,6 +29,9 @@ public interface CollegeRepository extends JpaRepository<College, Integer> {
     @EntityGraph("college.scores")
     Optional<College> findWithScoresById(Integer id);
 
+    @EntityGraph("college.all")
+    Optional<College> findWithAllById(Integer id);
+
     /**
      * Returns the list of colleges which name or abbreviation corresponds to the parameters
      *
@@ -44,4 +48,6 @@ public interface CollegeRepository extends JpaRepository<College, Integer> {
      * @return the list of colleges
      */
     List<College> findAllByCityIgnoreCase(String city);
+
+    List<College> findAllByOrderById();
 }

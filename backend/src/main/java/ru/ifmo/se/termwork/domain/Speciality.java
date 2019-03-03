@@ -1,5 +1,7 @@
 package ru.ifmo.se.termwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,6 +15,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "speciality.ratings", attributeNodes = {
                 @NamedAttributeNode("ratings")
@@ -29,6 +32,7 @@ public class Speciality {
     private int id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_college")
     private College college;
 

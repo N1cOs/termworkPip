@@ -1,5 +1,6 @@
 package ru.ifmo.se.termwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -19,7 +20,8 @@ import java.util.Set;
         }),
         @NamedEntityGraph(name = "college.scores", attributeNodes = {
                 @NamedAttributeNode("achievementsScore")
-        })
+        }),
+        @NamedEntityGraph(name = "college.all", includeAllAttributes = true)
 })
 public class College {
 
@@ -35,13 +37,14 @@ public class College {
 
     private String description;
 
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonManagedReference
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "college")
     private Set<Speciality> specialities;
 
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "id.college")
     private Set<CollegeAchievement> achievementsScore;
 }
