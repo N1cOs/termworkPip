@@ -1,5 +1,6 @@
 package ru.ifmo.se.termwork.domain;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -7,6 +8,7 @@ import ru.ifmo.se.termwork.domain.keys.ExamId;
 import ru.ifmo.se.termwork.domain.keys.RatingId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -15,6 +17,7 @@ import java.util.Set;
 @Data
 @Entity
 @DiscriminatorValue("1")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "student.exams", attributeNodes = {
                 @NamedAttributeNode("exams")
@@ -42,18 +45,22 @@ import java.util.Set;
 public class Student extends User {
 
     @Column(name = "date_birth")
+    @JsonView(User.View.Expanded.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date birthDate;
 
+    @JsonIgnore
     @Column(name = "serial_number")
     private String serialNumber;
 
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonManagedReference
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Exam> exams = new HashSet<>();
+    private Set<Exam> exams;
 
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "ach_student",
@@ -62,8 +69,9 @@ public class Student extends User {
     )
     private Set<Achievement> achievements;
 
-    @EqualsAndHashCode.Exclude
+    @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "student_olympiad",
@@ -72,8 +80,9 @@ public class Student extends User {
     )
     private Set<Olympiad> olympiads;
 
-    @EqualsAndHashCode.Exclude
+    @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings;
 

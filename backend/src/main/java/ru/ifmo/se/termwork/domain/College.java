@@ -1,6 +1,7 @@
 package ru.ifmo.se.termwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,25 +27,42 @@ import java.util.Set;
 public class College {
 
     @Id
+    @JsonView(View.Default.class)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonView(View.Default.class)
     private String name;
 
+    @JsonView(View.Default.class)
     private String city;
 
+    @JsonView(View.Default.class)
     private String abbreviation;
 
+    @JsonView(View.Default.class)
     private String description;
 
     @ToString.Exclude
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "college")
+    @JsonView(View.Specialities.class)
     private Set<Speciality> specialities;
 
     @ToString.Exclude
+    @JsonManagedReference
     @EqualsAndHashCode.Exclude
+    @JsonView(View.Achievements.class)
     @OneToMany(mappedBy = "id.college")
     private Set<CollegeAchievement> achievementsScore;
+
+    public static class View{
+
+        public class Default{}
+
+        public class Specialities extends Default{}
+
+        public class Achievements extends Default{}
+    }
 }

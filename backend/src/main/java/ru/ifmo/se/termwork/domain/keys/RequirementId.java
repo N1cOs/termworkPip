@@ -1,5 +1,6 @@
 package ru.ifmo.se.termwork.domain.keys;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import ru.ifmo.se.termwork.domain.Speciality;
 import ru.ifmo.se.termwork.domain.Subject;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 public class RequirementId implements Serializable {
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_spec")
     private Speciality speciality;
 

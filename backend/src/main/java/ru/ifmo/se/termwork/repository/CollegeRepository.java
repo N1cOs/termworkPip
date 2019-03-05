@@ -20,7 +20,7 @@ public interface CollegeRepository extends JpaRepository<College, Integer> {
     Optional<College> findWithSpecialitiesById(Integer id);
 
     /**
-     * Returns the college from a database with college's achievements  specified by id
+     * Returns the college from a database with college's achievements specified by id
      * @see ru.ifmo.se.termwork.domain.CollegeAchievement
      *
      * @param id id of the college
@@ -31,6 +31,7 @@ public interface CollegeRepository extends JpaRepository<College, Integer> {
 
     @EntityGraph("college.all")
     Optional<College> findWithAllById(Integer id);
+
 
     /**
      * Returns the list of colleges which name or abbreviation corresponds to the parameters

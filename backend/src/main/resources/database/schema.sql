@@ -69,7 +69,8 @@ create table speciality_student
   id_olymp        int references olympiad on update cascade,
   priority        int       not null check (priority >= 1 and priority <= 3) default 1,
   originals       boolean   not null                                         default false,
-  submission_date timestamp not null
+  submission_date timestamp not null,
+  total_sum int check (total_sum >= 0)
 );
 
 create table requirement
@@ -263,3 +264,18 @@ CREATE TRIGGER valid_user_data
   ON app_user
   FOR EACH ROW
 EXECUTE PROCEDURE valid_user_data();
+
+--ToDo: write trigger for counting
+
+-- create or replace function count_student_score() returns trigger as
+-- $$
+-- declare
+--   examScore int;
+--   achScore int;
+-- begin
+--   examScore = (select sum(score) from exam e where e.id_student = new.id_student);
+--   achScore = (select sum() from speciality s
+--     join college c on s.id_college = c.id
+--     join ach_college ac on c.id = ac.id_college)
+-- end;
+-- $$ language plpgsql;

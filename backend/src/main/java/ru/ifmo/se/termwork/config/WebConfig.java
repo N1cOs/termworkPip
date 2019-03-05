@@ -20,14 +20,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-@Configuration
 @EnableWebMvc
+@Configuration
 @ComponentScan(basePackages = {"ru.ifmo.se.termwork.controller"})
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/*").addResourceLocations("/static");
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     @Override
@@ -37,14 +41,17 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        Hibernate5Module hibernate5Module = new Hibernate5Module();
+        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
+        messageConverter.setObjectMapper(objectMapper());
+        converters.add(messageConverter);
+    }
 
+    @Bean
+    public ObjectMapper objectMapper(){
+        Hibernate5Module hibernate5Module = new Hibernate5Module();
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(hibernate5Module);
-
-        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
-        messageConverter.setObjectMapper(mapper);
-        converters.add(messageConverter);
+        return mapper;
     }
 
     @Bean

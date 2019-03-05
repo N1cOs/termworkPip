@@ -1,5 +1,6 @@
 package ru.ifmo.se.termwork.domain.keys;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.io.Serializable;
 public class ExamId implements Serializable {
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_student")
     private Student student;
 

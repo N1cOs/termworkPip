@@ -1,5 +1,7 @@
 package ru.ifmo.se.termwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +17,14 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "speciality_student")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "speciality_student")
 public class Rating {
 
     @EmbeddedId
+    @JsonUnwrapped
     private RatingId id;
 
     @ManyToOne
@@ -33,5 +36,9 @@ public class Rating {
     private boolean originals;
 
     @Column(name = "submission_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm dd-MM-yyyy")
     private Date submissionDate;
+
+//    @Column(name = "total_score")
+//    private int totalScore;
 }

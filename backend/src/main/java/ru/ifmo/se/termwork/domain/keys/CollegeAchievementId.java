@@ -1,5 +1,6 @@
 package ru.ifmo.se.termwork.domain.keys;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import ru.ifmo.se.termwork.domain.Achievement;
 import ru.ifmo.se.termwork.domain.College;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 public class CollegeAchievementId implements Serializable {
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_college")
     private College college;
 

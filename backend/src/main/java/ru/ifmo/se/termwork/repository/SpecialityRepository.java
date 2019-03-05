@@ -2,8 +2,10 @@ package ru.ifmo.se.termwork.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import ru.ifmo.se.termwork.domain.Speciality;
 
+import javax.persistence.MappedSuperclass;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +35,7 @@ public interface SpecialityRepository extends JpaRepository<Speciality, Integer>
      * @param id speciality id
      * @return the speciality
      */
-    @EntityGraph(value = "speciality.ratings")
+    @EntityGraph(value = "speciality.ratings", type = EntityGraph.EntityGraphType.FETCH)
     Optional<Speciality> findWithRatingsById(Integer id);
 
     /**
@@ -54,4 +56,8 @@ public interface SpecialityRepository extends JpaRepository<Speciality, Integer>
      */
     @EntityGraph(value = "speciality.all")
     Optional<Speciality> findWithAllById(Integer id);
+
+    @EntityGraph(value = "speciality.req")
+    @Query("select s from Speciality s where s.college.id = ?1")
+    List<Speciality> findWithReqAllByCollegeId(Integer id);
 }
