@@ -5,12 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import ru.ifmo.se.termwork.domain.keys.ExamId;
-import ru.ifmo.se.termwork.domain.keys.RatingId;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -83,7 +80,7 @@ public class Student extends User {
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings;
 
     public void addExam(Subject subject, Integer score){
@@ -93,7 +90,7 @@ public class Student extends User {
 
     public void applyFor(Speciality speciality, Olympiad olympiad, Integer priority, boolean originals){
         Optional<Rating> existRating = ratings.stream().
-                filter(r -> r.getId().getSpeciality().equals(speciality)).findFirst();
+                filter(r -> r.getSpeciality().equals(speciality)).findFirst();
         if(existRating.isPresent()){
             Rating rating = existRating.get();
             rating.setOlympiad(olympiad);
@@ -101,13 +98,13 @@ public class Student extends User {
             rating.setOriginals(originals);
         }
         else{
-            Rating rating = Rating.builder().id(new RatingId(speciality, this)).olympiad(olympiad).
+            Rating rating = Rating.builder().student(this).speciality(speciality).olympiad(olympiad).
                     priority(priority).originals(originals).submissionDate(new Date()).build();
             ratings.add(rating);
         }
     }
 
     public void cancelApplication(Speciality speciality){
-        ratings.removeIf(s -> s.getId().getSpeciality().equals(speciality));
+        ratings.removeIf(s -> s.getSpeciality().equals(speciality));
     }
 }

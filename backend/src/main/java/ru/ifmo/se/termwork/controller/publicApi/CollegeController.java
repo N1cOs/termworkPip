@@ -17,7 +17,7 @@ public class CollegeController {
 
     private final static String SPECIALITY_FIELD = "specialities";
 
-    private final static String ACHIEVEMENT_FIELD = "specialities";
+    private final static String ACHIEVEMENT_FIELD = "achievement";
 
     @Autowired
     private CollegeRepository collegeRepository;

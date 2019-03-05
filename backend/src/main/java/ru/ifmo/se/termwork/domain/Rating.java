@@ -1,7 +1,7 @@
 package ru.ifmo.se.termwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,9 +23,19 @@ import java.util.Date;
 @Table(name = "speciality_student")
 public class Rating {
 
+    @JsonIgnore
     @EmbeddedId
-    @JsonUnwrapped
     private RatingId id;
+
+    @ManyToOne
+    @MapsId("studentId")
+    @JoinColumn(name = "id_student")
+    private Student student;
+
+    @ManyToOne
+    @MapsId("specialityId")
+    @JoinColumn(name = "id_spec")
+    private Speciality speciality;
 
     @ManyToOne
     @JoinColumn(name = "id_olymp")

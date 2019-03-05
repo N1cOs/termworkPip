@@ -24,24 +24,18 @@ import java.util.Set;
         @NamedEntityGraph(
                 name = "speciality.ratings",
                 attributeNodes = {
-                    @NamedAttributeNode(value = "ratings", subgraph = "ratings.id")
+                    @NamedAttributeNode(value = "ratings", subgraph = "ratings.student")
                 },
                 subgraphs = {
                     @NamedSubgraph(
-                            name = "ratings.id",
+                            name = "ratings.student",
                             attributeNodes = {
-                                    @NamedAttributeNode(value = "id", subgraph = "rating.id.student")
+                                    @NamedAttributeNode(value = "student", subgraph = "rating.student.exams")
                             }),
                     @NamedSubgraph(
-                            name = "rating.id.student",
+                            name = "rating.student.exams",
                             attributeNodes = {
-                                    @NamedAttributeNode(value = "student", subgraph = "rating.id.student.exams")
-                            }
-                    ),
-                    @NamedSubgraph(
-                            name = "rating.id.student.exams",
-                            attributeNodes = {
-                                    @NamedAttributeNode(value = "achievements")
+                                    @NamedAttributeNode(value = "exams")
                             }
                     )
                 }),
@@ -74,7 +68,7 @@ public class Speciality implements Serializable {
     @JsonView(Rating.class)
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "id.speciality")
+    @OneToMany(mappedBy = "speciality")
     private Set<Rating> ratings;
 
     @ToString.Exclude
