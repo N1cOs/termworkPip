@@ -11,6 +11,7 @@ import org.jxmpp.jid.parts.Localpart;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import ru.ifmo.se.termwork.domain.Speciality;
 import ru.ifmo.se.termwork.service.JabberService;
 import ru.ifmo.se.termwork.service.MessageService;
 
@@ -54,5 +55,10 @@ public class JabberServiceImpl implements JabberService {
         } catch (Exception e) {
             log.error("Jabber bot exception", e);
         }
+    }
+
+    @Override
+    public void notifyStudents(Speciality speciality) {
+
     }
 }

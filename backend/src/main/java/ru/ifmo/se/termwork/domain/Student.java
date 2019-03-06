@@ -28,16 +28,77 @@ import java.util.Set;
         @NamedEntityGraph(name = "student.ratings", attributeNodes = {
                 @NamedAttributeNode("ratings")
         }),
-        @NamedEntityGraph(name = "student.scores", attributeNodes = {
-                @NamedAttributeNode("exams"),
-                @NamedAttributeNode("achievements")
-        }),
-        @NamedEntityGraph(name = "student.forApplying", attributeNodes = {
-                @NamedAttributeNode("exams"),
-                @NamedAttributeNode("olympiads"),
-                @NamedAttributeNode("ratings")
-
-        })
+        @NamedEntityGraph(name = "student.examsAndRatings",
+                attributeNodes = {
+                    @NamedAttributeNode("exams"),
+                    @NamedAttributeNode(value = "ratings", subgraph = "rating.speciality")
+                },
+                subgraphs = {
+                        @NamedSubgraph(name = "rating.speciality",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "speciality", subgraph = "rating.speciality.college")
+                                }
+                        ),
+                        @NamedSubgraph(name = "rating.speciality.college",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "college", subgraph = "rating.speciality.college.ach")
+                                }
+                        ),
+                        @NamedSubgraph(name = "rating.speciality.college.ach",
+                                attributeNodes = {
+                                        @NamedAttributeNode("achievementsScore")
+                                }
+                        )
+                }
+        ),
+        @NamedEntityGraph(name = "student.achAndRatings",
+                attributeNodes = {
+                        @NamedAttributeNode("achievements"),
+                        @NamedAttributeNode(value = "ratings", subgraph = "rating.speciality")
+                },
+                subgraphs = {
+                        @NamedSubgraph(name = "rating.speciality",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "speciality", subgraph = "rating.speciality.college")
+                                }
+                        ),
+                        @NamedSubgraph(name = "rating.speciality.college",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "college", subgraph = "rating.speciality.college.ach")
+                                }
+                        ),
+                        @NamedSubgraph(name = "rating.speciality.college.ach",
+                                attributeNodes = {
+                                        @NamedAttributeNode("achievementsScore")
+                                }
+                        )
+                }
+        ),
+        @NamedEntityGraph(name = "student.scoresAndRatings",
+                attributeNodes = {
+                        @NamedAttributeNode("exams"),
+                        @NamedAttributeNode("achievements"),
+                        @NamedAttributeNode(value = "ratings", subgraph = "rating.speciality")
+                },
+                subgraphs = {
+                        @NamedSubgraph(name = "rating.speciality",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "speciality", subgraph = "rating.speciality.college")
+                                }
+                        ),
+                        @NamedSubgraph(name = "rating.speciality.college",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "college", subgraph = "rating.speciality.college.ach")
+                                }
+                        ),
+                        @NamedSubgraph(name = "rating.speciality.college.ach",
+                                attributeNodes = {
+                                        @NamedAttributeNode("achievementsScore")
+                                }
+                        )
+                }
+        ),
+        @NamedEntityGraph(name = "student.all", includeAllAttributes = true)
 })
 public class Student extends User {
 
@@ -88,20 +149,22 @@ public class Student extends User {
         exams.add(exam);
     }
 
-    public void applyFor(Speciality speciality, Olympiad olympiad, Integer priority, boolean originals){
+    public Rating applyFor(Speciality speciality, Olympiad olympiad, Integer priority, boolean originals){
         Optional<Rating> existRating = ratings.stream().
                 filter(r -> r.getSpeciality().equals(speciality)).findFirst();
+        Rating rating;
         if(existRating.isPresent()){
-            Rating rating = existRating.get();
+            rating = existRating.get();
             rating.setOlympiad(olympiad);
             rating.setPriority(priority);
             rating.setOriginals(originals);
         }
         else{
-            Rating rating = Rating.builder().student(this).speciality(speciality).olympiad(olympiad).
+            rating = Rating.builder().student(this).speciality(speciality).olympiad(olympiad).
                     priority(priority).originals(originals).submissionDate(new Date()).build();
             ratings.add(rating);
         }
+        return rating;
     }
 
     public void cancelApplication(Speciality speciality){

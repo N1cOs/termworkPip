@@ -49,6 +49,6 @@ public class Rating {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm dd-MM-yyyy")
     private Date submissionDate;
 
-//    @Column(name = "total_score")
-//    private int totalScore;
+    @Column(name = "total_score")
+    private Integer totalScore;
 }

@@ -45,6 +45,12 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @EntityGraph("student.exams")
     Optional<Student> findWithExamsById(Integer id);
 
+    @EntityGraph("student.examsAndRatings")
+    Optional<Student> findWithExamsAndRatingsById(Integer id);
+
+    @EntityGraph("student.achAndRatings")
+    Optional<Student> findWithAchievementsAndRatingsById(Integer id);
+
     /**
      * Returns the student from a database with achievements by specified id
      *
@@ -63,8 +69,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
      * @see ru.ifmo.se.termwork.domain.Exam
      * @see ru.ifmo.se.termwork.domain.Achievement
      */
-    @EntityGraph("student.scores")
-    Optional<Student> findWithScoresById(Integer id);
+    @EntityGraph("student.scoresAndRatings")
+    Optional<Student> findWithScoresAndRatingsById(Integer id);
 
     /**
      * Returns the student from a database with olympiad by specified id
@@ -87,8 +93,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @EntityGraph("student.ratings")
     Optional<Student> findWithRatingsById(Integer id);
 
-    @EntityGraph("student.forApplying")
-    Optional<Student> findForApplyingById(Integer id);
+    @EntityGraph("student.all")
+    Optional<Student> findWithAllById(Integer id);
 
     interface SqlError {
 

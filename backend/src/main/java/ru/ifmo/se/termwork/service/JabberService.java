@@ -1,5 +1,7 @@
 package ru.ifmo.se.termwork.service;
 
+import ru.ifmo.se.termwork.domain.Speciality;
+
 import java.util.Map;
 
 public interface JabberService {
@@ -12,4 +14,6 @@ public interface JabberService {
      * @param body content for the message
      */
     void sendMessage(String username, String body);
+
+    void notifyStudents(Speciality speciality);
 }

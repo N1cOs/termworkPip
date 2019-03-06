@@ -9,6 +9,7 @@ import ru.ifmo.se.termwork.repository.OlympiadRepository;
 import ru.ifmo.se.termwork.repository.SpecialityRepository;
 import ru.ifmo.se.termwork.repository.StudentRepository;
 import ru.ifmo.se.termwork.service.ApplyingService;
+import ru.ifmo.se.termwork.service.ComputeService;
 import ru.ifmo.se.termwork.support.exception.ApiException;
 import ru.ifmo.se.termwork.support.exception.ClientException;
 
@@ -24,9 +25,11 @@ public class ApplyingServiceImpl implements ApplyingService {
 
     private final OlympiadRepository olympiadRepository;
 
+    private final ComputeService computeService;
+
     @Override
     public void applyForSpeciality(int studentId, ClaimDto claimDto) {
-        Student student = studentRepository.findForApplyingById(studentId).
+        Student student = studentRepository.findWithAllById(studentId).
                 orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.user.notFound"));
 
         Speciality speciality = specialityRepository.findWithAllById(claimDto.getSpecialityId()).
@@ -66,8 +69,11 @@ public class ApplyingServiceImpl implements ApplyingService {
                 throw new ClientException(HttpStatus.BAD_REQUEST, "exception.applying.exam.invalid", reqSubject.getName());
         }
 
-        student.applyFor(speciality, olympiad, claimDto.getPriority(), claimDto.isOriginals());
-        studentRepository.save(student);
+        Rating rating = student.applyFor(speciality, olympiad, claimDto.getPriority(), claimDto.isOriginals());
+        if(olympiad == null)
+            computeService.computeScoreAndSaveAsync(student, rating);
+        else
+            studentRepository.save(student);
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.termwork.domain.College;
+import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.repository.CollegeRepository;
 import ru.ifmo.se.termwork.support.exception.ApiException;
 
@@ -24,7 +25,8 @@ public class CollegeController {
 
     @GetMapping
     public List<College> getAllColleges(@RequestParam(value = "limit", defaultValue = "20") Integer limit,
-                                        @RequestParam(value = "offset", defaultValue = "0") Integer offset){
+                                        @RequestParam(value = "offset", defaultValue = "0") Integer offset,
+                                        @RequestParam("id") Student student){
         if(limit < 0 || offset < 0)
             throw new ApiException(HttpStatus.BAD_REQUEST, "exception.limit.offset.negative");
         return collegeRepository.findAllByOrderById().stream().

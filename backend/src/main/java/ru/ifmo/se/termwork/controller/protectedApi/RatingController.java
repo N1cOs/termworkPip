@@ -16,12 +16,11 @@ import ru.ifmo.se.termwork.support.exception.ApiException;
 import java.util.Set;
 
 @RestController
-@RequestMapping("public/rating")
+@RequestMapping("public/ratings")
 public class RatingController {
 
     @Autowired
     private SpecialityRepository specialityRepository;
-
 
     @GetMapping("/{id}")
     @JsonView(User.View.Default.class)
