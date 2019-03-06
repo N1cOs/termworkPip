@@ -15,9 +15,7 @@ import ru.ifmo.se.termwork.dto.StudentDto;
 import ru.ifmo.se.termwork.dto.WorkerDto;
 import ru.ifmo.se.termwork.repository.*;
 import ru.ifmo.se.termwork.security.Role;
-import ru.ifmo.se.termwork.service.JabberService;
-import ru.ifmo.se.termwork.service.LinkService;
-import ru.ifmo.se.termwork.service.SignUpService;
+import ru.ifmo.se.termwork.service.*;
 import ru.ifmo.se.termwork.service.mappers.StudentMapper;
 import ru.ifmo.se.termwork.service.mappers.WorkerMapper;
 import ru.ifmo.se.termwork.support.exception.ApiException;
@@ -60,6 +58,10 @@ public class SignUpServiceImpl implements SignUpService {
 
     private final JabberService jabberService;
 
+    private final MailService mailService;
+
+    private final MessageService messageService;
+
     static {
         Map<Integer, InputError> inputErrors = new HashMap<>();
         inputErrors.put(StudentRepository.SqlError.EMAIL,
@@ -71,16 +73,20 @@ public class SignUpServiceImpl implements SignUpService {
         ERRORS = Collections.unmodifiableMap(inputErrors);
     }
 
-    //ToDo: add sending emails
     @Async
     @Override
     public void addWorkerSignUp(int headWorkerId, String workerEmail) {
         Worker headWorker = workerRepository.findById(headWorkerId).
                 orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.user.notFound"));
         String link = linkService.generateLink();
+        String finalLink = "http://localhost:8080/uniss/public/sign-up/" + link;
 
         WorkerInfo workerInfo = new WorkerInfo(workerEmail, headWorker.getCollege());
         waitingWorkers.put(link, workerInfo);
+
+        String subject = messageService.getClientMessage("mail.signUp.subject");
+        String body = messageService.getClientMessage("mail.signUp.worker.body", finalLink);
+        mailService.sendMail(workerEmail, subject, body);
     }
 
     @Override
@@ -110,7 +116,7 @@ public class SignUpServiceImpl implements SignUpService {
         student.setRoles(Role.STUDENT);
 
         try {
-            studentRepository.save(student);
+            student = studentRepository.save(student);
         } catch (DataIntegrityViolationException ex) {
             Throwable rootCause = ex.getRootCause();
             if(rootCause instanceof SQLException){
@@ -118,6 +124,10 @@ public class SignUpServiceImpl implements SignUpService {
                 throwExceptionUponState(sqlException.getSQLState());
             }
         }
+
+        String subject = messageService.getClientMessage("mail.signUp.subject");
+        String body = messageService.getClientMessage("mail.signUp.student.body", student.getName());
+        mailService.sendMailAsync(student.getEmail(), subject, body);
 
         saveToJabber(studentDto.getEmail(), studentDto.getPassword());
     }

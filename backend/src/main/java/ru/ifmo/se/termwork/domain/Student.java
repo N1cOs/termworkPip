@@ -8,6 +8,7 @@ import ru.ifmo.se.termwork.domain.keys.ExamId;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -145,6 +146,9 @@ public class Student extends User {
     private Set<Rating> ratings;
 
     public void addExam(Subject subject, Integer score){
+        if(exams == null)
+            exams = new HashSet<>();
+
         Exam exam = new Exam(new ExamId(this, subject), score);
         exams.add(exam);
     }

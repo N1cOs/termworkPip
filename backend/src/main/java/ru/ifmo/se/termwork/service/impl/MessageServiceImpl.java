@@ -26,19 +26,17 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public String getApiMessage(String code, Object[] args) {
+    public String getApiMessage(String code, Object... args) {
         return apiMessageSource.getMessage(code, args, Locale.ENGLISH);
     }
 
     @Override
     public String getClientMessage(String code) {
-        Locale locale = LocaleContextHolder.getLocale();
-        return clientMessageSource.getMessage(code, null, locale);
+        return clientMessageSource.getMessage(code, null, new Locale("ru"));
     }
 
     @Override
-    public String getClientMessage(String code, Object[] args) {
-        Locale locale = LocaleContextHolder.getLocale();
-        return clientMessageSource.getMessage(code, args, locale);
+    public String getClientMessage(String code, Object... args) {
+        return clientMessageSource.getMessage(code, args, new Locale("ru"));
     }
 }

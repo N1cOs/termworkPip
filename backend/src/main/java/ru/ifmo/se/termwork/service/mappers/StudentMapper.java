@@ -34,31 +34,34 @@ public interface StudentMapper {
     @AfterMapping
     default void setExams(@MappingTarget Student student, StudentDto studentDto,
                           @Context SubjectRepository subjectRepository) {
-        List<ExamDto> examDtoList = studentDto.getExams();
-        List<Subject> subjects = subjectRepository.findAllById(examDtoList.stream().
-                map(ExamDto::getSubjectId).collect(Collectors.toList()));
-        for (Subject subject : subjects) {
-            int score = -1;
-            for (ExamDto examDto : examDtoList) {
-                if (examDto.getSubjectId() == subject.getId()) {
-                    score = examDto.getScore();
-                    break;
+        if (studentDto.getExams() != null) {
+            List<ExamDto> examDtoList = studentDto.getExams();
+            List<Subject> subjects = subjectRepository.findAllById(examDtoList.stream().
+                    map(ExamDto::getSubjectId).collect(Collectors.toList()));
+            for (Subject subject : subjects) {
+                int score = -1;
+                for (ExamDto examDto : examDtoList) {
+                    if (examDto.getSubjectId() == subject.getId()) {
+                        score = examDto.getScore();
+                        break;
+                    }
                 }
+                student.addExam(subject, score);
             }
-            student.addExam(subject, score);
         }
     }
 
     @Named("getAchievements")
     default Set<Achievement> map(List<Integer> achievementsId,
                                  @Context AchievementRepository achievementRepository) {
-        return new HashSet<>(achievementRepository.findAllById(achievementsId));
+        return achievementsId == null ? null :
+                new HashSet<>(achievementRepository.findAllById(achievementsId));
     }
 
     @Named("getOlympiads")
     default Set<Olympiad> map(List<Integer> olympiadsId,
                               @Context OlympiadRepository olympiadRepository) {
-        return new HashSet<>(olympiadRepository.findAllById(olympiadsId));
+        return olympiadsId == null ? null : new HashSet<>(olympiadRepository.findAllById(olympiadsId));
     }
 
 }

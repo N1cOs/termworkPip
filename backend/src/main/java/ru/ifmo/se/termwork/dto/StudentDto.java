@@ -2,6 +2,7 @@ package ru.ifmo.se.termwork.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -19,13 +20,16 @@ public class StudentDto {
 
     private Date birthDate;
 
+    @NotNull
     private String serialNumber;
 
+    @Email
     @NotNull
     private String email;
 
     private String phone;
 
+    @NotNull
     private String password;
 
     private List<ExamDto> exams;
