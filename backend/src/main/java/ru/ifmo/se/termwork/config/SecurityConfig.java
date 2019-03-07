@@ -12,8 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import ru.ifmo.se.termwork.security.JwtAuthenticationFilter;
 import ru.ifmo.se.termwork.security.JwtAuthenticationProvider;
 import ru.ifmo.se.termwork.security.NoRedirectStrategy;
@@ -53,8 +55,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     JwtAuthenticationFilter restFilter() throws Exception {
+        AntPathRequestMatcher publicApi = new AntPathRequestMatcher(PUBLIC_URLS);
+        AntPathRequestMatcher docs = new AntPathRequestMatcher("/api/v2/api-docs");
+        AntPathRequestMatcher swaggerHtml = new AntPathRequestMatcher("/api/swagger-ui.html");
+        AntPathRequestMatcher webjars = new AntPathRequestMatcher("/api/webjars/**");
+
+        OrRequestMatcher publicUrls = new OrRequestMatcher(publicApi, swaggerHtml, webjars, docs);
         NegatedRequestMatcher protectedUrls =
-                new NegatedRequestMatcher(new AntPathRequestMatcher(PUBLIC_URLS));
+                new NegatedRequestMatcher(publicUrls);
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(protectedUrls);
         authenticationFilter.setAuthenticationManager(authenticationManager());
         authenticationFilter.setAuthenticationSuccessHandler(successHandler());
