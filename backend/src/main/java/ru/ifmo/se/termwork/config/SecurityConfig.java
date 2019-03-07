@@ -12,10 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import ru.ifmo.se.termwork.security.JwtAuthenticationFilter;
 import ru.ifmo.se.termwork.security.JwtAuthenticationProvider;
 import ru.ifmo.se.termwork.security.NoRedirectStrategy;
@@ -26,11 +26,22 @@ import ru.ifmo.se.termwork.security.Role;
 @ComponentScan(basePackages = "ru.ifmo.se.termwork.security")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final static String PUBLIC_URLS = "/api/public/**";
+    private final static RequestMatcher PUBLIC_URLS;
 
     private final static String STUDENT_URLS = "/api/student/**";
 
     private final static String WORKER_URLS = "/api/worker/**";
+
+    static {
+        AntPathRequestMatcher publicApi = new AntPathRequestMatcher("/api/public/**");
+        AntPathRequestMatcher docs = new AntPathRequestMatcher("/api/v2/api-docs");
+        AntPathRequestMatcher swaggerHtml = new AntPathRequestMatcher("/api/swagger-ui.html");
+        AntPathRequestMatcher webjars = new AntPathRequestMatcher("/api/webjars/**");
+        AntPathRequestMatcher swaggerResources = new AntPathRequestMatcher("/api/swagger-resources/**");
+        AntPathRequestMatcher nullResource = new AntPathRequestMatcher("/api/null/swagger-resources/**");
+
+        PUBLIC_URLS = new OrRequestMatcher(publicApi, swaggerHtml, webjars, docs, swaggerResources, nullResource);
+    }
 
     @Autowired
     private JwtAuthenticationProvider jwtAuthenticationProvider;
@@ -55,14 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     JwtAuthenticationFilter restFilter() throws Exception {
-        AntPathRequestMatcher publicApi = new AntPathRequestMatcher(PUBLIC_URLS);
-        AntPathRequestMatcher docs = new AntPathRequestMatcher("/api/v2/api-docs");
-        AntPathRequestMatcher swaggerHtml = new AntPathRequestMatcher("/api/swagger-ui.html");
-        AntPathRequestMatcher webjars = new AntPathRequestMatcher("/api/webjars/**");
-
-        OrRequestMatcher publicUrls = new OrRequestMatcher(publicApi, swaggerHtml, webjars, docs);
         NegatedRequestMatcher protectedUrls =
-                new NegatedRequestMatcher(publicUrls);
+                new NegatedRequestMatcher(PUBLIC_URLS);
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(protectedUrls);
         authenticationFilter.setAuthenticationManager(authenticationManager());
         authenticationFilter.setAuthenticationSuccessHandler(successHandler());
