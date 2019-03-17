@@ -4,7 +4,7 @@
             action=""
             method="post"
     >
-        <div v-if="errs.length">
+        <div v-if="errs!==[]">
             <div
                     v-for="error in errs"
                     :key="error.type"
@@ -15,19 +15,19 @@
         </div>
 
         <p>
-            <label for="surname">Surname</label>
+            <label for="user.surname">Surname</label>
             <input
-                    id="surname"
-                    v-model="user.surname"
+                    :id="user.surname"
+                    v-model.lazy="user.surname"
                     type="text"
                     name="surname"
             >
         </p>
 
         <p>
-            <label for="patronymic">Patronymic</label>
+            <label for="user.patronymic">Patronymic</label>
             <input
-                    id="patronymic"
+                    :id="user.patronymic"
                     v-model="user.patronymic"
                     type="text"
                     name="patronymic"
@@ -35,9 +35,9 @@
         </p>
 
         <p>
-            <label for="birthDate">Dirth date</label>
+            <label for="user.birthDate">Dirth date</label>
             <input
-                    id="birthDate"
+                    :id="user.birthDate"
                     v-model="user.birthDate"
                     type="text"
                     name="birthDate"
@@ -45,9 +45,9 @@
         </p>
 
         <p>
-            <label for="serialNumber">Serial number</label>
+            <label for="user.serialNumber">Serial number</label>
             <input
-                    id="serialNumber"
+                    id="user.serialNumber"
                     v-model="user.serialNumber"
                     type="text"
                     name="serialNumber"
@@ -55,9 +55,9 @@
         </p>
 
         <p>
-            <label for="email">E-mail</label>
+            <label for="user.email">E-mail</label>
             <input
-                    id="email"
+                    id="user.email"
                     v-model="user.email"
                     type="text"
                     name="email"
@@ -65,21 +65,28 @@
         </p>
 
         <p>
-            <label for="password">Password</label>
+            <label for="user.password">Password</label>
             <input
-                    id="password"
+                    id="user.password"
                     v-model="user.password"
                     type="text"
                     name="password"
             >
         </p>
+
+        <div
+                v-for="exam in exams"
+                class="added-exams"
+        >
+            {{}}
+        </div>
         <p>
-            <label>Exams</label>
+            <label>Add an exam</label>
             <select>
                 <option
                         v-for="subj in subjects"
                         :key="subj.id"
-                        value="{{subj.id}}"
+                        :aria-valuenow="smth"
                 >
                     {{subj.name}}
                 </option>
@@ -88,11 +95,10 @@
             <input
                     type="number"
                     v-model="subjectPoints"
-                    placeholder="{{Math.random()*101}}"
+                    :aria-placeholder="80"
             >
             <button @click="addExamToList">Add exam</button>
         </p>
-
 
         <input
                 type="submit"
@@ -100,29 +106,35 @@
         >
         <!-- for submit: @click.prevent=""-->
 
-
     </form>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator";
-    import User from "@/types/User";
     import Error from "@/types/Error"
     import Exam from "@/types/Exam";
     import Subject from "@/types/Subject";
+    // import subjs from "@/mock/Subjects"
+    import User from "@/types/User";
 
     @Component
     export default class Register extends Vue {
 
         errs: Error[] = [];
-        user: User;
+        private user: User = <User>{};
         exams: Exam[] = [];
-        subjects: Subject[];
-        subjectPoints: number;
+        subjects: Subject[] = [
+            {
+                id: 1,
+                name: ""
+            }
+        ];
+        subjectPoints: number = 0;
 
         addExamToList() {
-
-            this.subjectPoints = null
+            // exam: Exam
+            // exam.id =
+            this.subjectPoints = 0
         }
 
         checkForm() {
