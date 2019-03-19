@@ -1,8 +1,8 @@
 <template>
     <div id="app">
 
-        <Register></Register>
-
+        <!--<Register></Register>-->
+        <Login></Login>
         <!--<div id="nav">-->
         <!--<router-link to="/">Home</router-link> |-->
         <!--<router-link to="/about">About</router-link>-->
@@ -16,10 +16,12 @@
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator";
     import Register from "@/views/Register.vue";
+    import Login from "@/views/Login.vue";
 
     @Component({
         components: {
-            Register
+            Register,
+            Login
         },
 
     })
