@@ -1,15 +1,22 @@
 <template>
-    <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+    <el-card style="width: 500px; margin: auto;">
+        <div slot="header" class="clearfix" style="text-align: center">
+            <span>Login</span>
+        </div>
+        <el-form ref="form" :rules="rules" :model="form" label-width="120px">
 
-        <el-form-item label="E-mail" prop="email">
-            <el-input v-model="form.email" type="email"></el-input>
-        </el-form-item>
-        <el-form-item label="Password">
-            <el-input v-model="form.password" type="password"></el-input>
-        </el-form-item>
+            <el-form-item label="E-mail" prop="email">
+                <el-input v-model="form.email" type="email"></el-input>
+            </el-form-item>
+            <el-form-item label="Password" prop="password">
+                <el-input v-model="form.password" type="password"></el-input>
+            </el-form-item>
+            <el-button type="primary" @click="submitForm('form')">Create</el-button>
 
 
-    </el-form>
+        </el-form>
+    </el-card>
+
 </template>
 
 <script>
@@ -32,6 +39,13 @@
                 { required: true, message: 'Please enter your password', trigger: 'blur' },
                 { min: 6, message: 'Your password is too short!' },
                 ],
+        }
+
+        submitForm(formName){
+            this.$refs[formName].validate((valid)=>{
+                if (valid) alert('submit');
+                else return false;
+            })
         }
     }
 </script>
