@@ -3,6 +3,7 @@
         <div slot="header" class="clearfix" style="text-align: center">
             <span>Login</span>
         </div>
+        <!--!!! don't forget to mention prop attribute to validate el-form-input with rules passed !!!-->
         <el-form ref="form" :rules="rules" :model="form" label-width="120px">
 
             <el-form-item label="E-mail" prop="email">
@@ -12,7 +13,6 @@
                 <el-input v-model="form.password" type="password"></el-input>
             </el-form-item>
             <el-button type="primary" @click="submitForm('form')">Create</el-button>
-
 
         </el-form>
     </el-card>
