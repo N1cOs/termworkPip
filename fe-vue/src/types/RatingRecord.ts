@@ -1,9 +1,9 @@
-import Subject from "@/types/Subject";
+import Exam from "@/types/Exam";
 
 export default interface RatingRecord {
   userFullName: string;
   // pontsSum: number;
-  subjects: Subject[];
+  subjects: Exam[];
   // place: number;
   // placeWithOriginals: number;
 }
