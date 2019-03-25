@@ -7,4 +7,4 @@ const mockUser = {
     email: "",
     phone: "",
     password: ""
-}
+};
