@@ -5,12 +5,26 @@ import Register from "./views/Register.vue";
 import Main from "@/views/Main.vue";
 import Colleges from "@/views/college/Colleges.vue";
 import College from "@/views/college/College.vue";
+import Ratings from "@/views/Ratings.vue";
+import User from "@/types/User.vue";
 
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
+    {
+      path: '/user/:id',
+      name: "user",
+      component: User,
+      children:[
+        {
+          path: "/ratings/:specId",
+          name: "ratings",
+          component: Ratings
+        }
+      ]
+    },
     {
       path: "/l",
       name: "login",
@@ -25,7 +39,7 @@ export default new Router({
       path: "/m",
       name: "main",
       component: Main
-    },{
+    }, {
       path: "/colleges/:id",
       name: "colleges",
       component: College
@@ -34,9 +48,8 @@ export default new Router({
       path: "/colleges",
       name: "colleges",
       component: Colleges,
-      children:[
+      children: []
+    },
 
-      ]
-    }
   ]
 });
