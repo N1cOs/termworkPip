@@ -2,7 +2,7 @@
 
   <el-container>
       <el-header>
-
+        {{this.$route.params.specId}}
       </el-header>
 
     <el-container>
