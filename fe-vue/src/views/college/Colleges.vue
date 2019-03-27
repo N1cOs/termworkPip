@@ -28,13 +28,26 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import College from "@/types/College";
-import {mockCollege} from "@/mock/Colleges";
+import Axios,{ AxiosResponse, AxiosError } from 'axios';
 
 @Component
 export default class Colleges extends Vue {
+  
+  readonly url: string = "/api/public/colleges";
+  
   search: string = "";
 
-  colleges: College[] =mockCollege;
+  colleges?: College[]
+
+  created() {
+    Axios.get(this.url)
+    .then((response: AxiosResponse) => {
+      this.colleges = response.data
+    })
+    .catch((e: AxiosError) => {
+
+    })
+  }
 }
 
 Vue.component("Colleges", Colleges);
