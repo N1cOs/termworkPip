@@ -1,7 +1,7 @@
 <template>
   <el-card style="width: 500px; margin: auto;">
     <div slot="header" class="clearfix" style="text-align: center">
-      <span>Login</span>
+      <span>Вход</span>
     </div>
     <!--!!! don't forget to mention prop attribute to validate el-form-input with rules passed !!!-->
     <el-form
@@ -11,67 +11,74 @@
       :model="form"
       label-width="120px"
     >
-      <el-form-item label="E-mail" prop="email">
-        <el-input v-model="form.email" type="email"></el-input>
+      <el-form-item label="E-mail" prop="username">
+        <div>{{errorEmail}}</div>
+        <el-input v-model="form.username" type="email"></el-input>
       </el-form-item>
-      <el-form-item label="Password" prop="password">
+      <div>{{errorPassword}}</div>
+      <el-form-item label="Пароль" prop="password">
         <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
-      <el-button type="primary" @click="submitForm('form')">Sign in</el-button>
+      <el-button type="primary" @click="submitForm('form')">Войти</el-button>
       <br />
-      <el-button type="text">forgot password?</el-button>
+      <el-button type="text">Забыли пароль?</el-button>
     </el-form>
   </el-card>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { AxiosError, AxiosResponse, AxiosInstance } from "axios";
-import http from "http-common";
+import Axios,{ AxiosError,AxiosResponse,AxiosInstance } from "axios";
 
 @Component
 export default class Login extends Vue {
   
   readonly loginUrl: string = "/api/public/sign-in";
+  readonly config: any = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+
+  errorEmail: string = ""
+  errorPassword: string = ""
   
   form = {
-    email: "",
+    username: "",
     password: ""
   };
 
   rules = {
-    email: [
+    username: [
       {
         required: true,
-        message: "Please enter your email address",
+        message: "Пожалуйста, введите ваш адрес электронной почты",
         trigger: "blur"
       },
       {
         type: "email",
-        message: "Please enter a valid email address",
+        message: "Пожалуйста, введите существующий адрес электронной почты",
         trigger: "blur"
       }
     ],
     password: [
       {
         required: true,
-        message: "Please enter your password",
+        message: "Пожалуйста, введите ваш пароль",
         trigger: "blur"
       },
-      { min: 4, message: "Your password is too short!" }
+      { min: 4, message: "Пароль должен быть длинее 4 символов" }
     ]
   };
   submitForm(formName: any) {
     (this.$refs[formName] as any).validate((valid: any) => {
       if (valid){
-        http.post(this.loginUrl, {
-          body: this.form
-        })
+        Axios.post(this.loginUrl, this.form, this.config)
         .then((r: AxiosResponse) => {
-
+          this.$store.state.token = r.data;       
         })
         .catch((e: AxiosError) => {
-          console.log(e)
+          //ToDo: add error handling
         })
       }
       else{
