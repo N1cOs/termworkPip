@@ -29,7 +29,7 @@
     @Component
     export default class Colleges extends Vue {
         colleges: College[] = mockCollege;
-        college: College = {
+        college?: College = {
             id: 1,
             name: "0",
             description: ""

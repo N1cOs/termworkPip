@@ -18,7 +18,7 @@
 
     @Component
     export default class Ratings extends Vue {
-        ratings: RatingRecord[]
+        ratings?: RatingRecord[]
     }
 </script>
 

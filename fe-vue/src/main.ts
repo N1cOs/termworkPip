@@ -6,7 +6,7 @@ import ElementUI from 'element-ui'
 import '@/styles/index.scss'
 
 Vue.config.productionTip = false;
-Vue.use(ElementUI)
+Vue.use(ElementUI);
 
 new Vue({
   router,

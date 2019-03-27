@@ -6,7 +6,7 @@ import Main from "@/views/Main.vue";
 import Colleges from "@/views/college/Colleges.vue";
 import College from "@/views/college/College.vue";
 import Ratings from "@/views/Ratings.vue";
-import User from "@/types/User.vue";
+import User from "@/views/User.vue";
 
 Vue.use(Router);
 
