@@ -17,18 +17,23 @@
       <el-form-item label="Password" prop="password">
         <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
-      <el-button type="primary" @click="submitForm('form')">Create</el-button>
+      <el-button type="primary" @click="submitForm('form')">Sign in</el-button>
       <br />
       <el-button type="text">forgot password?</el-button>
     </el-form>
   </el-card>
 </template>
 
-<script>
+<script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { AxiosError, AxiosResponse, AxiosInstance } from "axios";
+import http from "http-common";
 
 @Component
 export default class Login extends Vue {
+  
+  readonly loginUrl: string = "/api/public/sign-in";
+  
   form = {
     email: "",
     password: ""
@@ -53,14 +58,25 @@ export default class Login extends Vue {
         message: "Please enter your password",
         trigger: "blur"
       },
-      { min: 6, message: "Your password is too short!" }
+      { min: 4, message: "Your password is too short!" }
     ]
   };
+  submitForm(formName: any) {
+    (this.$refs[formName] as any).validate((valid: any) => {
+      if (valid){
+        http.post(this.loginUrl, {
+          body: this.form
+        })
+        .then((r: AxiosResponse) => {
 
-  submitForm(formName) {
-    this.$refs[formName].validate(valid => {
-      if (valid) alert("submit");
-      else return false;
+        })
+        .catch((e: AxiosError) => {
+          console.log(e)
+        })
+      }
+      else{
+        return false
+      }
     });
   }
 }
