@@ -33,7 +33,7 @@ import Axios,{ AxiosError,AxiosResponse,AxiosInstance } from "axios";
 @Component
 export default class Login extends Vue {
   
-  readonly loginUrl: string = "/api/public/sign-in";
+  readonly url: string = "/api/public/sign-in";
   readonly config: any = {
     headers: {
       'Content-Type': 'application/json'
@@ -70,10 +70,11 @@ export default class Login extends Vue {
       { min: 4, message: "Пароль должен быть длинее 4 символов" }
     ]
   };
+
   submitForm(formName: any) {
     (this.$refs[formName] as any).validate((valid: any) => {
       if (valid){
-        Axios.post(this.loginUrl, this.form, this.config)
+        Axios.post(this.url, this.form, this.config)
         .then((r: AxiosResponse) => {
           this.$store.state.token = r.data;       
         })

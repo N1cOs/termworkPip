@@ -1,7 +1,7 @@
 <template>
   <el-card style="margin: auto;">
     <div slot="header" class="clearfix" style="text-align: center">
-      <span>Register</span>
+      <span>Регистрация</span>
     </div>
     <!--!!! don't forget to mention prop attribute to validate el-form-input with rules passed !!!-->
     <el-form
@@ -11,17 +11,17 @@
       :model="form"
       label-width="120px"
     >
-      <el-form-item label="Surname" prop="surname">
+      <el-form-item label="Фамилия" prop="surname">
         <el-input v-model="form.surname" type=""></el-input>
       </el-form-item>
-      <el-form-item label="Name" prop="name">
+      <el-form-item label="Имя" prop="name">
         <el-input v-model="form.name" type=""></el-input>
       </el-form-item>
 
-      <el-form-item label="Patronymic" prop="">
+      <el-form-item label="Отчество" prop="">
         <el-input v-model="form.patronymic" type=""></el-input>
       </el-form-item>
-      <el-form-item label="Birth date">
+      <el-form-item label="Дата рождения">
         <el-date-picker
           type="date"
           placeholder="Pick a date"
@@ -29,7 +29,7 @@
           style="width: 100%;"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="Passport" prop="serialNumber">
+      <el-form-item label="Паспорт" prop="serialNumber">
         <el-input
           v-model="form.serialNumber"
           type=""
@@ -39,14 +39,14 @@
       <el-form-item label="E-mail" prop="email">
         <el-input v-model="form.email" type="email"></el-input>
       </el-form-item>
-      <el-form-item label="Phone" prop="phone">
+      <el-form-item label="Телефон" prop="phone">
         <el-input v-model="form.phone" type=""></el-input>
       </el-form-item>
-      <el-form-item label="Password" prop="password">
+      <el-form-item label="Пароль" prop="password">
         <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
 
-      <el-button type="primary" @click="submitForm('form')">Register</el-button>
+      <el-button type="primary" @click="submitForm('form')">Зарегестрироваться</el-button>
     </el-form>
   </el-card>
 </template>
@@ -58,35 +58,43 @@ import Exam from "@/types/Exam";
 import Subject from "@/types/Subject";
 // import subjs from "@/mock/Subjects"
 import User from "@/types/User";
+import Axios,{ AxiosResponse, AxiosError } from 'axios';
 
 @Component
 export default class Register extends Vue {
+  readonly url: string = "/api/public/sign-up";
+  readonly config: any = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  
   rules = {
     email: [
       {
         required: true,
-        message: "Please enter your email address",
+        message: "Пожалуйста, введите адрес электронной почты",
         trigger: "blur"
       },
       {
         type: "email",
-        message: "Please enter a valid email address",
+        message: "Пожалуйста, введите существующий адрес электронной почты",
         trigger: "blur"
       }
     ],
     password: [
       {
         required: true,
-        message: "Please enter your password",
+        message: "Пожалуйста, введите ваш пароль",
         trigger: "blur"
       },
-      { min: 6, message: "Your password is too short!" }
+      { min: 6, message: "Пароль должен быть длинее 6 символов" }
     ],
     serialNumber: [
       {
         required: true,
         min: 11,
-        message: 'Please enter passport serial number in form: "xxxx xxxxxx"',
+        message: 'Пожалуйста введите паспортные данные в формате:серия номер',
         trigger: "blur"
       }
     ]
@@ -114,6 +122,23 @@ export default class Register extends Vue {
     // olympiads: [],
     // errors: []
   };
+
+  submitForm(formName: any) {
+    (this.$refs[formName] as any).validate((valid: any) => {
+      if (valid){
+        Axios.post(this.url, this.form, this.config)
+        .then((response: AxiosResponse) => {
+
+        })
+        .catch((e: AxiosError) => {
+
+        })
+      }
+      else{
+        return false
+      }
+    });
+  }
 }
 </script>
 
