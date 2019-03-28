@@ -24,7 +24,4 @@ public class Olympiad implements Serializable {
     private String name;
 
     private int level;
-
-    @Column(name = "serial_number")
-    private String serialNumber;
 }
