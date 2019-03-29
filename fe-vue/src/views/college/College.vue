@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <el-header> {{ college.name }}</el-header>
+      <el-header v-model="college"> {{ college.name }}</el-header>
       <el-container>
         <el-header>
           Common information
@@ -25,6 +25,8 @@
   import {mockCollege} from "@/mock/Colleges";
   import Speciality from "@/types/Speciality";
   import {mockSpecialities} from "@/mock/Specialities";
+  import { Watch} from "vue-property-decorator";
+
 
   @Component
   export default class Colleges extends Vue {
@@ -35,13 +37,19 @@
           description: ""
       };
 
-      specialities: Speciality[] = mockSpecialities
+    specialities: Speciality[] = mockSpecialities
 
-      mounted() {
-          this.college = this.colleges.find(
-              college => college.id === parseInt(this.$route.params.id)
-          );
-      }
+    @Watch('$route.params.id')
+    setCollege(){
+      this.college = this.colleges.find(
+        college => college.id === parseInt(this.$route.params.id)
+      );
+    }
+
+    mounted() {
+      this.setCollege()
+    }
+
   }
 </script>
 
