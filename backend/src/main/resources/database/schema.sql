@@ -91,7 +91,7 @@ create table exam
 create table achievement
 (
   id   serial primary key,
-  name varchar(30) not null unique
+  name varchar(255) not null unique
 );
 
 create table ach_college
@@ -215,7 +215,17 @@ insert into olympiad(id_subj, name, level) values
 (15, 'Покори Воробьёвы горы!', 1),
 (15, 'Турнир имени М.В. Ломоносова', 2);
 
-
+insert into achievement(name) values
+('Аттестат о среднем общем образовании с отличием'),
+('Диплом о среднем профессиональном образовании с отличием'),
+('ГТО'),
+('Волонтер'),
+('Международный языковой сертификат'),
+('Итоговое сочинение в выпускных классах'),
+('Чемпион или призёр Олимпийских игр'),
+('Участник международной олимпиады по физике'),
+('Победитель или призер всероссийской командной олимпиады школьников по программированию'),
+('Участник международной математической олимпиады');
 -- Triggers
 
 create or replace function is_email_used(f_email varchar(60))
