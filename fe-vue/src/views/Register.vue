@@ -69,6 +69,7 @@ export default class Register extends Vue {
     }
   }
   
+
   rules = {
     email: [
       {
@@ -143,10 +144,10 @@ export default class Register extends Vue {
 </script>
 
 <style scoped>
-@media screen and (max-width: 500px) {
-  .el-form-item {
-    width: 300px;
-    margin-bottom: 40px;
+  @media screen and (max-width: 500px) {
+    .el-form-item {
+      width: 300px;
+      margin-bottom: 40px;
+    }
   }
-}
 </style>
