@@ -5,11 +5,11 @@ import store from './store';
 import ElementUI from 'element-ui'
 import '@/styles/index.scss'
 import Bootstrap from 'bootstrap-vue'
-
+import locale from 'element-ui/lib/locale/lang/ru-RU'
 
 Vue.config.productionTip = false;
 
-Vue.use(ElementUI);
+Vue.use(ElementUI, {locale});
 Vue.use(Bootstrap);
 
 new Vue({

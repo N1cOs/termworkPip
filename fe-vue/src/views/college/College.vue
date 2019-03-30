@@ -30,25 +30,25 @@
 
   @Component
   export default class Colleges extends Vue {
-      colleges: College[] = mockCollege;
-      college?: College = {
-          id: 1,
-          name: "0",
-          description: ""
-      };
+    //   colleges: College[] = mockCollege;
+    //   college?: College = {
+    //       id: 1,
+    //       name: "0",
+    //       description: ""
+    //   };
 
-    specialities: Speciality[] = mockSpecialities
+    // specialities: Speciality[] = mockSpecialities
 
-    @Watch('$route.params.id')
-    setCollege(){
-      this.college = this.colleges.find(
-        college => college.id === parseInt(this.$route.params.id)
-      );
-    }
+    // @Watch('$route.params.id')
+    // setCollege(){
+    //   this.college = this.colleges.find(
+    //     college => college.id === parseInt(this.$route.params.id)
+    //   );
+    // }
 
-    mounted() {
-      this.setCollege()
-    }
+    // mounted() {
+    //   this.setCollege()
+    // }
 
   }
 </script>

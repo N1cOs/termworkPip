@@ -42,13 +42,11 @@ export default new Router({
       path: "/colleges",
       name: "colleges",
       component: Colleges,
-      children:[
-        {
-          path: "/colleges/:id",
-          name: "colleges",
-          component: College
-        },
-      ]
     },
+    {
+      path: "/colleges/:id",
+      name: "college",
+      component: College
+    }
   ]
 });

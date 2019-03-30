@@ -1,6 +1,6 @@
-interface College{
+export default interface College{
     id: number
+    city: string
     name: string
     description: string
 }
-export default College
