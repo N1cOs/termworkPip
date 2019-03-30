@@ -14,10 +14,13 @@
           </div>
           <div v-for="college in colleges" :key="college.id">
             <router-link
-              :to="'/colleges/'+college.id"
-              >{{ college.name }}</router-link
-            >
+              :to="'/college/'+college.id"
+            >{{ college.name }}
+            </router-link>
           </div>
+        </el-card>
+        <el-card>
+          <router-view/>
         </el-card>
       </el-main>
     </el-container>
@@ -32,9 +35,9 @@ import Axios,{ AxiosResponse, AxiosError } from 'axios';
 
 @Component
 export default class Colleges extends Vue {
-  
+
   readonly url: string = "/api/public/colleges";
-  
+
   search: string = "";
 
   colleges?: College[]

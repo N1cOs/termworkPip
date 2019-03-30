@@ -12,13 +12,13 @@
         <el-container>
           <el-aside width="80px">
             <router-link to="/"
-              ><img src="../assets/person.png" alt=""
+            ><img src="../assets/person.png" alt=""
             /></router-link>
             <router-link to="/"
-              ><img src="../assets/rating.png" alt=""
+            ><img src="../assets/rating.png" alt=""
             /></router-link>
             <router-link to="/"
-              ><img src="../assets/vuz.png" alt=""
+            ><img src="../assets/vuz.png" alt=""
             /></router-link>
           </el-aside>
           <el-main>
@@ -29,20 +29,20 @@
             adipisicing elit. Commodi distinctio fuga officiis porro, rem
             repellendus sit temporibus. Aperiam aut, blanditiis ea id iure
             labore laboriosam magni praesentium provident sequi vero.
-            <br />
+            <br/>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi cum
             cupiditate distinctio dolorem id laudantium magnam magni nam nobis
             non odit optio pariatur quisquam, reprehenderit sint ut
             voluptatibus? Culpa, quasi?
-            <br />
-	          <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab amet fugit, iusto labore natus non quod
-		          unde voluptate! Aperiam cumque dolorum quo ratione? At consequatur exercitationem iste officiis quae,
-		          rerum!
-	          </div>
-	          <div>Beatae dignissimos neque praesentium provident quis recusandae rem tempore vel vitae voluptatum?
-		          Aliquam aliquid, aut consequuntur eveniet ex, fugiat nesciunt nobis perspiciatis, quae quisquam reiciendis
-		          reprehenderit unde ut veritatis voluptatibus.
-	          </div>
+            <br/>
+            <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab amet fugit, iusto labore natus non quod
+              unde voluptate! Aperiam cumque dolorum quo ratione? At consequatur exercitationem iste officiis quae,
+              rerum!
+            </div>
+            <div>Beatae dignissimos neque praesentium provident quis recusandae rem tempore vel vitae voluptatum?
+              Aliquam aliquid, aut consequuntur eveniet ex, fugiat nesciunt nobis perspiciatis, quae quisquam reiciendis
+              reprehenderit unde ut veritatis voluptatibus.
+            </div>
           </el-main>
         </el-container>
       </el-container>
@@ -50,12 +50,13 @@
   </div>
 </template>
 
-<script>
-import { Component, Vue } from "vue-property-decorator";
+<script lang="ts">
+    import {Component, Vue} from "vue-property-decorator";
 
-@Component
-export default class Main extends Vue {}
-Vue.component("Main", Main);
+    @Component
+    export default class Main extends Vue {
+    }
+    Vue.component("Main", Main);
 </script>
 
 <style scoped></style>

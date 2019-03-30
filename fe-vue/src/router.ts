@@ -17,39 +17,38 @@ export default new Router({
       path: '/user/:id',
       name: "user",
       component: User,
-      children:[
-        {
-          path: "/ratings/:specId",
-          name: "ratings",
-          component: Ratings
-        }
-      ]
     },
     {
-      path: "/l",
+      path: "/ratings/:specId",
+      name: "ratings",
+      component: Ratings
+    },
+    {
+      path: "/login",
       name: "login",
       component: Login
     },
     {
-      path: "/r",
-      name: "reg",
+      path: "/signup",
+      name: "signup",
       component: Register
     },
     {
-      path: "/m",
+      path: "/",
       name: "main",
       component: Main
-    }, {
-      path: "/colleges/:id",
-      name: "colleges",
-      component: College
     },
     {
       path: "/colleges",
       name: "colleges",
       component: Colleges,
-      children: []
+      children:[
+        {
+          path: "/college/:id",
+          name: "colleges",
+          component: College
+        },
+      ]
     },
-
   ]
 });
