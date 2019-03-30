@@ -1,27 +1,27 @@
 <template>
-  <el-card style="width: 500px; margin: auto;">
+  <el-card style="width: 500px; margin: auto">
     <div slot="header" class="clearfix" style="text-align: center">
       <span>Вход</span>
     </div>
-    <!--!!! don't forget to mention prop attribute to validate el-form-input with rules passed !!!-->
+    
     <el-form
       ref="form"
       :label-position="'left'"
       :rules="rules"
       :model="form"
-      label-width="120px"
+      label-width="70px"
     >
-      <el-form-item label="E-mail" prop="username">
-        <div>{{errorEmail}}</div>
+      <el-form-item label="E-mail" prop="username" v-bind:error="errorEmail">
         <el-input v-model="form.username" type="email"></el-input>
       </el-form-item>
-      <div>{{errorPassword}}</div>
-      <el-form-item label="Пароль" prop="password">
+      
+      <el-form-item label="Пароль" prop="password" v-bind:error="errorPassword">
         <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
+      
       <el-button type="primary" @click="submitForm('form')">Войти</el-button>
       <br />
-      <el-button type="text">Забыли пароль?</el-button>
+      <!-- <el-button type="text">Забыли пароль?</el-button> -->
     </el-form>
   </el-card>
 </template>
@@ -29,6 +29,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import Axios,{ AxiosError,AxiosResponse,AxiosInstance } from "axios";
+import Error from '@/types/Error';
 
 @Component
 export default class Login extends Vue {
@@ -76,10 +77,22 @@ export default class Login extends Vue {
       if (valid){
         Axios.post(this.url, this.form, this.config)
         .then((r: AxiosResponse) => {
-          this.$store.state.token = r.data;       
+          this.$store.state.token = r.data;      
         })
         .catch((e: AxiosError) => {
-          //ToDo: add error handling
+          if(e.response !== undefined){
+            let errors = e.response.data as Error;
+            let error = errors.inputErrors[0]
+            
+            switch(error.field){
+              case "email": 
+                  this.errorEmail = error.info;
+                  break;
+              case "password": 
+                  this.errorPassword = error.info;
+                  break;
+            }
+          }
         })
       }
       else{
@@ -89,6 +102,7 @@ export default class Login extends Vue {
   }
 }
 </script>
+
 <style scoped>
 /*@media screen and (max-width: 500px) {*/
   /*.el-card {*/

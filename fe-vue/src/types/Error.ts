@@ -1,5 +1,5 @@
-interface Error{
-    field: string
-    info: string
+import InputError from './InputError';
+
+export default interface Error{
+    inputErrors: Array<InputError>;
 }
-export default Error
