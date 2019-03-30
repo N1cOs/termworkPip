@@ -24,13 +24,13 @@ export default new Router({
       component: Ratings
     },
     {
-      path: "/login",
-      name: "login",
+      path: "/sign-in",
+      name: "signIn",
       component: Login
     },
     {
-      path: "/signup",
-      name: "signup",
+      path: "/sign-up",
+      name: "signUp",
       component: Register
     },
     {
@@ -44,7 +44,7 @@ export default new Router({
       component: Colleges,
       children:[
         {
-          path: "/college/:id",
+          path: "/colleges/:id",
           name: "colleges",
           component: College
         },
