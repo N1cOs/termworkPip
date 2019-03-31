@@ -18,7 +18,7 @@
             </el-row>
             <el-row>
               <el-col :span="2" :xs="24">
-                <img src="../../assets/msu.png"/>
+                <img src="images/logo/msu.png"/>
               </el-col>
               <div class="content">
                 <el-col :offset="2" :span="4" :xs="6" class="city">
@@ -39,6 +39,7 @@
         <el-pagination
         background
         layout="prev, pager, next"
+        pager-count="5"
         v-bind:page-size="pageSize"
         v-bind:total="pageSize * pageAmount"
         @current-change="nextPage"
@@ -78,7 +79,7 @@ export default class Colleges extends Vue {
   }
 
   getColleges(limit: number, offset: number){
-    let url = `/api/public/colleges?limit=${limit}&offset=${offset}`;
+    let url = `api/public/colleges?limit=${limit}&offset=${offset}`;
     Axios.get(url)
     .then((response: AxiosResponse) => {
       this.colleges = response.data

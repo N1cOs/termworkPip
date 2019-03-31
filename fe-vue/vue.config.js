@@ -1,13 +1,14 @@
 module.exports = {
-    publicPath: '/uniss',
     devServer: {
         proxy: {
-            '/api': {
+            'api': {
                 target: 'http://localhost:14580',
                 changeOrigin: true,
-                pathRewrite: {
-                    '^/api': '/uniss/api/'
-                },
+                secure: false
+            },
+            'images': {
+                target: 'http://localhost:14580',
+                changeOrigin: true,
                 secure: false
             }
         }
