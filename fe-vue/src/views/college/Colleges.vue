@@ -18,14 +18,14 @@
             </el-row>
             <el-row>
               <el-col :span="2" :xs="24">
-                <img src="images/logo/msu.png"/>
+                <img v-bind:src="college.logoUrl"/>
               </el-col>
               <div class="content">
                 <el-col :offset="2" :span="4" :xs="6" class="city">
                 {{college.city}}
                 </el-col>
                 <el-col :offset="2" :span="6" :xs="14" class="specs">
-                  Образовательных программ: 20 
+                  Бюджетных мест: {{college.places}} 
                 </el-col>
               </div>
             </el-row>
@@ -54,7 +54,8 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import College from "@/types/College";
-import Axios,{ AxiosResponse, AxiosError } from 'axios';
+import CollegesResponse from "@/types/CollegesResponse";
+import Axios,{ AxiosResponse, AxiosError, AxiosPromise } from 'axios';
 
 @Component
 export default class Colleges extends Vue {
@@ -65,31 +66,40 @@ export default class Colleges extends Vue {
 
   pageSize: number = 20;
 
-  pageAmount: number = 20;
+  pageAmount: number = 1;
 
   screenLock: boolean = false;
 
   created() {
-    this.getColleges(this.pageSize, 0);
+    this.getColleges(this.pageSize, 0)
+      .then((response: AxiosResponse) => {
+        let data = response.data as CollegesResponse;
+        this.colleges = data.colleges;
+        this.pageAmount = data.amount / this.pageSize - 1;
+      })
+      .catch((e: AxiosError) => {
+        this.$message.error('Упс, что-то пошло не так');
+      })
   }
 
   nextPage(pageNumber: number){
     this.screenLock = true;
-    this.getColleges(this.pageSize, this.pageSize * pageNumber);
+    this.getColleges(this.pageSize, this.pageSize * (pageNumber - 1))
+      .then((response: AxiosResponse) => {
+        let data = response.data as CollegesResponse;
+        this.colleges = data.colleges;
+        window.scrollTo(0, 0);
+        this.screenLock = false;
+      })
+      .catch((e: AxiosError) => {
+        this.screenLock = false;
+        this.$message.error('Упс, что-то пошло не так');
+      })
   }
 
-  getColleges(limit: number, offset: number){
+  getColleges(limit: number, offset: number): AxiosPromise{
     let url = `api/public/colleges?limit=${limit}&offset=${offset}`;
-    Axios.get(url)
-    .then((response: AxiosResponse) => {
-      this.colleges = response.data
-      window.scrollTo(0, 0);
-      this.screenLock = false;
-    })
-    .catch((e: AxiosError) => {  
-      this.screenLock = false;
-      this.$message.error('Упс, что-то пошло не так');
-    })
+    return Axios.get(url);
   }
 }
 </script>
