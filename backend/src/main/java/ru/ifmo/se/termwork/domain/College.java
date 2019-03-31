@@ -43,6 +43,13 @@ public class College {
     @JsonView(View.Default.class)
     private String description;
 
+    @JsonView(View.Default.class)
+    private int places;
+
+    @Column(name = "logo_url")
+    @JsonView(View.Default.class)
+    private String logoUrl;
+
     @ToString.Exclude
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
