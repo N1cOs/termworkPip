@@ -34,7 +34,7 @@ public class SpecialityController {
                                            @RequestParam(name = "offset", defaultValue = "0") Integer offset){
         if(limit < 0 || offset < 0)
             throw new ApiException(HttpStatus.BAD_REQUEST, "exception.limit.offset.negative");
-        List<Speciality> specialities = specialityRepository.findWithReqAllByCollegeId(collegeId);
+        List<Speciality> specialities = specialityRepository.findWithReqAllByCollegeIdOrderById(collegeId);
         if(specialities.isEmpty())
             throw new ApiException(HttpStatus.BAD_REQUEST, "exception.college.notFound", collegeId);
         return new SpecialitiesDto(specialities.size(),

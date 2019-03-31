@@ -58,6 +58,5 @@ public interface SpecialityRepository extends JpaRepository<Speciality, Integer>
     Optional<Speciality> findWithAllById(Integer id);
 
     @EntityGraph(value = "speciality.req")
-    @Query("select s from Speciality s where s.college.id = ?1")
-    List<Speciality> findWithReqAllByCollegeId(Integer id);
+    List<Speciality> findWithReqAllByCollegeIdOrderById(Integer id);
 }
