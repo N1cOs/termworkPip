@@ -14,15 +14,13 @@ import ru.ifmo.se.termwork.repository.CollegeRepository;
 import ru.ifmo.se.termwork.support.exception.ApiException;
 import ru.ifmo.se.termwork.support.exception.Error;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/public/colleges")
 public class CollegeController {
-
-    private final static String SPECIALITIES_FIELD = "specialities";
-    private final static String ACH_FIELD = "achievements";
 
     @Autowired
     private CollegeRepository collegeRepository;
@@ -54,5 +52,30 @@ public class CollegeController {
     public College getCollege(@PathVariable("id") Integer collegeId) {
         return collegeRepository.findWithScoresById(collegeId).orElseThrow(() ->
                 new ApiException(HttpStatus.BAD_REQUEST, "exception.college.notFound", collegeId));
+    }
+
+    @JsonView(College.View.Default.class)
+    @GetMapping(params = {"query"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<College> searchColleges(@RequestParam("query") String query){
+        final int maxAmount = 10;
+        if (!query.isEmpty()) {
+            String queryString =  query + "%";
+            List<College> colleges = collegeRepository.findAllByNameLikeIgnoreCaseOrAbbreviationLikeIgnoreCase(queryString, queryString);
+            if(colleges.size() > 0){
+                for(int i = 0; i < colleges.size(); i++){
+                    College college = colleges.get(i);
+                    if(college.getName().equals(query) || college.getAbbreviation().equals(query)){
+                        Collections.swap(colleges, 0, i);
+                        break;
+                    }
+                }
+                return colleges.stream().limit(maxAmount).collect(Collectors.toList());
+            }
+
+            queryString = "%" + queryString;
+            return collegeRepository.findAllByNameLikeIgnoreCaseOrAbbreviationLikeIgnoreCase(queryString, queryString)
+                    .stream().limit(maxAmount).collect(Collectors.toList());
+        }
+        throw new ApiException(HttpStatus.BAD_REQUEST, "exception.query.empty");
     }
 }
