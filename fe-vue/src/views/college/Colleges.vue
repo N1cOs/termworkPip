@@ -3,10 +3,14 @@
     <el-header>Вузы России</el-header>
     <el-container>
       <el-main>
-        <el-input
+        <el-autocomplete
           placeholder="Введите название учебного заведения"
-          style="margin-bottom: 30px"
-        ></el-input>
+          style="margin-bottom: 30px; width: 100%"
+          v-model="search"
+          :fetch-suggestions="querySearch"
+          @keydown.native.esc="restorePreviousColleges"
+          @select="handleSelect"
+        ></el-autocomplete>
         <div v-for="college in colleges" :key="college.id">
           <el-card>
             <el-row>
@@ -39,11 +43,12 @@
         <el-pagination
         background
         layout="prev, pager, next"
-        pager-count="5"
+        v-bind:pager-count="pagerCount"
         v-bind:page-size="pageSize"
         v-bind:total="pageSize * pageAmount"
         @current-change="nextPage"
         v-loading.fullscreen.lock="screenLock"
+        v-bind:hidden="hiddenPagination"
         ></el-pagination>
       </el-main>
     </el-container>
@@ -61,14 +66,22 @@ import Axios,{ AxiosResponse, AxiosError, AxiosPromise } from 'axios';
 export default class Colleges extends Vue {
   
   search: string = "";
-
+  
   colleges: College[] = [];
+
+  previousColleges: College[] = [];
+
+  fetchedColleges: Map<string, College[]> = new Map();
 
   pageSize: number = 20;
 
   pageAmount: number = 1;
 
+  pagerCount: number = 5;
+
   screenLock: boolean = false;
+
+  hiddenPagination: boolean = false;
 
   created() {
     this.getColleges(this.pageSize, 0)
@@ -95,6 +108,62 @@ export default class Colleges extends Vue {
         this.screenLock = false;
         this.$message.error('Упс, что-то пошло не так');
       })
+  }
+
+  querySearch(query: string, callback: any){
+    const url = `api/public/colleges?query=${query}`;
+    if(query.trim().length > 0){
+      let colleges = this.fetchedColleges.get(query);
+      if(colleges !== undefined){
+        callback(this.getNamesFromColleges(colleges));
+      }
+      else{
+        Axios.get(url)
+        .then((response: AxiosResponse) => {
+          let data = response.data as College[];
+          this.fetchedColleges.set(query, data);
+          callback(this.getNamesFromColleges(data));
+        })
+        .catch((e: AxiosError) => {
+
+        })
+      }
+    }
+    else{
+      callback([]);
+    }
+  }
+
+  handleSelect(query: any){
+    this.screenLock = true;
+    for(let colleges of this.fetchedColleges.values()){
+      colleges.forEach(c =>{
+        if(c.name === query.value){
+          this.previousColleges = this.colleges;
+          this.colleges = [c];
+        }
+      });
+    }
+    this.hiddenPagination = true;
+    this.screenLock = false;
+  }
+
+  restorePreviousColleges(){
+    if(this.previousColleges.length > 0 && 
+      this.colleges != this.previousColleges &&
+      this.colleges.length == 1){
+      this.colleges = this.previousColleges;
+      this.search = '';
+      this.hiddenPagination = false;
+    }
+  }
+
+  getNamesFromColleges(colleges: College[]): any[]{
+    let names: any[] = [];
+    colleges.forEach(c => {
+      names.push({value: c.name});
+    });
+    return names;
   }
 
   getColleges(limit: number, offset: number): AxiosPromise{
