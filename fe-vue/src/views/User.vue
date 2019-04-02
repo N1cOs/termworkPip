@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator'
+  import {Component, Vue} from 'vue-property-decorator';
   import Subject from "@/types/Subject";
   import Axios, {AxiosResponse} from "axios";
   import Olympiad from "@/types/Olympiad";
@@ -59,65 +59,65 @@
     readonly achievementsUrl: string = "/api/public/achievements";
 
     created() {
-      this.getSubjects()
-      this.getOlympiads()
-      this.getAchievements()
+      this.getSubjects();
+      this.getOlympiads();
+      this.getAchievements();
     }
 
     getOlympiads() {
       Axios.get(this.olympiadsUrl)
         .then((res: AxiosResponse) => {
-          this.olympiadsList = res.data as Subject[]
-        })
+          this.olympiadsList = res.data as Subject[];
+        });
     }
 
     getAchievements() {
       Axios.get(this.achievementsUrl)
         .then((res: AxiosResponse) => {
-          this.achievementsList = res.data as Olympiad[]
-        })
+          this.achievementsList = res.data as Olympiad[];
+        });
     }
 
     getSubjects() {
       Axios.get(this.subjectsUrl)
         .then((res: AxiosResponse) => {
-          this.subjectsList = res.data
-        })
+          this.subjectsList = res.data;
+        });
     }
 
     addExam() {
       this.form.exams.push({
         subjectId: null,
         score: null
-      })
+      });
     }
 
     addAchievement() {
-      this.form.achievementsId.push("Выберите ИД")
+      this.form.achievementsId.push("Выберите ИД");
     }
 
     addOlympiad() {
-      this.form.olympiadsId.push("Выберите олимпиаду")
+      this.form.olympiadsId.push("Выберите олимпиаду");
     }
 
     removeExam(exam: any) {
-      let index = this.form.exams.indexOf(exam)
+      let index = this.form.exams.indexOf(exam);
       if (index != -1) {
-        this.form.exams.splice(index, 1)
+        this.form.exams.splice(index, 1);
       }
     }
 
     removeOlympiad(olympiad) {
-      let index = this.form.olympiadsId.indexOf(olympiad)
+      let index = this.form.olympiadsId.indexOf(olympiad);
       if (index != -1) {
-        this.form.olympiadsId.splice(index, 1)
+        this.form.olympiadsId.splice(index, 1);
       }
     }
 
     removeAchievement(achievement) {
-      let index = this.form.achievementsId.indexOf(achievement)
+      let index = this.form.achievementsId.indexOf(achievement);
       if (index != -1) {
-        this.form.achievementsId.splice(index, 1)
+        this.form.achievementsId.splice(index, 1);
       }
     }
 
@@ -125,11 +125,11 @@
       Axios.post("/api/student/exams", this.form.exams, this.config)
         .then(
           (res: AxiosResponse) => {
-            console.log(res.status)
+            console.log(res.status);
           }
-        )
+        );
     }
   }
-  Vue.component("User", User)
+  Vue.component("User", User);
 
 </script>

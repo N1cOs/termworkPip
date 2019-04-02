@@ -5,8 +5,8 @@ import SignUp from "./views/SignUp.vue";
 import Main from "@/views/Main.vue";
 import Colleges from "@/views/college/Colleges.vue";
 import College from "@/views/college/College.vue";
-import Ratings from "@/views/Ratings.vue";
 import User from "@/views/User.vue";
+import Speciality from "@/views/Speciality.vue";
 
 Vue.use(Router);
 
@@ -19,9 +19,9 @@ export default new Router({
       component: User,
     },
     {
-      path: "/ratings/:specId",
-      name: "ratings",
-      component: Ratings
+      path: "/spec/:specId",
+      name: "specialities",
+      component: Speciality
     },
     {
       path: "/sign-in",
