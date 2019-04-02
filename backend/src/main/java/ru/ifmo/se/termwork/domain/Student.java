@@ -27,6 +27,11 @@ import java.util.Set;
         @NamedEntityGraph(name = "student.olympiads", attributeNodes = {
                 @NamedAttributeNode("olympiads")
         }),
+        @NamedEntityGraph(name = "student.scores", attributeNodes = {
+                @NamedAttributeNode("olympiads"),
+                @NamedAttributeNode("achievements"),
+                @NamedAttributeNode("exams")
+        }),
         @NamedEntityGraph(name = "student.ratings", attributeNodes = {
                 @NamedAttributeNode("ratings")
         }),
@@ -116,11 +121,13 @@ public class Student extends User {
     @ToString.Exclude
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
+    @JsonView(View.Scores.class)
     @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Exam> exams;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonView(View.Scores.class)
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "ach_student",
@@ -132,6 +139,7 @@ public class Student extends User {
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonView(View.Scores.class)
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "student_olympiad",
@@ -143,6 +151,7 @@ public class Student extends User {
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonView(View.Ratings.class)
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings;
 

@@ -51,6 +51,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @EntityGraph("student.achAndRatings")
     Optional<Student> findWithAchievementsAndRatingsById(Integer id);
 
+    @EntityGraph("student.scores")
+    Optional<Student> findWithScoresById(Integer id);
+
     /**
      * Returns the student from a database with achievements by specified id
      *
