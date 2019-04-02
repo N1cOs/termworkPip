@@ -136,7 +136,6 @@
         'Content-Type': 'application/json'
       }
     }
-    addingExam: number = -1;
 
     rules = {
       email: [
@@ -168,8 +167,6 @@
         }
       ]
     };
-
-    subjectPoints: number = 0;
 
     private form: any = {
       surname: "",

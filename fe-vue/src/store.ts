@@ -8,7 +8,8 @@ export default new Vuex.Store({
 
   },
   state: {
-    token: ''
+    token: '',
+    colleges: []
   },
   mutations: {
 

@@ -77,7 +77,8 @@ export default class Login extends Vue {
       if (valid){
         Axios.post(this.url, this.form, this.config)
         .then((r: AxiosResponse) => {
-          this.$store.state.token = r.data;      
+          this.$store.state.token = r.data;
+          console.log(this.$store.state.token )
         })
         .catch((e: AxiosError) => {
           if(e.response !== undefined){

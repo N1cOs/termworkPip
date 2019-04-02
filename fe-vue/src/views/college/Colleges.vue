@@ -29,7 +29,7 @@
                 {{college.city}}
                 </el-col>
                 <el-col :offset="2" :span="6" :xs="14" class="specs">
-                  Бюджетных мест: {{college.places}} 
+                  Бюджетных мест: {{college.places}}
                 </el-col>
               </div>
             </el-row>
@@ -64,7 +64,7 @@ import Axios,{ AxiosResponse, AxiosError, AxiosPromise } from 'axios';
 
 @Component
 export default class Colleges extends Vue {
-  
+
   search: string = "";
   
   colleges: College[] = [];
@@ -212,7 +212,7 @@ a{
   margin-top: 20px;
 }
 
-.question{  
+.question{
   text-align: end;
   margin-bottom: 0;
 }
