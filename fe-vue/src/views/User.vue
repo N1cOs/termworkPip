@@ -23,7 +23,6 @@
       <el-button @click="addExam">
         Добавить экзамен
       </el-button>
-
       <el-button @click="saveExams">Сохранить экзамен(ы)</el-button>
     </el-form>
   </div>
@@ -45,12 +44,9 @@
     config: any = {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+this.$store.state.token
+        'Authorization': 'Bearer ' + this.$store.state.token
       }
     }
-
-    //todo remove this
-    readonly superstudent: number = 164;
 
     private subjectsList: Subject[] = [{"id": 1, "name": "Русский язык"}, {
       "id": 2,
@@ -126,9 +122,9 @@
     }
 
     saveExams() {
-      Axios.post("/api/student/exams", {exams: this.form.exams}, this.config)
+      Axios.post("/api/student/exams", this.form.exams, this.config)
         .then(
-          (res: AxiosResponse)=>{
+          (res: AxiosResponse) => {
             console.log(res.status)
           }
         )
@@ -137,7 +133,3 @@
   Vue.component("User", User)
 
 </script>
-
-<style scoped>
-
-</style>

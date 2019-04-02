@@ -7,7 +7,8 @@ export default new Vuex.Store({
   modules: {},
   state: {
     token: '',
-    colleges: []
+    colleges: [],
+    userId: ''
   },
   mutations: {},
   actions: {},

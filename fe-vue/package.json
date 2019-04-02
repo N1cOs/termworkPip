@@ -39,7 +39,12 @@
       "eslint:recommended",
       "@vue/typescript"
     ],
-    "rules": {},
+    "rules": {
+      "semi": [
+        "error",
+        "always"
+      ]
+    },
     "parserOptions": {
       "parser": "@typescript-eslint/parser"
     }

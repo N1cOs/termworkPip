@@ -29,35 +29,36 @@
     config: any = {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+this.$store.state.token
+        'Authorization': this.$store.state.token
       }
-    }
-    ratings?: RatingRecord[]
-    speciality?: Speciality
+    };
+    ratings?: RatingRecord[];
+    speciality?: Speciality;
     loading = true;
     priority: number = 1;
     originals: boolean = false;
     olympiadId: number = -1;
     successfullyApplied: boolean = false;
+
     created() {
-      this.getRatings()
+      this.getRatings();
     }
 
     @Watch('successfullyApplied')
-    logApplication(){
-      console.log("APPLIED!!!!!!")
+    logApplication() {
+      console.log("APPLIED!!!!!!");
     }
 
-    applyForSpeciality(){
-      Axios.post("/api/student/speciality/"+ this.$route.params.specId, {
+    applyForSpeciality() {
+      Axios.post("/api/student/speciality/" + this.$route.params.specId, {
         specialityId: this.$route.params.specId,
         priority: this.priority,
         originals: this.originals,
         olympiadId: this.olympiadId
-      },this.config)
-        .then((res: AxiosResponse)=>{
+      }, this.config)
+        .then((res: AxiosResponse) => {
           this.successfullyApplied = true;
-        })
+        });
     }
 
     getRatings() {
@@ -65,8 +66,7 @@
         .then(res => {
           // console.log(res)
           this.loading = false;
-        })
-
+        });
     }
   }
 </script>

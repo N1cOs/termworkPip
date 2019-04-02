@@ -39,10 +39,10 @@ export default class Login extends Vue {
     headers: {
       'Content-Type': 'application/json'
     }
-  }
+  };
 
-  errorEmail: string = ""
-  errorPassword: string = ""
+  errorEmail: string = "";
+  errorPassword: string = "";
   
   form = {
     username: "",
@@ -77,13 +77,14 @@ export default class Login extends Vue {
       if (valid){
         Axios.post(this.url, this.form, this.config)
         .then((r: AxiosResponse) => {
-          this.$store.state.token = r.data;
-          console.log(this.$store.state.token )
+          this.$store.state.token = r.data.token;
+          this.$store.state.userId = r.data.userId;
+          this.$router.push("/ratings/9");
         })
         .catch((e: AxiosError) => {
           if(e.response !== undefined){
             let errors = e.response.data as Error;
-            let error = errors.inputErrors[0]
+            let error = errors.inputErrors[0];
             
             switch(error.field){
               case "email": 
