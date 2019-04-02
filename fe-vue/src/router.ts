@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Login from "./views/Login.vue";
-import Register from "./views/Register.vue";
+import SignIn from "./views/SignIn.vue";
+import SignUp from "./views/SignUp.vue";
 import Main from "@/views/Main.vue";
 import Colleges from "@/views/college/Colleges.vue";
 import College from "@/views/college/College.vue";
@@ -26,12 +26,12 @@ export default new Router({
     {
       path: "/sign-in",
       name: "signIn",
-      component: Login
+      component: SignIn
     },
     {
       path: "/sign-up",
       name: "signUp",
-      component: Register
+      component: SignUp
     },
     {
       path: "/",
