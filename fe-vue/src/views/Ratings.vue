@@ -61,9 +61,10 @@
     }
 
     getRatings() {
+      console.log(this.$store.state.token)
       Axios.get("/api/public/ratings/" + this.$route.params.specId)
         .then(res => {
-          // console.log(res)
+          console.log(res)
           this.loading = false;
         })
 
