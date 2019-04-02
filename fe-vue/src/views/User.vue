@@ -91,8 +91,8 @@
 
     addExam() {
       this.form.exams.push({
+        score: null,
         subjectId: null,
-        score: null
       })
     }
 
@@ -126,7 +126,7 @@
     }
 
     saveExams() {
-      Axios.post("/api/student/exams", {exams: this.form.exams}, this.config)
+      Axios.post("/api/student/exams", this.form.exams, this.config)
         .then(
           (res: AxiosResponse)=>{
             console.log(res.status)
