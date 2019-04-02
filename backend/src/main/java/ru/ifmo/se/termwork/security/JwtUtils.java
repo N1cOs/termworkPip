@@ -66,7 +66,7 @@ public class JwtUtils {
                 .claim(ROLES_CLAIM_NAME, roles)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-        return token;
+        return "Bearer " + token;
     }
 
 }
