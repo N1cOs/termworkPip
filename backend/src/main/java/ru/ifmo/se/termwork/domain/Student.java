@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import ru.ifmo.se.termwork.domain.keys.ExamId;
+import ru.ifmo.se.termwork.domain.keys.RatingId;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,6 +26,11 @@ import java.util.Set;
         }),
         @NamedEntityGraph(name = "student.olympiads", attributeNodes = {
                 @NamedAttributeNode("olympiads")
+        }),
+        @NamedEntityGraph(name = "student.scores", attributeNodes = {
+                @NamedAttributeNode("olympiads"),
+                @NamedAttributeNode("achievements"),
+                @NamedAttributeNode("exams")
         }),
         @NamedEntityGraph(name = "student.ratings", attributeNodes = {
                 @NamedAttributeNode("ratings")
@@ -115,11 +121,13 @@ public class Student extends User {
     @ToString.Exclude
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
+    @JsonView(View.Scores.class)
     @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Exam> exams;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonView(View.Scores.class)
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "ach_student",
@@ -131,6 +139,7 @@ public class Student extends User {
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonView(View.Scores.class)
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "student_olympiad",
@@ -142,6 +151,7 @@ public class Student extends User {
     @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonView(View.Ratings.class)
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Rating> ratings;
 
@@ -164,7 +174,8 @@ public class Student extends User {
             rating.setOriginals(originals);
         }
         else{
-            rating = Rating.builder().student(this).speciality(speciality).olympiad(olympiad).
+            RatingId ratingId = new RatingId(speciality.getId(), id);
+            rating = Rating.builder().id(ratingId).student(this).speciality(speciality).olympiad(olympiad).
                     priority(priority).originals(originals).submissionDate(new Date()).build();
             ratings.add(rating);
         }

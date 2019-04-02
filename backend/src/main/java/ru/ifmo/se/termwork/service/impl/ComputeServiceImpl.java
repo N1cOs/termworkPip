@@ -1,5 +1,6 @@
 package ru.ifmo.se.termwork.service.impl;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import ru.ifmo.se.termwork.repository.CollegeRepository;
 import ru.ifmo.se.termwork.repository.StudentRepository;
 import ru.ifmo.se.termwork.service.ComputeService;
 
+@Log4j
 @Service
 public class ComputeServiceImpl implements ComputeService {
 
@@ -26,7 +28,11 @@ public class ComputeServiceImpl implements ComputeService {
 
         int totalScore = getExamScore(student) + getAchievementsScore(student, college);
         rating.setTotalScore(totalScore);
-        studentRepository.save(student);
+        try{
+            studentRepository.save(student);
+        } catch (RuntimeException e){
+            log.error("Saving student", e);
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ifmo.se.termwork.domain.Authority;
 import ru.ifmo.se.termwork.domain.User;
+import ru.ifmo.se.termwork.dto.SignInDto;
 import ru.ifmo.se.termwork.dto.UserDto;
 import ru.ifmo.se.termwork.repository.UserRepository;
 import ru.ifmo.se.termwork.security.JwtUtils;
@@ -39,7 +40,7 @@ public class SignInController {
     @PostMapping(path = "/sign-in",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity signIn(@RequestBody @Valid UserDto userDTO) {
+    public SignInDto signIn(@RequestBody @Valid UserDto userDTO) {
         User user = userRepository.findByEmail(userDTO.getUsername()).
                 orElseThrow(() -> new ClientException(HttpStatus.UNAUTHORIZED, InputErrors.Invalid.EMAIL));
 
@@ -47,6 +48,6 @@ public class SignInController {
             throw new ClientException(HttpStatus.UNAUTHORIZED, InputErrors.Invalid.PASSWORD);
 
         List<String> roles = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
-        return ResponseEntity.ok(jwtUtils.getToken(user.getId(), roles));
+        return new SignInDto(user.getId(),  jwtUtils.getToken(user.getId(), roles));
     }
 }
