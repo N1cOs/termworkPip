@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import ru.ifmo.se.termwork.domain.keys.ExamId;
+import ru.ifmo.se.termwork.domain.keys.RatingId;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -164,7 +165,8 @@ public class Student extends User {
             rating.setOriginals(originals);
         }
         else{
-            rating = Rating.builder().student(this).speciality(speciality).olympiad(olympiad).
+            RatingId ratingId = new RatingId(speciality.getId(), id);
+            rating = Rating.builder().id(ratingId).student(this).speciality(speciality).olympiad(olympiad).
                     priority(priority).originals(originals).submissionDate(new Date()).build();
             ratings.add(rating);
         }
