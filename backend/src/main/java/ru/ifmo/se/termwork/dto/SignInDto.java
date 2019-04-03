@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class SignInDto {
 
-    private int userId;
+    private String role;
 
     private String token;
 }

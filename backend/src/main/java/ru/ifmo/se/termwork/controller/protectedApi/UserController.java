@@ -1,41 +1,40 @@
-package ru.ifmo.se.termwork.controller.studentApi;
+package ru.ifmo.se.termwork.controller.protectedApi;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.domain.User;
+import ru.ifmo.se.termwork.domain.Worker;
 import ru.ifmo.se.termwork.repository.StudentRepository;
+import ru.ifmo.se.termwork.repository.WorkerRepository;
+import ru.ifmo.se.termwork.security.Role;
 import ru.ifmo.se.termwork.support.exception.ApiException;
 
 @RestController
-@RequestMapping("/student/{id}")
-public class StudentController {
+@RequestMapping("/me")
+public class UserController {
 
     @Autowired
     private StudentRepository studentRepository;
 
-    @JsonView(User.View.Scores.class)
+    @Autowired
+    private WorkerRepository workerRepository;
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Success"),
-            @ApiResponse(code = 403, message = "You can't get information about another student")
-    })
-    public Student getStudent(
-            @AuthenticationPrincipal User user,
-            @PathVariable("id") Integer studentId){
-        if(user.getId() == studentId){
-            return studentRepository.findWithScoresById(studentId).
+    public ResponseEntity<? extends User> getMe(@AuthenticationPrincipal User user){
+        if(user.hasRole(Role.STUDENT)){
+            Student student = studentRepository.findWithScoresById(user.getId()).
                     orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.user.notFound"));
+            return ResponseEntity.ok(student);
         }
-        throw new ApiException(HttpStatus.FORBIDDEN, "exception.forbidden");
+        Worker worker = workerRepository.findById(user.getId()).
+                orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.user.notFound"));
+        return ResponseEntity.ok(worker);
     }
 }

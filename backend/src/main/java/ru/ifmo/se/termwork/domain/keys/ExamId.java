@@ -1,6 +1,7 @@
 package ru.ifmo.se.termwork.domain.keys;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class ExamId implements Serializable {
     private Student student;
 
     @ManyToOne
+    @JsonUnwrapped
     @JoinColumn(name = "id_subj")
     private Subject subject;
 }

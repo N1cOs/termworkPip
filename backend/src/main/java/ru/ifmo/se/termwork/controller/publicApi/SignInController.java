@@ -4,7 +4,6 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,10 +43,11 @@ public class SignInController {
         User user = userRepository.findByEmail(userDTO.getUsername()).
                 orElseThrow(() -> new ClientException(HttpStatus.UNAUTHORIZED, InputErrors.Invalid.EMAIL));
 
-        if(!passwordEncoder.matches(userDTO.getPassword(), user.getPassword()))
+        if (!passwordEncoder.matches(userDTO.getPassword(), user.getPassword()))
             throw new ClientException(HttpStatus.UNAUTHORIZED, InputErrors.Invalid.PASSWORD);
 
-        List<String> roles = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
-        return new SignInDto(user.getId(),  jwtUtils.getToken(user.getId(), roles));
+        List<String> roles = user.getAuthorities().stream().sorted((a, b) -> -(a.getId() - b.getId())).
+                map(Authority::getName).collect(Collectors.toList());
+        return new SignInDto(roles.get(0), jwtUtils.getToken(user.getId(), roles));
     }
 }
