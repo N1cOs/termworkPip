@@ -45,6 +45,11 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @EntityGraph("student.exams")
     Optional<Student> findWithExamsById(Integer id);
 
+    /**
+     *
+     * @param id
+     * @return student with exams and ratings. Also return requirements for each speciality in ratings.
+     */
     @EntityGraph("student.examsAndRatings")
     Optional<Student> findWithExamsAndRatingsById(Integer id);
 
@@ -68,7 +73,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
      * Returns the student from a database with exams and achievements by specified id
      *
      * @param id id of the student
-     * @return the student
+     * @return student with scores, exams and ratings. Also return requirements for each speciality
+     * in ratings.
      * @see ru.ifmo.se.termwork.domain.Exam
      * @see ru.ifmo.se.termwork.domain.Achievement
      */

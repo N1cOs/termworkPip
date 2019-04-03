@@ -19,6 +19,11 @@ public class ComputeServiceImpl implements ComputeService {
     @Autowired
     private CollegeRepository collegeRepository;
 
+    /**
+     *
+     * @param student student
+     * @param rating have to be with speciality, which have to be with requirements
+     */
     @Async
     @Override
     public void computeScoreAndSaveAsync(Student student, Rating rating) {
@@ -26,7 +31,8 @@ public class ComputeServiceImpl implements ComputeService {
         College college = collegeRepository.findWithScoresById(rating.getSpeciality().getCollege().getId()).
                 orElseThrow(IllegalArgumentException::new);
 
-        int totalScore = getExamScore(student) + getAchievementsScore(student, college);
+        int totalScore = getExamScore(student, rating.getSpeciality()) +
+                getAchievementsScore(student, college);
         rating.setTotalScore(totalScore);
         try{
             studentRepository.save(student);
@@ -39,9 +45,8 @@ public class ComputeServiceImpl implements ComputeService {
     public Student recomputeExams(int studentId) {
         Student student = studentRepository.findWithExamsAndRatingsById(studentId).
                 orElseThrow(IllegalArgumentException::new);
-        int score = getExamScore(student);
         for(Rating rating : student.getRatings())
-            rating.setTotalScore(score);
+            rating.setTotalScore(getExamScore(student, rating.getSpeciality()));
         return student;
     }
 
@@ -62,19 +67,33 @@ public class ComputeServiceImpl implements ComputeService {
     public Student recomputeAll(int studentId) {
         Student student = studentRepository.findWithScoresAndRatingsById(studentId).
                 orElseThrow(IllegalArgumentException::new);
-        int examScore = getExamScore(student);
 
         for(Rating rating : student.getRatings()){
             College college = rating.getSpeciality().getCollege();
-            int totalScore = examScore + getAchievementsScore(student, college);
+            int totalScore = getExamScore(student, rating.getSpeciality()) +
+                    getAchievementsScore(student, college);
             rating.setTotalScore(totalScore);
         }
 
         return student;
     }
 
-    private int getExamScore(Student student){
-        return student.getExams().stream().mapToInt(Exam::getScore).sum();
+    private int getExamScore(Student student, Speciality speciality){
+        int sum = 0;
+        if(speciality.getRequirements() != null){
+            for(Requirement requirement : speciality.getRequirements()){
+                Exam exam = student.getExams().stream().filter(e -> e.getId().getSubject().
+                        equals(requirement.getId().getSubject())).findFirst().orElseThrow(
+                                () -> new IllegalArgumentException("Student " + student +
+                                        " does not have exam on" + requirement.getId().getSubject()));
+                sum += exam.getScore();
+            }
+        }
+        else{
+            log.error("Speciality does't have requirements attribute");
+        }
+
+        return sum;
     }
 
     private int getAchievementsScore(Student student, College college){
@@ -89,6 +108,6 @@ public class ComputeServiceImpl implements ComputeService {
             }
         }
 
-        return totalScore;
+        return totalScore > 10 ? 10 : totalScore;
     }
 }

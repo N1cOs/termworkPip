@@ -43,17 +43,12 @@ import java.util.Set;
                 subgraphs = {
                         @NamedSubgraph(name = "rating.speciality",
                                 attributeNodes = {
-                                        @NamedAttributeNode(value = "speciality", subgraph = "rating.speciality.college")
+                                        @NamedAttributeNode(value = "speciality", subgraph = "rating.speciality.reqs")
                                 }
                         ),
-                        @NamedSubgraph(name = "rating.speciality.college",
+                        @NamedSubgraph(name = "rating.speciality.reqs",
                                 attributeNodes = {
-                                        @NamedAttributeNode(value = "college", subgraph = "rating.speciality.college.ach")
-                                }
-                        ),
-                        @NamedSubgraph(name = "rating.speciality.college.ach",
-                                attributeNodes = {
-                                        @NamedAttributeNode("achievementsScore")
+                                        @NamedAttributeNode(value = "requirements")
                                 }
                         )
                 }
@@ -95,6 +90,7 @@ import java.util.Set;
                         ),
                         @NamedSubgraph(name = "rating.speciality.college",
                                 attributeNodes = {
+                                        @NamedAttributeNode(value = "requirements"),
                                         @NamedAttributeNode(value = "college", subgraph = "rating.speciality.college.ach")
                                 }
                         ),
