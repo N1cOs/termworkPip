@@ -80,7 +80,7 @@
         .then((r: AxiosResponse) => {
           this.$store.state.token = r.data.token;
           this.$store.state.userId = r.data.userId;
-          this.$router.push("/spec/9");
+          this.$router.push("/me");
         })
         .catch((e: AxiosError) => {
           if (e.response !== undefined) {
@@ -106,7 +106,7 @@
             .then((r: AxiosResponse) => {
               this.$store.state.token = r.data.token;
               this.$store.state.userId = r.data.userId;
-              this.$router.push("/spec/9");
+              this.$router.push("/me");
             })
             .catch((e: AxiosError) => {
               if (e.response !== undefined) {

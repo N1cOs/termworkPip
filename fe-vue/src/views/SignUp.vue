@@ -133,7 +133,7 @@
     readonly achievementsUrl: string = "/api/public/achievements";
     readonly config: any = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       }
     }
 
@@ -190,9 +190,14 @@
     private achievementsList: any[] = [{id: 1}]
 
     created() {
-      this.getSubjects()
-      this.getOlympiads()
-      this.getAchievements()
+      debugger
+      Axios.get("/api/me", {headers: {'Authorization': this.$store.state.token}})
+        .then((res: AxiosResponse) => {
+          console.log(res.data);
+        });
+      this.getSubjects();
+      this.getOlympiads();
+      this.getAchievements();
     }
 
     getOlympiads() {
@@ -226,6 +231,7 @@
     addAchievement() {
       this.form.achievementsId.push("Выберите ИД")
     }
+
     addOlympiad() {
       this.form.olympiadsId.push("Выберите олимпиаду")
     }
@@ -237,14 +243,14 @@
       }
     }
 
-    removeOlympiad(olympiad) {
+    removeOlympiad(olympiad: any) {
       let index = this.form.olympiadsId.indexOf(olympiad)
       if (index != -1) {
         this.form.olympiadsId.splice(index, 1)
       }
     }
 
-    removeAchievement(achievement) {
+    removeAchievement(achievement: any) {
       let index = this.form.achievementsId.indexOf(achievement)
       if (index != -1) {
         this.form.achievementsId.splice(index, 1)

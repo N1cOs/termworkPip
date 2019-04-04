@@ -37,28 +37,29 @@
   @Component
   export default class User extends Vue {
     form = {
-      exams: [],
-      olympiadsId: [],
-      achievementsId: [],
-    }
+      exams: [] as any[],
+      olympiadsId: [] as any[],
+      achievementsId: [] as any[],
+    };
     config: any = {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + this.$store.state.token
       }
-    }
+    };
 
     private subjectsList: Subject[] = [{"id": 1, "name": "Русский язык"}, {
       "id": 2,
       "name": "Математика (базовая)"
     }, {"id": 3, "name": "Математика (профиль)"}] as Subject[];
-    private olympiadsList: any[] = [{id: 1}]
-    private achievementsList: any[] = [{id: 1}]
+    private olympiadsList: any[] = [{id: 1}];
+    private achievementsList: any[] = [{id: 1}];
     readonly subjectsUrl: string = "/api/public/subjects";
     readonly olympiadsUrl: string = "/api/public/olympiads";
     readonly achievementsUrl: string = "/api/public/achievements";
 
     created() {
+      Axios.get("/api/me", {headers: {'Authorization': this.$store.state.token}})
       this.getSubjects();
       this.getOlympiads();
       this.getAchievements();
@@ -87,8 +88,8 @@
 
     addExam() {
       this.form.exams.push({
-        subjectId: null,
-        score: null
+        subjectId: '',
+        score: 0
       });
     }
 
@@ -107,14 +108,14 @@
       }
     }
 
-    removeOlympiad(olympiad) {
+    removeOlympiad(olympiad: any) {
       let index = this.form.olympiadsId.indexOf(olympiad);
       if (index != -1) {
         this.form.olympiadsId.splice(index, 1);
       }
     }
 
-    removeAchievement(achievement) {
+    removeAchievement(achievement: any) {
       let index = this.form.achievementsId.indexOf(achievement);
       if (index != -1) {
         this.form.achievementsId.splice(index, 1);
