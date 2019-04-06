@@ -1,8 +1,10 @@
 <template>
   <el-container>
-    <el-header>Вузы России</el-header>
     <el-container>
       <el-main>
+        <el-card class="header">
+          Вузы России
+        </el-card>
         <el-autocomplete
           placeholder="Введите название учебного заведения"
           style="margin-bottom: 30px; width: 100%"
@@ -176,6 +178,12 @@ export default class Colleges extends Vue {
 <style scoped>
 .el-card{
   margin-bottom: 20px;
+}
+
+.header{
+  color: #409EFF;
+  font-size: 1.1em;
+  font-weight: bold;
 }
 
 .el-col{

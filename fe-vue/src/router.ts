@@ -19,8 +19,8 @@ export default new Router({
       component: User,
     },
     {
-      path: "/spec/:specId",
-      name: "specialities",
+      path: "/speciality/:id",
+      name: "speciality",
       component: Speciality
     },
     {
