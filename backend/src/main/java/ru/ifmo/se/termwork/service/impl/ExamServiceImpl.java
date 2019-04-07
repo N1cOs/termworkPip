@@ -55,7 +55,7 @@ public class ExamServiceImpl implements ExamService {
             }
             if(subject == null)
                 throw new ApiException(HttpStatus.BAD_REQUEST, "exception.subject.invalidId",
-                        new Object[]{examDto.getSubjectId()});
+                        examDto.getSubjectId());
 
             ExamId examId = new ExamId(student, subject);
             examsEntity.add(new Exam(examId, examDto.getScore()));

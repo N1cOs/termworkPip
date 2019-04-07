@@ -23,7 +23,7 @@ public class RatingController {
     private SpecialityRepository specialityRepository;
 
     @GetMapping("/{id}")
-    @JsonView(User.View.Default.class)
+    @JsonView(User.View.Exams.class)
     public Set<Rating> getRatings(@PathVariable("id") Integer specialityId){
         Speciality speciality = specialityRepository.findWithRatingsById(specialityId).orElseThrow(() ->
                 new ApiException(HttpStatus.BAD_REQUEST, "exception.speciality.notFound", specialityId));

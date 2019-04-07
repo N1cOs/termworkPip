@@ -24,7 +24,7 @@ public class JwtUtils {
 
     private final static String ROLES_CLAIM_NAME = "roles";
 
-    private final static int validityInMinutes = 15;
+    private final static int validityInMinutes = 60;
 
     private static SecretKey secretKey;
 

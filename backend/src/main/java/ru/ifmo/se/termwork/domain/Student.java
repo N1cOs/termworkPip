@@ -117,7 +117,7 @@ public class Student extends User {
     @ToString.Exclude
     @JsonManagedReference
     @EqualsAndHashCode.Exclude
-    @JsonView(View.Scores.class)
+    @JsonView(View.Exams.class)
     @OneToMany(mappedBy = "id.student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Exam> exams;
 

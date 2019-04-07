@@ -33,6 +33,7 @@ public class Rating {
     private Student student;
 
     @ManyToOne
+    @JsonIgnore
     @MapsId("specialityId")
     @JoinColumn(name = "id_spec")
     private Speciality speciality;

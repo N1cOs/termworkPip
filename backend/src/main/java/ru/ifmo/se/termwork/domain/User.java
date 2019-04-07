@@ -122,7 +122,9 @@ public class User implements UserDetails, Serializable {
 
         public class Expanded extends Default{}
 
-        public class Scores extends Expanded{}
+        public class Exams extends Expanded{}
+
+        public class Scores extends Exams{}
 
         public class Ratings extends Expanded{}
     }

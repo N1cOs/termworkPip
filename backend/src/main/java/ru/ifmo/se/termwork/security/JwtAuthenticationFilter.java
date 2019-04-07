@@ -30,10 +30,12 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         String header = Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION)).
                 orElseThrow(() -> new BadCredentialsException("Missing authentication token"));
 
-        String token = header.substring(SCHEMA.length()).trim();
-        Authentication authentication = new UsernamePasswordAuthenticationToken(token, token);
-
-        return getAuthenticationManager().authenticate(authentication);
+        if (header.length() > SCHEMA.length()) {
+            String token = header.substring(SCHEMA.length()).trim();
+            Authentication authentication = new UsernamePasswordAuthenticationToken(token, token);
+            return getAuthenticationManager().authenticate(authentication);
+        }
+        throw new BadCredentialsException("Bad token's format");
     }
 
     @Override

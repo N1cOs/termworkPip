@@ -35,7 +35,7 @@ public interface SpecialityRepository extends JpaRepository<Speciality, Integer>
      * @param id speciality id
      * @return the speciality
      */
-    @EntityGraph(value = "speciality.ratings", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "speciality.ratings")
     Optional<Speciality> findWithRatingsById(Integer id);
 
     /**
