@@ -61,9 +61,11 @@
   @Component
 
   export default class User extends Vue {
+
     user: UserInfo = {} as UserInfo;
 
     subjects: Subject[] = [];
+
 
     //subjectId, position
     subjectPosition: Map<number, number> = new Map();
