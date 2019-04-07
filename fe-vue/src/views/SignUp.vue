@@ -45,29 +45,33 @@
       <el-form-item label="Пароль" prop="password">
         <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
-      Экзамен
-      <el-form-item
-        v-for="(exam, index) in form.exams"
-        :key="exam.id"
-      >
-        <el-select
-          v-model="form.exams[index].subjectId"
+      <el-row>
+
+        Экзамен
+        <el-form-item
+          v-for="(exam, index) in form.exams"
+          :key="exam.id"
         >
-          <el-option
-            v-for="subj in subjectsList"
-            :key="subj.id"
-            :label="subj.name"
-            :value="subj.id"
+
+          <el-select
+            v-model="form.exams[index].subjectId"
           >
-          </el-option>
-        </el-select>
-        <el-input v-model="form.exams[index].score" placeholder="Введите количество баллов за экзамен">
-        </el-input>
-        <el-button @click="removeExam(exam)">Убрать экзамен</el-button>
-      </el-form-item>
-      <el-button @click="addExam">
-        Добавить экзамен
-      </el-button>
+            <el-option
+              v-for="subj in subjectsList"
+              :key="subj.id"
+              :label="subj.name"
+              :value="subj.id"
+            >
+            </el-option>
+          </el-select>
+          <el-input v-model="form.exams[index].score" placeholder="Введите количество баллов за экзамен">
+          </el-input>
+          <el-button @click="removeExam(exam)">Убрать экзамен</el-button>
+        </el-form-item>
+        <el-button @click="addExam">Добавить экзамен
+        </el-button>
+      </el-row>
+
       Олимпиады
       <el-form-item
         v-for="(olympiad, index) in form.olympiadsId"
