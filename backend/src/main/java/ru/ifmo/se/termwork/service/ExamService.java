@@ -8,5 +8,5 @@ public interface ExamService {
 
     void saveExams(int studentId, List<ExamDto> exams);
 
-    void deleteExams(int studentId, List<ExamDto> exams);
+    void deleteExams(int studentId, List<Integer> exams);
 }

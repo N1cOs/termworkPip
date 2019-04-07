@@ -6,11 +6,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import ru.ifmo.se.termwork.support.annotation.RecomputeScore;
-import ru.ifmo.se.termwork.support.exception.ApiException;
 import ru.ifmo.se.termwork.domain.User;
 import ru.ifmo.se.termwork.dto.ExamDto;
 import ru.ifmo.se.termwork.service.ExamService;
+import ru.ifmo.se.termwork.support.annotation.RecomputeScore;
+import ru.ifmo.se.termwork.support.exception.ApiException;
 
 import javax.validation.Validator;
 import java.util.List;
@@ -48,12 +48,9 @@ public class ExamController {
 
     @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteExams(@AuthenticationPrincipal User user,
-                                      @RequestBody List<ExamDto> exams){
-        if(isValid(exams)) {
-            examService.deleteExams(user.getId(), exams);
-            return ResponseEntity.ok().build();
-        }
-        throw new ApiException(HttpStatus.BAD_REQUEST, "exception.exam.invalidFormat");
+                                      @RequestBody List<Integer> exams){
+        examService.deleteExams(user.getId(), exams);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     private boolean isValid(List<ExamDto> exams){
