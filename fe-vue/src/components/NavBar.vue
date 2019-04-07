@@ -30,6 +30,13 @@
 
     & div {
       margin-right: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    & img{
+      width: 50px;
+      height: 50px;
     }
 
   }
