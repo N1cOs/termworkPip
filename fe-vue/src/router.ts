@@ -14,7 +14,7 @@ export default new Router({
   // mode: 'history',
   routes: [
     {
-      path: '/user/:id',
+      path: '/me',
       name: "user",
       component: User,
     },

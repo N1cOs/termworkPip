@@ -1,4 +1,5 @@
 export default interface Exam {
-    subjectId: number
-    score: number
+    id: number;
+    name: string;
+    score: number;
 }
