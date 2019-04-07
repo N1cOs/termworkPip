@@ -1,5 +1,6 @@
 package ru.ifmo.se.termwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Data;
 import ru.ifmo.se.termwork.domain.keys.CollegeAchievementId;
 
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 public class CollegeAchievement {
 
     @EmbeddedId
+    @JsonUnwrapped
     private CollegeAchievementId id;
 
     private int score;

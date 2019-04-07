@@ -1,5 +1,6 @@
 package ru.ifmo.se.termwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Data;
 import ru.ifmo.se.termwork.domain.keys.RequirementId;
 
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 public class Requirement {
 
     @EmbeddedId
+    @JsonUnwrapped
     private RequirementId id;
 
     @Column(name = "min_score")
