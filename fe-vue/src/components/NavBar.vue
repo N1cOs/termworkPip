@@ -1,13 +1,13 @@
 <template>
   <div class="navbar-wrapper">
     <div>
-      <router-link to="colleges"><img src="@/assets/vuz.png" alt=""></router-link>
+      <router-link :to="{name: 'colleges'}"><img src="@/assets/vuz.png" alt=""></router-link>
     </div>
     <div>
-      <router-link to="ratings"><img src="@/assets/person.png" alt=""></router-link>
+      <router-link :to="{name: 'user'}"><img src="@/assets/person.png" alt=""></router-link>
     </div>
     <div>
-      <router-link to="me"><img src="@/assets/rating.png" alt=""></router-link>
+      <router-link to="ratings"><img src="@/assets/rating.png" alt=""></router-link>
     </div>
   </div>
 </template>
