@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student/exams")
-@RecomputeScore(RecomputeScore.Type.EXAMS)
+@RecomputeScore(RecomputeScore.Type.ALL)
 public class ExamController {
 
     @Autowired

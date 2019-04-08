@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student/achievements")
-@RecomputeScore(RecomputeScore.Type.ACHIEVEMENTS)
+@RecomputeScore(RecomputeScore.Type.ALL)
 public class AchievementController {
 
     @Autowired
