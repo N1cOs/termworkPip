@@ -146,6 +146,7 @@ public class Student extends User {
 
     @JsonIgnore
     @ToString.Exclude
+    @JsonManagedReference
     @EqualsAndHashCode.Exclude
     @JsonView(View.Ratings.class)
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,5 +1,6 @@
 package ru.ifmo.se.termwork.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "speciality_student")
-public class Rating {
+public class Rating implements Comparable<Rating> {
 
     @JsonIgnore
     @EmbeddedId
@@ -29,6 +30,8 @@ public class Rating {
 
     @ManyToOne
     @MapsId("studentId")
+
+    @JsonBackReference
     @JoinColumn(name = "id_student")
     private Student student;
 
@@ -52,4 +55,18 @@ public class Rating {
 
     @Column(name = "total_score")
     private Integer totalScore;
+
+    @Override
+    public int compareTo(Rating o) {
+        if(o.getOlympiad() != null && olympiad != null){
+            return 0;
+        }
+        if(o.getOlympiad() != null && olympiad == null){
+            return 1;
+        }
+        if(olympiad != null){
+            return -1;
+        }
+        return o.getTotalScore() - totalScore;
+    }
 }

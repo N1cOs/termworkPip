@@ -1,13 +1,13 @@
 package ru.ifmo.se.termwork.service.mappers;
 
 import org.mapstruct.*;
-
 import ru.ifmo.se.termwork.domain.Achievement;
 import ru.ifmo.se.termwork.domain.Olympiad;
 import ru.ifmo.se.termwork.domain.Student;
 import ru.ifmo.se.termwork.domain.Subject;
 import ru.ifmo.se.termwork.dto.ExamDto;
 import ru.ifmo.se.termwork.dto.StudentDto;
+import ru.ifmo.se.termwork.dto.StudentResponseDto;
 import ru.ifmo.se.termwork.repository.AchievementRepository;
 import ru.ifmo.se.termwork.repository.OlympiadRepository;
 import ru.ifmo.se.termwork.repository.SubjectRepository;
@@ -30,6 +30,11 @@ public interface StudentMapper {
                       @Context SubjectRepository sr,
                       @Context AchievementRepository ar,
                       @Context OlympiadRepository or);
+
+    @Mappings({
+            @Mapping(target = "ratings", ignore = true)
+    })
+    StudentResponseDto toStudentResponse(Student student);
 
     @AfterMapping
     default void setExams(@MappingTarget Student student, StudentDto studentDto,

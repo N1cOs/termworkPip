@@ -2,10 +2,8 @@ package ru.ifmo.se.termwork.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import ru.ifmo.se.termwork.domain.Speciality;
 
-import javax.persistence.MappedSuperclass;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +35,9 @@ public interface SpecialityRepository extends JpaRepository<Speciality, Integer>
      */
     @EntityGraph(value = "speciality.ratings")
     Optional<Speciality> findWithRatingsById(Integer id);
+
+    @EntityGraph(value = "speciality.ratings")
+    List<Speciality> findWithRatingsAllById(List<Integer> ids);
 
     /**
      * Returns the speciality from a database with its requirements by speciality id
