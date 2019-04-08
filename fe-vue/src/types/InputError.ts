@@ -1,4 +1,4 @@
 export default interface Error{
-    field: string
+    field?: string
     info: string
 }

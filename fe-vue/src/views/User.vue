@@ -8,20 +8,20 @@
         {{user.birthDate}}
       </div>
       <el-main>
-        <el-row class="scores">
+        <el-row :gutter="20" class="scores">
           <el-col :md="12" :sm="24" :xs="24" class="exams">
             <el-card>
-              <div class="exams-title">
+              <div class="card-title">
                 Мои экзамены
               </div>
               <div v-for="(exam, i) in user.exams" :key="exam.id" class="exam-row">
-                <span style="float: left;">{{exam.name}} : {{exam.score}}</span>
+                <span style="float: left; width: 80%">{{exam.name}} : {{exam.score}}</span>
                 <el-button class="delete-button" icon="el-icon-delete" @click="deleteExistingExam(i)" circle></el-button>
               </div>
               <el-form :model="examForm" ref="examForm">
                 <el-form-item v-for="(exam, index) in examForm.exams" :key="exam.subjectId" style="text-align: start;">
                   <span class="subject-name">
-                    <el-select v-model="exam.subjectId" :disabled="disabledSelects[index]" @change="selectedNewExam">
+                    <el-select v-model="exam.subjectId" @change="selectedNewExam">
                     <el-option
                       v-for="(subj, i) in subjects"
                       :key="subj.id"
@@ -43,6 +43,37 @@
               </div>
             </el-card>
           </el-col>
+          <el-col :md="12" :sm="24" :xs="24" class="exams">
+            <el-card>
+              <div class="card-title">
+                Мои индивидуальные достижения
+              </div>
+              <div v-for="(ach, i) in user.achievements" :key="ach.id" class="ach-row">
+                <span style="float: left; width: 80%">{{ach.name}}</span>
+                <el-button class="delete-button" icon="el-icon-delete" @click="deleteExistingAch(i)" circle></el-button>
+              </div>
+              <el-form :model="achievementForm" ref="achievementForm">
+                <el-form-item v-for="(ach, index) in achievementForm.achievements" :key="ach.key" style="text-align: start;">
+                  <span class="subject-name">
+                    <el-select v-model="ach.id" @change="selectedNewAch">
+                    <el-option
+                      v-for="(a, i) in achievements"
+                      :key="a.id"
+                      :label="a.name"
+                      :value="a.id"
+                      :disabled="disabledAchievements[i]"
+                    ></el-option>
+                  </el-select>
+                  </span>
+                  <el-button class="delete-button" icon="el-icon-delete" @click="deleteNewAchievement(index)" circle></el-button>
+                </el-form-item>
+              </el-form>
+              <div>
+                <el-button class="addButton" @click="addAchievement">Добавить достижение</el-button>
+                <el-button class="saveButton" @click="submitAchievements('achievementForm')">Сохранить</el-button>
+              </div>
+            </el-card>
+          </el-col>
         </el-row>
       </el-main>
     </div>
@@ -57,6 +88,7 @@
   import UserInfo from "@/types/User";
   import Exam from '../types/Exam';
   import Error from '../types/InputError';
+  import Achievement from '../types/Achievement';
 
   @Component
 
@@ -66,37 +98,66 @@
 
     subjects: Subject[] = [];
 
-
+    achievements: Achievement[] = [];
+    
     //subjectId, position
     subjectPosition: Map<number, number> = new Map();
 
     disabledSubjects: boolean[] = [];
 
-    disabledSelects: boolean[] = [];
-
     examForm: any = {
       exams: []
-    }
+    };
 
     deletedExams: Set<number> = new Set();
 
+    //achievementId, position
+    achievementPosition: Map<number, number> = new Map();
+
+    disabledAchievements: boolean[] = [];
+
+    achievementForm: any = {
+      achievements: []
+    };
+
+    deletedAchievements: Set<number> = new Set();
+
     screenLock: boolean = false;
 
-    async created(){
-      await this.getMe()
+    created(){
+      let subjectUrl = "/api/public/subjects";
+      let achievementUrl = "/api/public/achievements";
+
+      this.getMe()
         .then((response: AxiosResponse) => {
           this.user = response.data;
+          
+          Axios.get(subjectUrl)
+            .then((response: AxiosResponse) => {
+              this.subjects = response.data;
+              this.resetSubjects();
+            })
+            .catch((e: AxiosError) => {
+
+             })
+          
+          Axios.get(achievementUrl)
+            .then((response: AxiosResponse) => {
+              this.achievements = response.data;
+              this.resetAchievements();
+            })
+            .catch((e: AxiosError) => {
+
+            })
         })
         .catch((e: AxiosError) => {
 
         });
+    }
 
-      let subjectUrl = "/api/public/subjects";
-      Axios.get(subjectUrl)
-        .then((response: AxiosResponse) => {
-          this.subjects = response.data;
-          
-          let exams: Exam[] = [];
+    resetSubjects(){
+      this.disabledSubjects = [];
+      let exams: Exam[] = [];
           if(this.user.exams != undefined){
             exams = this.user.exams;
           }
@@ -112,18 +173,29 @@
               }
             }
 
-            if(!exist){
-              this.disabledSubjects.push(false);
-            }
-            else{
-              this.disabledSubjects.push(true)
-            }
+            this.disabledSubjects.push(exist);
           });
-         
-        })
-        .catch((e: AxiosError) => {
+    }
 
-        })
+    resetAchievements(){
+      this.disabledAchievements = [];
+      let achievements: Achievement[] = [];
+      if(this.user.achievements != undefined){
+        achievements = this.user.achievements;
+      }
+
+      this.achievements.forEach((ach, i) => {
+        this.achievementPosition.set(ach.id, i);
+
+        let exist = false;
+        for(let i = 0; i < achievements.length; i++){
+          if(achievements[i].id == ach.id){
+            exist = true;
+            break;
+          }
+        }
+         this.disabledAchievements.push(exist);
+      });
     }
 
     getMe(): AxiosPromise{
@@ -145,8 +217,7 @@
     addExam(){
       this.examForm.exams.push({
         score: 0
-      })
-      this.disabledSelects.push(false);
+      });
     }
 
     deleteNewExam(examIndex: number){
@@ -155,7 +226,6 @@
         this.disabledSubjects[position] = false;
       }
       this.examForm.exams.splice(examIndex, 1);
-      this.disabledSelects.splice(examIndex, 1);
     }
 
     deleteExistingExam(examIndex: number){
@@ -213,6 +283,7 @@
                 this.getMe()
                   .then((response: AxiosResponse) => {
                     this.user = response.data;
+                    this.resetSubjects();
                   })
                   .catch((error: AxiosError) => {
 
@@ -254,8 +325,8 @@
                 message: 'Информация об экзаменах успешно обновлена',
                 type: 'success'
               });
-              this.screenLock = false;
               this.examForm.exams = [];
+              this.screenLock = false;
           })
           .catch((e: AxiosError) => {
 
@@ -278,6 +349,149 @@
       }
     }
 
+    addAchievement(){
+      this.achievementForm.achievements.push({key: Date.now()});
+    }
+
+    deleteNewAchievement(achIndex: number){
+      let position = this.achievementPosition.get(this.achievementForm.achievements[achIndex].id);
+      if(position != undefined){
+        this.disabledAchievements[position] = false;
+      }
+      this.achievementForm.achievements.splice(achIndex, 1);
+    }
+
+    deleteExistingAch(achIndex: number){
+      if(this.user.achievements != undefined){
+        let ach = {
+          id: this.user.achievements[achIndex].id
+        };
+
+        let position = this.achievementPosition.get(ach.id);
+        if(position != undefined){
+          this.disabledAchievements[position] = false;
+        }
+        
+        this.deletedAchievements.add(ach.id); 
+        this.user.achievements.splice(achIndex, 1);
+      }
+    }
+
+    selectedNewAch(achId: number){
+      let position = this.achievementPosition.get(achId);
+      if(position != undefined){
+        this.disabledAchievements[position] = true;
+      }
+    }
+
+    submitAchievements(formName: string){
+      (this.$refs[formName] as any).validate((valid : any) => {
+        if(valid){
+          this.screenLock = true;
+          let url = "/api/student/achievements";
+          
+
+          this.achievementForm.achievements.forEach((ach: any) => {
+            this.deletedAchievements.forEach(dAch => {
+              if(ach.id == dAch){
+                this.deletedAchievements.delete(dAch);
+              }
+            });
+          })
+          
+          if(this.deletedAchievements.size > 0){
+            let config = {
+              headers: {
+                'Authorization': this.$store.state.token
+              },
+              data: Array.from(this.deletedAchievements)
+            };
+
+            Axios.delete(url, config)
+              .then((response: AxiosResponse) => {
+                this.saveAchievements();
+              })
+              .catch((error: AxiosError) => {
+                this.getMe()
+                  .then((response: AxiosResponse) => {
+                    this.user = response.data;
+                    this.resetAchievements();
+                  })
+                  .catch((error: AxiosError) => {
+
+                  });
+                if(error.response != undefined && error.response.data != undefined){
+                  let e = error.response.data as Error;
+                  this.$message({
+                    message: e.info,
+                    type: 'error'
+                  })
+                }
+                else{
+                  this.$message({
+                    message: 'При выполнении запроса произошла ошибка, информация не обновлена',
+                    type: 'error'
+                  })
+                }
+                this.achievementForm.achievements = [];
+                this.screenLock = false;  
+              });
+          }
+          else{
+            this.saveAchievements();
+          }
+        }
+        else{
+          return false;
+        }
+      })
+    }
+
+    saveAchievements(){
+      let url = "/api/student/achievements";
+        let config = {
+          headers: {
+            'Authorization': this.$store.state.token
+        }
+      };
+
+      if(this.achievementForm.achievements.length > 0){
+        let data = this.achievementForm.achievements.map((a: any) => a.id);
+        console.log(data);
+        Axios.post(url, data, config)
+        .then((response: AxiosResponse) => {
+          this.getMe()
+            .then((response: AxiosResponse) => {
+              this.user = response.data;
+              this.$message({
+                message: 'Информация о достижениях успешно обновлена',
+                type: 'success'
+              });
+              this.achievementForm.achievements = [];
+              this.screenLock = false;
+          })
+          .catch((e: AxiosError) => {
+
+          });
+        })
+        .catch((error: AxiosError) => {
+          this.$message({
+            message: 'При выполнении запроса произошла ошибка, информация не обновлена',
+            type: 'error'
+          });
+          this.achievementForm.achievements = [];
+          this.screenLock = false;
+        });
+      }
+      else{
+        this.screenLock = false;
+        this.$message({
+          message: 'Информация о достижениях успешно обновлена',
+          type: 'success'
+        });
+      }
+    }
+
   }  
 </script>
 
@@ -293,6 +507,7 @@ a{
 .info{
   width: 100%;
   text-align: end;
+  padding: 5px;
   color: #303133; 
 }
 
@@ -306,7 +521,7 @@ a{
   font-style: italic; 
 }
 
-.exams-title{
+.card-title{
   font-size: 1.1em;
   color: #409EFF;
   font-weight: bold;
@@ -336,10 +551,27 @@ a{
 }
 
 .addButton{
+  font-size: 0.8em;
   float: left;
 }
 
 .saveButton{
+  font-size: 0.8em;
   float: right;
+}
+
+.ach-row{
+  margin-bottom: 10px;
+  text-align: start;
+  font-style: italic;
+  color: #909399;
+  height: 50px;
+}
+
+@media only screen and (max-width: 992px) {
+  .el-card{
+    padding: 10px;
+    margin-top: 30px;
+  }
 }
 </style>
