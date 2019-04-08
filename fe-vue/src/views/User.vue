@@ -19,8 +19,14 @@
                 <el-button class="delete-button" icon="el-icon-delete" @click="deleteExistingExam(i)" circle></el-button>
               </div>
               <el-form :model="examForm" ref="examForm">
-                <el-form-item v-for="(exam, index) in examForm.exams" :key="exam.subjectId" style="text-align: start;">
-                  <span class="subject-name">
+                <div v-for="(exam, index) in examForm.exams" :key="exam.subjectId">
+                  <el-form-item 
+                  :rules="{
+                    required: true, message: 'Выберите экзамен', trigger: 'blur'
+                  }"
+                  class="subject-name"
+                  :prop="'exams.' + index + '.subjectId'"
+                  >
                     <el-select v-model="exam.subjectId" @change="selectedNewExam">
                     <el-option
                       v-for="(subj, i) in subjects"
@@ -30,17 +36,28 @@
                       :disabled="disabledSubjects[i]"
                     ></el-option>
                   </el-select>
-                  </span>
-                  <span class="score-input">
-                    <el-input v-model="exam.score" placeholder="Введите количество баллов"></el-input>
-                  </span>
+                  </el-form-item>
+                  <el-form-item
+                  :rules="[
+                    {required: true, message: 'Введите количество баллов', trigger: 'blur'},
+                    {
+                      type: 'number', min: 1, max: 100, 
+                      message: 'Количество баллов должно быть больше 0, но не больше 100', 
+                      trigger: 'blur'
+                    }
+                  ]" 
+                  class="score-input"
+                  :prop="'exams.' + index + '.score'"
+                  >
+                    <el-input v-model.number="exam.score" type="number" placeholder="Введите количество баллов"></el-input>
+                  </el-form-item>
                   <el-button class="delete-button" icon="el-icon-delete" @click="deleteNewExam(index)" circle></el-button>
-                </el-form-item>
+                </div> 
+                <div>
+                  <el-button class="addButton" @click="addExam">Добавить экзамен</el-button>
+                  <el-button class="saveButton" @click="submitExams('examForm')">Сохранить</el-button>
+                </div>
               </el-form>
-              <div>
-                <el-button class="addButton" @click="addExam">Добавить экзамен</el-button>
-                <el-button class="saveButton" @click="submitExams('examForm')">Сохранить</el-button>
-              </div>
             </el-card>
           </el-col>
           <el-col :md="12" :sm="24" :xs="24" class="exams">
@@ -53,7 +70,12 @@
                 <el-button class="delete-button" icon="el-icon-delete" @click="deleteExistingAch(i)" circle></el-button>
               </div>
               <el-form :model="achievementForm" ref="achievementForm">
-                <el-form-item v-for="(ach, index) in achievementForm.achievements" :key="ach.key" style="text-align: start;">
+                <el-form-item v-for="(ach, index) in achievementForm.achievements" :key="ach.key"
+                :rules="{
+                  required: true, message: 'Выберите достижение', trigger: 'blur'
+                }"
+                :prop="'achievements.' + index + '.id'"
+                >
                   <span class="subject-name">
                     <el-select v-model="ach.id" @change="selectedNewAch">
                     <el-option
@@ -215,9 +237,7 @@
     }
 
     addExam(){
-      this.examForm.exams.push({
-        score: 0
-      });
+      this.examForm.exams.push({});
     }
 
     deleteNewExam(examIndex: number){
@@ -457,7 +477,6 @@
 
       if(this.achievementForm.achievements.length > 0){
         let data = this.achievementForm.achievements.map((a: any) => a.id);
-        console.log(data);
         Axios.post(url, data, config)
         .then((response: AxiosResponse) => {
           this.getMe()
@@ -542,7 +561,8 @@ a{
 }
 
 .subject-name{
-  float: left;   
+  float: left;
+  clear: left;
 }
 
 .score-input{
@@ -552,6 +572,7 @@ a{
 
 .addButton{
   font-size: 0.8em;
+  clear: both;
   float: left;
 }
 
