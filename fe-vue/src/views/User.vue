@@ -179,6 +179,7 @@
 
     resetSubjects(){
       this.disabledSubjects = [];
+      this.deletedExams.clear();
       let exams: Exam[] = [];
           if(this.user.exams != undefined){
             exams = this.user.exams;
