@@ -11,7 +11,7 @@ import ru.ifmo.se.termwork.repository.AchievementRepository;
 
 import java.util.Collection;
 
-@RestController
+@RestController("publicAchievementController")
 @RequestMapping("/public/achievements")
 public class AchievementController {
 
