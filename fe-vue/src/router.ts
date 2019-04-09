@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
   if (store.state.token !== '') {
     next();
   } else {
-    if (to.name === 'signIn' || to.name === 'colleges') {
+    if (to.name === 'signIn' || to.name === 'colleges' || to.name === 'signUp') {
       next();
     } else {
       next({

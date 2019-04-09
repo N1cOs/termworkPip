@@ -13,6 +13,9 @@
     <div v-if="this.$store.state.token === ''">
       <router-link :to="{name: 'signIn'}">Войти</router-link>
     </div>
+    <div v-if="this.$store.state.token === ''">
+      <router-link :to="{name: 'signUp'}">Зарегестрироваться</router-link>
+    </div>
     <div v-if="this.$store.state.token !== ''" @click="signOut">
       Выйти
     </div>

@@ -194,7 +194,6 @@
     private achievementsList: any[] = [{id: 1}]
 
     created() {
-      debugger
       Axios.get("/api/me", {headers: {'Authorization': this.$store.state.token}})
         .then((res: AxiosResponse) => {
           console.log(res.data);
