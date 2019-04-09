@@ -708,6 +708,7 @@
     padding: 10px;
     font-size: 0.9em;
     color: #909399;
+    font-weight: bold;
     margin-top: 25px;
     text-align: center;
   }
@@ -715,6 +716,7 @@
   a {
     text-decoration: none;
     color: #409EFF;
+    font-weight: 100;
   }
 
   .originals {
@@ -722,7 +724,7 @@
   }
 
   .success-speciality {
-    background: rgba(80, 250, 58, 0.575);
+    background: #DFF2BF;
   }
 
   .col-name{
