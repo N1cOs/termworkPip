@@ -113,7 +113,7 @@
           <div slot="header" class="card-title">
             <span>Мои рейтинги</span>
           </div>
-          <el-row class="rating-header">
+          <el-row class="rating-header hidden-sm-and-down">
             <el-col :span="7">
               Специальность
             </el-col>
@@ -130,8 +130,9 @@
               Место по оригиналам
             </el-col>
           </el-row>
-          <el-row v-for="rating in user.ratings" :key="rating.speciality.id"
-                  :class="{'rating-row' : true, 'originals': rating.originals, 'success-speciality': rating.success}">
+          <el-row v-for="rating in user.ratings" :key="rating.speciality.id + '1'"
+                  :class="{'rating-row' : true, 'originals': rating.originals, 
+                  'success-speciality': rating.success, 'hidden-sm-and-down' : true}">
             <el-col :span="7">
               <router-link :to="{name: 'speciality', params: {id: rating.speciality.id}}">
                 {{rating.speciality.okso}}
@@ -151,6 +152,54 @@
             <el-col :span="4">
               {{rating.placeOriginal}}
             </el-col>
+          </el-row>
+          <el-row v-for="rating in user.ratings" :key="rating.speciality.id + '2'"
+                  :class="{'rating-row' : true, 'originals': rating.originals, 
+                  'success-speciality': rating.success, 'hidden-md-and-up' : true}">
+            <el-row class="row-mobile">
+              <el-col :span="12" class="col-name">
+                Специальность
+              </el-col>
+              <el-col :span="12">
+                <router-link :to="{name: 'speciality', params: {id: rating.speciality.id}}">
+                  {{rating.speciality.okso}}
+                </router-link>
+              </el-col>
+            </el-row>
+            <el-row class="row-mobile">
+              <el-col :span="12" class="col-name">
+                Университет
+              </el-col>
+              <el-col :span="12">
+                <router-link :to="{name: 'college', params: {id: rating.speciality.college.id}}">
+                  {{rating.speciality.college.abbreviation}}
+                </router-link>
+              </el-col>
+            </el-row>
+            <el-row class="row-mobile">
+              <el-col :span="12" class="col-name">
+                Количество баллов
+              </el-col>
+              <el-col :span="12">
+                {{rating.totalScore}}
+              </el-col>
+            </el-row>
+            <el-row class="row-mobile">
+              <el-col :span="12" class="col-name">
+                Место по копиям
+              </el-col>
+              <el-col :span="12">
+                {{rating.place}}
+              </el-col>
+            </el-row>
+            <el-row class="row-mobile">
+              <el-col :span="12" class="col-name">
+                Место по оригиналам
+              </el-col>
+              <el-col :span="12">
+                {{rating.placeOriginal}}
+              </el-col>
+            </el-row>
           </el-row>
         </el-card>
       </el-main>
@@ -659,6 +708,7 @@
     padding: 10px;
     font-size: 0.9em;
     color: #909399;
+    margin-top: 25px;
     text-align: center;
   }
 
@@ -675,11 +725,26 @@
     background: rgba(80, 250, 58, 0.575);
   }
 
+  .col-name{
+    font-size: 0.95em;
+    color: #909399;
+    font-weight: bold;
+  }
+
+  .row-mobile{
+    margin-top: 5px;
+    border-bottom: solid 2px #909399; 
+  }
+
 
   @media only screen and (max-width: 992px) {
     .el-card {
       padding: 10px;
       margin-top: 30px;
+    }
+
+    .note{
+      margin-bottom: -30px;
     }
   }
 </style>
