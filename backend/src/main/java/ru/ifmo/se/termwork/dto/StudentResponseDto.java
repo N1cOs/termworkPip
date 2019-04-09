@@ -19,7 +19,7 @@ public class StudentResponseDto {
 
     private String patronymic;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date birthDate;
 
     private Set<Exam> exams;

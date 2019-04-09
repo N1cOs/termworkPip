@@ -45,7 +45,7 @@ public class StudentServiceImpl implements StudentService {
             RatingDto dto = new RatingDto();
             dto.setTotalScore(rating.getTotalScore());
             dto.setOriginals(rating.isOriginals());
-            dto.setOlympiad(rating.getOlympiad() != null);
+            dto.setIsOlympiad(rating.getOlympiad() != null);
 
             CollegeDto collegeDto = new CollegeDto(rating.getSpeciality().getCollege().getId(),
                     rating.getSpeciality().getCollege().getAbbreviation());
@@ -58,24 +58,19 @@ public class StudentServiceImpl implements StudentService {
             TreeSet<Rating> sortedRatings = new TreeSet<>(speciality.getRatings());
 
             int place = 1;
-            for(Rating r : sortedRatings){
-                if(r.getStudent().getId() == studentId){
-                    break;
-                }
-                place++;
-            }
-            dto.setPlace(place);
-
-            place = 1;
+            int placeOriginal = 1;
             for(Rating r : sortedRatings){
                 if(r.getStudent().getId() == studentId){
                     break;
                 }
                 if(r.isOriginals()){
-                    place++;
+                    placeOriginal++;
                 }
+                place++;
             }
-            dto.setPlaceOriginal(place);
+            dto.setPlace(place);
+            dto.setPlaceOriginal(placeOriginal);
+            dto.setSuccess(speciality.getPlaces() >= placeOriginal);
             ratings.add(dto);
         }
 

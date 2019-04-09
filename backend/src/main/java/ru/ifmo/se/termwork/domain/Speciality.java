@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import ru.ifmo.se.termwork.domain.keys.RatingId;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,27 +23,43 @@ import java.util.Set;
         @NamedEntityGraph(
                 name = "speciality.ratings",
                 attributeNodes = {
-                    @NamedAttributeNode(value = "ratings", subgraph = "ratings.student")
+                        @NamedAttributeNode(value = "ratings", subgraph = "ratings.student")
                 },
                 subgraphs = {
-                    @NamedSubgraph(
-                            name = "ratings.student",
-                            attributeNodes = {
-                                    @NamedAttributeNode(value = "student", subgraph = "rating.student.exams")
-                            }),
-                    @NamedSubgraph(
-                            name = "rating.student.exams",
-                            attributeNodes = {
-                                    @NamedAttributeNode(value = "exams")
-                            }
-                    )
+                        @NamedSubgraph(
+                                name = "ratings.student",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "student", subgraph = "rating.student.exams")
+                                }),
+                        @NamedSubgraph(
+                                name = "rating.student.exams",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "exams")
+                                }
+                        )
                 }),
         @NamedEntityGraph(
                 name = "speciality.req",
                 attributeNodes = {
-                    @NamedAttributeNode("requirements")
-        }),
-        @NamedEntityGraph(name = "speciality.all", includeAllAttributes = true)
+                        @NamedAttributeNode("requirements")
+                }),
+        @NamedEntityGraph(name = "speciality.all", includeAllAttributes = true, attributeNodes = {
+                @NamedAttributeNode(value = "ratings", subgraph = "ratings.student")
+        },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "ratings.student",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "student", subgraph = "rating.student.exams")
+                                }),
+                        @NamedSubgraph(
+                                name = "rating.student.exams",
+                                attributeNodes = {
+                                        @NamedAttributeNode(value = "exams")
+                                }
+                        )
+                }
+        )
 })
 public class Speciality implements Serializable {
 
