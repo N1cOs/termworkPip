@@ -1,5 +1,6 @@
 <template>
   <div class="navbar-wrapper">
+  
     <div>
       <router-link :to="{name: 'colleges'}">
         <img src="@/assets/vuz.png" alt="">
@@ -10,12 +11,15 @@
         <img src="@/assets/person.png" alt="">
       </router-link>
     </div>
+    <!-- ToDo: Replace with user icon-->
     <div v-if="this.$store.state.token === ''">
       <router-link :to="{name: 'signIn'}">Войти</router-link>
     </div>
+    <!-- ToDo: Move it to sign in view-->
     <div v-if="this.$store.state.token === ''">
       <router-link :to="{name: 'signUp'}">Зарегестрироваться</router-link>
     </div>
+    <!-- ToDo: Replace with icon-->
     <div v-if="this.$store.state.token !== ''" @click="signOut">
       Выйти
     </div>
