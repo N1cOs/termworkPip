@@ -131,7 +131,7 @@
             </el-col>
           </el-row>
           <el-row v-for="rating in user.ratings" :key="rating.speciality.id"
-                  :class="{'rating-row' : true, 'originals': rating.originals, 'success-speciality': true}">
+                  :class="{'rating-row' : true, 'originals': rating.originals, 'success-speciality': rating.success}">
             <el-col :span="7">
               <router-link :to="{name: 'speciality', params: {id: rating.speciality.id}}">
                 {{rating.speciality.okso}}

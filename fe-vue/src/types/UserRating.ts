@@ -6,5 +6,6 @@ export default interface UserRating{
     place: number;
     placeOriginal: number;
     olympiad: boolean;
+    success: boolean;
     speciality: Speciality;
 }

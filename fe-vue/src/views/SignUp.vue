@@ -145,8 +145,6 @@
       }
     };
 
-    disabledExams
-
     rules = {
       email: [
         {
