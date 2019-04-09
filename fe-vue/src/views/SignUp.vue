@@ -17,7 +17,6 @@
       <el-form-item label="Имя" prop="name">
         <el-input v-model="form.name" type=""></el-input>
       </el-form-item>
-
       <el-form-item label="Отчество" prop="">
         <el-input v-model="form.patronymic" type=""></el-input>
       </el-form-item>
@@ -45,77 +44,82 @@
       <el-form-item label="Пароль" prop="password">
         <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
-      <el-row>
-
-        Экзамен
-        <el-form-item
-          v-for="(exam, index) in form.exams"
-          :key="exam.id"
-        >
-
-          <el-select
-            v-model="form.exams[index].subjectId"
+      <el-row :gutter="20">
+        <el-col :md="8" :sm="16" :xs="16">
+          <h3>Экзамен</h3>
+          <el-form-item
+            v-for="(exam, index) in form.exams"
+            :key="exam.id"
           >
-            <el-option
-              v-for="subj in subjectsList"
-              :key="subj.id"
-              :label="subj.name"
-              :value="subj.id"
+            <el-row>
+              <el-row>
+                <el-select
+                  v-model="form.exams[index].subjectId"
+                >
+                  <el-option
+                    v-for="subj in subjectsList"
+                    :key="subj.id"
+                    :label="subj.name"
+                    :value="subj.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-row>
+              <el-input v-model="form.exams[index].score" placeholder="Введите количество баллов за экзамен"/>
+              <el-button @click="removeExam(exam)" icon="el-icon-delete" circle />
+            </el-row>
+          </el-form-item>
+          <el-button @click="addExam">Добавить экзамен</el-button>
+        </el-col>
+        <el-col :md="8" :sm="16" :xs="16">
+          <h3>Олимпиады</h3>
+          <el-form-item
+            v-for="(olympiad, index) in form.olympiadsId"
+            :key="olympiad.id"
+          >
+            <el-select
+              v-model="form.olympiadsId[index]"
             >
-            </el-option>
-          </el-select>
-          <el-input v-model="form.exams[index].score" placeholder="Введите количество баллов за экзамен">
-          </el-input>
-          <el-button @click="removeExam(exam)">Убрать экзамен</el-button>
-        </el-form-item>
-        <el-button @click="addExam">Добавить экзамен
-        </el-button>
+              <el-option
+                v-for="olympiad in olympiadsList"
+                :key="olympiad.id"
+                :label="olympiad.name"
+                :value="olympiad.id"
+              >
+              </el-option>
+            </el-select>
+            <el-button @click="removeOlympiad(olympiad)" icon="el-icon-delete" circle />
+          </el-form-item>
+          <el-button @click="addOlympiad">
+            Добавить олимпиаду
+          </el-button>
+        </el-col>
+        <el-col :md="8" :sm="16" :xs="16">
+          <h3>Индивидуальные достижения</h3>
+          <el-form-item
+            v-for="(achievement, index) in form.achievementsId"
+            :key="achievement.id"
+          >
+            <el-select
+              v-model="form.achievementsId[index]"
+            >
+              <el-option
+                v-for="achievement in achievementsList"
+                :key="achievement.id"
+                :label="achievement.name"
+                :value="achievement.id"
+              >
+              </el-option>
+            </el-select>
+            <el-button @click="removeAchievement(achievement)" icon="el-icon-delete" circle />
+          </el-form-item>
+          <el-button @click="addAchievement">
+            Добавить достижние
+          </el-button>
+        </el-col>
       </el-row>
 
-      Олимпиады
-      <el-form-item
-        v-for="(olympiad, index) in form.olympiadsId"
-        :key="olympiad.id"
-      >
-        <el-select
-          v-model="form.olympiadsId[index]"
-        >
-          <el-option
-            v-for="olympiad in olympiadsList"
-            :key="olympiad.id"
-            :label="olympiad.name"
-            :value="olympiad.id"
-          >
-          </el-option>
-        </el-select>
-        <el-button @click="removeOlympiad(olympiad)">Убрать олимпиаду</el-button>
-      </el-form-item>
-      <el-button @click="addOlympiad">
-        Добавить олимпиаду
-      </el-button>
-      Индивидуальные достижения
-      <el-form-item
-        v-for="(achievement, index) in form.achievementsId"
-        :key="achievement.id"
-      >
-        <el-select
-          v-model="form.achievementsId[index]"
-        >
-          <el-option
-            v-for="achievement in achievementsList"
-            :key="achievement.id"
-            :label="achievement.name"
-            :value="achievement.id"
-          >
-          </el-option>
-        </el-select>
-        <el-button @click="removeAchievement(achievement)">Убрать достижение</el-button>
-      </el-form-item>
-      <el-button @click="addAchievement">
-        Добавить достижние
-      </el-button>
-
-      <el-button type="primary" @click="submitForm('form')">Зарегестрироваться</el-button>
+      <el-button style="margin-top: 30px;" type="primary" @click="submitForm('form')">Зарегестрироваться</el-button>
     </el-form>
   </el-card>
 </template>
@@ -139,7 +143,9 @@
       headers: {
         'Content-Type': 'application/json',
       }
-    }
+    };
+
+    disabledExams
 
     rules = {
       email: [
@@ -194,11 +200,6 @@
     private achievementsList: any[] = [{id: 1}]
 
     created() {
-      debugger
-      Axios.get("/api/me", {headers: {'Authorization': this.$store.state.token}})
-        .then((res: AxiosResponse) => {
-          console.log(res.data);
-        });
       this.getSubjects();
       this.getOlympiads();
       this.getAchievements();
@@ -207,57 +208,57 @@
     getOlympiads() {
       Axios.get(this.olympiadsUrl)
         .then((res: AxiosResponse) => {
-          this.olympiadsList = res.data as Subject[]
-        })
+          this.olympiadsList = res.data as Subject[];
+        });
     }
 
     getAchievements() {
       Axios.get(this.achievementsUrl)
         .then((res: AxiosResponse) => {
-          this.achievementsList = res.data as Olympiad[]
-        })
+          this.achievementsList = res.data as Olympiad[];
+        });
     }
 
     getSubjects() {
       Axios.get(this.subjectsUrl)
         .then((res: AxiosResponse) => {
-          this.subjectsList = res.data
-        })
+          this.subjectsList = res.data;
+        });
     }
 
     addExam() {
       this.form.exams.push({
         subjectId: null,
         score: null
-      })
+      });
     }
 
     addAchievement() {
-      this.form.achievementsId.push("Выберите ИД")
+      this.form.achievementsId.push("Выберите ИД");
     }
 
     addOlympiad() {
-      this.form.olympiadsId.push("Выберите олимпиаду")
+      this.form.olympiadsId.push("Выберите олимпиаду");
     }
 
     removeExam(exam: any) {
-      let index = this.form.exams.indexOf(exam)
+      let index = this.form.exams.indexOf(exam);
       if (index != -1) {
-        this.form.exams.splice(index, 1)
+        this.form.exams.splice(index, 1);
       }
     }
 
     removeOlympiad(olympiad: any) {
-      let index = this.form.olympiadsId.indexOf(olympiad)
+      let index = this.form.olympiadsId.indexOf(olympiad);
       if (index != -1) {
-        this.form.olympiadsId.splice(index, 1)
+        this.form.olympiadsId.splice(index, 1);
       }
     }
 
     removeAchievement(achievement: any) {
-      let index = this.form.achievementsId.indexOf(achievement)
+      let index = this.form.achievementsId.indexOf(achievement);
       if (index != -1) {
-        this.form.achievementsId.splice(index, 1)
+        this.form.achievementsId.splice(index, 1);
       }
     }
 
@@ -270,9 +271,9 @@
             })
             .catch((e: AxiosError) => {
 
-            })
+            });
         } else {
-          return false
+          return false;
         }
       });
     }
@@ -286,4 +287,5 @@
       margin-bottom: 40px;
     }
   }
+
 </style>
