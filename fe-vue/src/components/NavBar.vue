@@ -11,25 +11,21 @@
         <img src="@/assets/person.png" alt="">
       </router-link>
     </div>
-    <!-- ToDo: Replace with user icon-->
     <div v-if="this.$store.state.token === ''">
-      <router-link :to="{name: 'signIn'}">Войти</router-link>
+      <router-link :to="{name: 'signIn'}">
+        <img src="@/assets/sign-in.svg" alt="">
+      </router-link>
     </div>
-    <!-- ToDo: Move it to sign in view-->
-    <div v-if="this.$store.state.token === ''">
-      <router-link :to="{name: 'signUp'}">Зарегестрироваться</router-link>
-    </div>
-    <!-- ToDo: Replace with icon-->
     <div v-if="this.$store.state.token !== ''" @click="signOut">
-      Выйти
+      <a><img src="@/assets/sign-out-option.svg" alt=""></a>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+  import {Component, Vue} from 'vue-property-decorator';
 
-    @Component
+  @Component
     export default class NavBar extends Vue {
 
       created(){

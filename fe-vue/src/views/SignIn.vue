@@ -22,6 +22,8 @@
       <el-button type="primary" @click="submitForm('form')">Войти</el-button>
       <br/>
       <el-button @click="fastSignIn">fast sign in</el-button>
+      <br>
+      <router-link :to="{name: 'signUp'}"><el-button>Зарегестрироваться</el-button></router-link>
       <!-- <el-button type="text">Забыли пароль?</el-button> -->
     </el-form>
   </el-card>
@@ -29,7 +31,7 @@
 
 <script lang="ts">
   import {Component, Vue} from "vue-property-decorator";
-  import Axios, {AxiosError, AxiosResponse, AxiosInstance} from "axios";
+  import Axios, {AxiosError, AxiosResponse} from "axios";
   import Error from '@/types/Error';
 
   @Component
