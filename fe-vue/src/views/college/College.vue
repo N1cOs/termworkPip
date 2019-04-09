@@ -34,14 +34,14 @@
           <span>Направления подготовки</span>
         </div>
         <div>
-          <div v-for="spec in specialities" :key="spec.id" class="spec">
+          <div v-for="spec in specialities" :key="spec.id + '1'" class="spec hidden-xs-only">
             <el-row class="spec-name-holder">
               <router-link :to="{name: 'speciality', params: {id: spec.id}}" class="spec-name">
                 {{spec.name}}
               </router-link>
             </el-row>
             <el-row>
-              <el-col v-for="req in spec.requirements" :key="req.subject.id" :span="24 / spec.requirements.length" class="subject-name">
+              <el-col v-for="req in spec.requirements" :key="req.subject.id + '11'" :span="24 / spec.requirements.length" class="subject-name">
                 {{req.subject.name}}
               </el-col>
             </el-row>
@@ -49,7 +49,7 @@
               Минимальные баллы:
             </el-row>
             <el-row>
-              <el-col v-for="req in spec.requirements" :key="req.subject.id" :span="24 / spec.requirements.length" class="subject-name">
+              <el-col v-for="req in spec.requirements" :key="req.subject.id + '12'" :span="24 / spec.requirements.length" class="subject-name">
                 {{req.minScore}}
               </el-col>
             </el-row>
@@ -57,7 +57,36 @@
               Минимальный уровень олимпиады:
             </el-row>
             <el-row>
-              <el-col v-for="req in spec.requirements" :key="req.subject.id" :span="24 / spec.requirements.length" class="subject-name">
+              <el-col v-for="req in spec.requirements" :key="req.subject.id + '13'" :span="24 / spec.requirements.length" class="subject-name">
+                {{req.minLevelOfOlympiad}}
+              </el-col>
+            </el-row>
+          </div>
+          <div v-for="spec in specialities" :key="spec.id + '2'" class="spec hidden-sm-and-up">
+            <el-row class="spec-name-holder">
+              <router-link :to="{name: 'speciality', params: {id: spec.id}}" class="spec-name">
+                {{spec.name}}
+              </router-link>
+            </el-row>
+            <el-row class="score-title-mobile">
+              Минимальные баллы:
+            </el-row>
+            <el-row v-for="req in spec.requirements" :key="req.subject.id + '21'">
+              <el-col :span="12" class="subject-name-mobile">
+                {{req.subject.name}}
+              </el-col>
+              <el-col :span="12" class="subject-name">
+                {{req.minScore}}
+              </el-col>
+            </el-row>
+            <el-row class="score-title-mobile">
+              Минимальный уровень олимпиады:
+            </el-row>
+            <el-row v-for="req in spec.requirements" :key="req.subject.id + '22'">
+              <el-col :span="12" class="subject-name-mobile">
+                {{req.subject.name}}
+              </el-col>
+              <el-col :span="12" class="subject-name">
                 {{req.minLevelOfOlympiad}}
               </el-col>
             </el-row>
@@ -191,5 +220,22 @@ a{
   color: #303133;
   font-style: italic;
   font-size: 0.9em;
+}
+
+.subject-name-mobile{
+  text-align: start;
+  margin-top: 10px;
+  color: #303133;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.score-title-mobile{
+  margin-top: 10px; 
+  text-align: start;
+  color: #303133;
+  font-style: italic;
+  font-size: 0.9em;
+  border-bottom: solid 2px black;
 }
 </style>
