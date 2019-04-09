@@ -1,4 +1,5 @@
 import Requirement from './Requirement';
+import College from './College';
 
 export default interface Speciality {
   id: number;
@@ -6,4 +7,5 @@ export default interface Speciality {
   okso: string;
   places: number;
   requirements?: Requirement[];
+  college?: College;
 }

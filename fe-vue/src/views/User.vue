@@ -11,8 +11,8 @@
         <el-row :gutter="20" class="scores">
           <el-col :md="12" :sm="24" :xs="24" class="exams">
             <el-card>
-              <div class="card-title">
-                Мои экзамены
+              <div slot="header" class="card-title">
+                <span> Мои экзамены</span>
               </div>
               <div v-for="(exam, i) in user.exams" :key="exam.id" class="exam-row">
                 <span style="float: left; width: 80%">{{exam.name}} : {{exam.score}}</span>
@@ -62,8 +62,8 @@
           </el-col>
           <el-col :md="12" :sm="24" :xs="24" class="exams">
             <el-card>
-              <div class="card-title">
-                Мои индивидуальные достижения
+              <div slot="header" class="card-title">
+                <span>Мои индивидуальные достижения</span>
               </div>
               <div v-for="(ach, i) in user.achievements" :key="ach.id" class="ach-row">
                 <span style="float: left; width: 80%">{{ach.name}}</span>
@@ -97,6 +97,58 @@
             </el-card>
           </el-col>
         </el-row>
+        <div class="note">
+          <div>
+            *Обведенная строка означает, что на данную специальность поданы оригиналы документов
+          </div>
+          <div>
+            **Подсвеченная зелёным строка означает, что вы проходите на эту специальность по оригиналам на данный момент
+          </div> 
+        </div>
+        <el-card class="ratings">
+          <div slot="header" class="card-title">
+            <span>Мои рейтинги</span>
+          </div>
+          <el-row class="rating-header">
+            <el-col :span="7">
+              Специальность
+            </el-col>
+            <el-col :span="4">
+              Университет
+            </el-col>
+            <el-col :span="5">
+              Количество баллов
+            </el-col>
+            <el-col :span="4">
+              Место по копиям
+            </el-col>
+            <el-col :span="4">
+              Место по оригиналам
+            </el-col>
+          </el-row>
+          <el-row v-for="rating in user.ratings" :key="rating.speciality.id" 
+          :class="{'rating-row' : true, 'originals': rating.originals, 'success-speciality': true}">
+            <el-col :span="7">
+              <router-link :to="{name: 'speciality', params: {id: rating.speciality.id}}">
+                {{rating.speciality.okso}}
+              </router-link>
+            </el-col>
+            <el-col :span="4">
+              <router-link :to="{name: 'college', params: {id: rating.speciality.college.id}}">
+                {{rating.speciality.college.abbreviation}}
+              </router-link>
+            </el-col>
+            <el-col :span="5">
+              {{rating.totalScore}}
+            </el-col>
+            <el-col :span="4">
+              {{rating.place}}
+            </el-col>
+            <el-col :span="4">
+              {{rating.placeOriginal}}
+            </el-col>
+          </el-row>
+        </el-card>
       </el-main>
     </div>
   </el-container>
@@ -516,10 +568,6 @@
 </script>
 
 <style scoped>
-a{
-  text-decoration: none;
-}
-
 .el-card{
   padding: 10px;
 }
@@ -589,6 +637,47 @@ a{
   color: #909399;
   height: 50px;
 }
+
+.note{
+  margin-top: 30px;
+  margin-bottom: 5px;
+  font-size: 0.65em;
+  text-align: end;
+}
+
+.ratings{
+  padding: 0;
+}
+
+.rating-header{
+  margin-bottom: 10px;
+  font-size: 0.95em;
+  color: #909399;
+  font-weight: bold;
+  border-bottom: solid 2px #DCDFE6;
+  text-align: center;
+}
+
+.rating-row{
+  padding: 10px;
+  font-size: 0.9em;
+  color: #909399;
+  text-align: center;
+}
+
+a{
+  text-decoration: none;
+  color: #409EFF;
+}
+
+.originals{
+  border: solid 3px #909399;
+}
+
+.success-speciality{
+  background: rgba(80, 250, 58, 0.575);
+}
+
 
 @media only screen and (max-width: 992px) {
   .el-card{

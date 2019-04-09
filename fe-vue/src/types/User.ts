@@ -1,5 +1,6 @@
 import Exam from './Exam';
 import Achievement from './Achievement';
+import UserRating from './UserRating';
 
 export default interface User {
     surname: string;
@@ -12,4 +13,5 @@ export default interface User {
     password: string;
     exams?: Exam[];
     achievements?: Achievement[];
+    ratings?: UserRating[];
 }

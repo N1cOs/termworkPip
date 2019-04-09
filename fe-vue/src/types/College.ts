@@ -6,6 +6,7 @@ export default interface College{
     name: string;
     places: number;
     logoUrl: string;
+    abbreviation: string;
     description?: string;
     achievementsScore?: AchievementScore[];
 }
