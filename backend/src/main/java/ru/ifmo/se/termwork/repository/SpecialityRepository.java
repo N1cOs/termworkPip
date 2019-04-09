@@ -2,6 +2,7 @@ package ru.ifmo.se.termwork.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import ru.ifmo.se.termwork.domain.Speciality;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public interface SpecialityRepository extends JpaRepository<Speciality, Integer>
     @EntityGraph(value = "speciality.ratings")
     Optional<Speciality> findWithRatingsById(Integer id);
 
+    @Query("select s from Speciality s where s.id in ?1")
     @EntityGraph(value = "speciality.ratings")
     List<Speciality> findWithRatingsAllById(List<Integer> ids);
 
