@@ -1,12 +1,12 @@
 <template>
   <div class="navbar-wrapper">
-  
+
     <div>
       <router-link :to="{name: 'colleges'}">
         <img src="@/assets/vuz.png" alt="">
       </router-link>
     </div>
-    <div  v-if="this.$store.state.token !== ''">
+    <div v-if="this.$store.state.token !== ''">
       <router-link :to="{name: 'user'}">
         <img src="@/assets/person.png" alt="">
       </router-link>
@@ -26,17 +26,17 @@
   import {Component, Vue} from 'vue-property-decorator';
 
   @Component
-    export default class NavBar extends Vue {
+  export default class NavBar extends Vue {
 
-      created(){
-        console.log(this.$router.currentRoute);
-      }
-
-      signOut(){
-        this.$store.state.token = '';
-        this.$router.push('/sign-in');
-      }
+    created() {
+      console.log(this.$router.currentRoute);
     }
+
+    signOut() {
+      this.$store.state.token = '';
+      this.$router.push('/sign-in');
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -58,7 +58,5 @@
       width: 50px;
       height: 50px;
     }
-
   }
-
 </style>

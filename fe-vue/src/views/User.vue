@@ -210,8 +210,7 @@
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
   import Subject from "@/types/Subject";
-  import Axios, {AxiosResponse, AxiosError, AxiosPromise} from "axios";
-  import Olympiad from "@/types/Olympiad";
+  import Axios, {AxiosError, AxiosPromise, AxiosResponse} from "axios";
   import UserInfo from "@/types/User";
   import Exam from '../types/Exam';
   import Error from '../types/InputError';
@@ -292,7 +291,6 @@
 
       this.subjects.forEach((s, i) => {
         this.subjectPosition.set(s.id, i);
-
         let exist = false;
         for (let i = 0; i < exams.length; i++) {
           if (exams[i].id == s.id) {
@@ -727,15 +725,15 @@
     background: #DFF2BF;
   }
 
-  .col-name{
+  .col-name {
     font-size: 0.95em;
     color: #909399;
     font-weight: bold;
   }
 
-  .row-mobile{
+  .row-mobile {
     margin-top: 5px;
-    border-bottom: solid 2px #909399; 
+    border-bottom: solid 2px #909399;
   }
 
 
@@ -745,7 +743,7 @@
       margin-top: 30px;
     }
 
-    .note{
+    .note {
       margin-bottom: -30px;
     }
   }

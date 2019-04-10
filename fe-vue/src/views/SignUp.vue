@@ -53,22 +53,44 @@
           >
             <el-row>
               <el-row>
-                <el-select
-                  v-model="form.exams[index].subjectId"
+
+                <el-form-item
+                  :prop="'exams.'+index+'.subjectId'"
+                  :rules="{ required: true, message: 'Выберите экзамен', trigger: 'blur' }"
                 >
-                  <el-option
-                    v-for="subj in subjectsList"
-                    :key="subj.id"
-                    :label="subj.name"
-                    :value="subj.id"
+                  <el-select
+                    v-model="form.exams[index].subjectId"
+                    @change="selectNewExam"
                   >
-                  </el-option>
-                </el-select>
+                    <el-option
+                      v-for="(subj, ind) in subjectsList"
+                      :key="subj.id"
+                      :label="subj.name"
+                      :value="subj.id"
+                      :disabled="disabledExams[ind]"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
               </el-row>
-              <el-input v-model="form.exams[index].score" placeholder="Введите количество баллов за экзамен"/>
-              <el-button @click="removeExam(exam)" icon="el-icon-delete" circle />
+              <el-form-item
+                label="Количество баллов"
+                :prop="'exams.'+index+'.score'"
+                :rules="[
+                  {required: true, message: 'Введите количество баллов', trigger: 'blur'},
+                  {
+                    type: 'number', min: 1, max: 100,
+                    message: 'Количество баллов должно быть больше 0, но не больше 100',
+                    trigger: 'blur'
+                  }
+                ]"
+              >
+                <el-input v-model.number="form.exams[index].score" type="number" placeholder="Введите количество баллов за экзамен"/>
+              </el-form-item>
+              <el-button @click="removeExam(exam)" icon="el-icon-delete" circle/>
             </el-row>
           </el-form-item>
+
           <el-button @click="addExam">Добавить экзамен</el-button>
         </el-col>
         <el-col :md="8" :sm="16" :xs="16">
@@ -81,14 +103,14 @@
               v-model="form.olympiadsId[index]"
             >
               <el-option
-                v-for="olympiad in olympiadsList"
+                v-for="(olympiad) in olympiadsList"
                 :key="olympiad.id"
                 :label="olympiad.name"
                 :value="olympiad.id"
               >
               </el-option>
             </el-select>
-            <el-button @click="removeOlympiad(olympiad)" icon="el-icon-delete" circle />
+            <el-button @click="removeOlympiad(olympiad)" icon="el-icon-delete" circle/>
           </el-form-item>
           <el-button @click="addOlympiad">
             Добавить олимпиаду
@@ -111,7 +133,7 @@
               >
               </el-option>
             </el-select>
-            <el-button @click="removeAchievement(achievement)" icon="el-icon-delete" circle />
+            <el-button @click="removeAchievement(achievement)" icon="el-icon-delete" circle/>
           </el-form-item>
           <el-button @click="addAchievement">
             Добавить достижние
@@ -125,12 +147,9 @@
 </template>
 
 <script lang="ts">
-  import {Component, Vue, Watch} from "vue-property-decorator";
-  import Error from "@/types/Error";
-  import Exam from "@/types/Exam";
+  import {Component, Vue} from "vue-property-decorator";
   import Subject from "@/types/Subject";
-  import User from "@/types/User";
-  import Axios, {AxiosResponse, AxiosError} from 'axios';
+  import Axios, {AxiosError, AxiosResponse} from 'axios';
   import Olympiad from "@/types/Olympiad";
 
   @Component
@@ -145,6 +164,8 @@
       }
     };
 
+    disabledExams: boolean[] = [];
+    lastValueChanged: number = -1;
     rules = {
       email: [
         {
@@ -194,8 +215,23 @@
       "id": 2,
       "name": "Математика (базовая)"
     }, {"id": 3, "name": "Математика (профиль)"}] as Subject[];
-    private olympiadsList: any[] = [{id: 1}]
-    private achievementsList: any[] = [{id: 1}]
+    private olympiadsList: any[] = [{id: 1}];
+    private achievementsList: any[] = [{id: 1}];
+
+    saveValue(subjId: number){
+      this.lastValueChanged = subjId;
+      console.log(this.lastValueChanged)
+    }
+
+    selectNewExam(subjId: number) {
+      let position: Subject | undefined;
+      position = this.subjectsList.find(function (element: any): boolean {
+        return element.id == subjId;
+      });
+      if (position != undefined) {
+        this.disabledExams[this.subjectsList.indexOf(position)] = true;
+      }
+    }
 
     created() {
       this.getSubjects();
@@ -221,6 +257,9 @@
       Axios.get(this.subjectsUrl)
         .then((res: AxiosResponse) => {
           this.subjectsList = res.data;
+          this.subjectsList.forEach(() => {
+            this.disabledExams.push(false);
+          });
         });
     }
 
@@ -243,6 +282,13 @@
       let index = this.form.exams.indexOf(exam);
       if (index != -1) {
         this.form.exams.splice(index, 1);
+      }
+      let position: Subject | undefined;
+      position = this.subjectsList.find((subject) => {
+        return subject.id == exam.subjectId;
+      });
+      if (typeof position !== 'undefined') {
+        this.disabledExams[this.subjectsList.indexOf(position)] = false;
       }
     }
 
@@ -285,5 +331,4 @@
       margin-bottom: 40px;
     }
   }
-
 </style>
