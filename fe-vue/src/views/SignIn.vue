@@ -21,6 +21,7 @@
 
       <el-button type="primary" @click="submitForm('form')">Войти</el-button>
       <br/>
+      <el-button type="primary" @click="fastSignIn">fast sign in</el-button>
       <br>
       <router-link :to="{name: 'signUp'}"><el-button style="margin-top: 25px;">Зарегестрироваться</el-button></router-link>
       <!-- <el-button type="text">Забыли пароль?</el-button> -->
@@ -81,6 +82,7 @@
         .then((r: AxiosResponse) => {
           this.$store.state.token = r.data.token;
           this.$store.state.userId = r.data.userId;
+          this.$store.commit('saveToken', r.data.token);
           this.$router.push("/me");
         })
         .catch((e: AxiosError) => {

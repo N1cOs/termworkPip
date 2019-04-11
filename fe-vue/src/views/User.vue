@@ -257,7 +257,6 @@
       this.getMe()
         .then((response: AxiosResponse) => {
           this.user = response.data;
-
           Axios.get(subjectUrl)
             .then((response: AxiosResponse) => {
               this.subjects = response.data;

@@ -7,7 +7,6 @@ import Colleges from "@/views/college/Colleges.vue";
 import College from "@/views/college/College.vue";
 import User from "@/views/User.vue";
 import Speciality from "@/views/Speciality.vue";
-import store from './store';
 
 Vue.use(Router);
 
@@ -53,7 +52,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (store.state.token !== '') {
+  if (localStorage.getItem('token') !== '') {
     next();
   } else {
     if (to.name === 'signIn' || to.name === 'colleges' || to.name === 'signUp') {

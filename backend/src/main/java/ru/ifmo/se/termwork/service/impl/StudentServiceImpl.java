@@ -37,45 +37,46 @@ public class StudentServiceImpl implements StudentService {
     public StudentResponseDto getStudentDto(int studentId) {
         Student student = studentRepository.findWithScoresAndRatingsById(studentId).
                 orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "exception.user.notFound"));
-        List<Speciality> specialities = specialityRepository.findWithRatingsAllById(student.getRatings().stream().
-                map(r -> r.getSpeciality().getId()).collect(Collectors.toList()));
-
-        HashSet<RatingDto> ratings = new HashSet<>();
-        for(Rating rating : student.getRatings()){
-            RatingDto dto = new RatingDto();
-            dto.setTotalScore(rating.getTotalScore());
-            dto.setOriginals(rating.isOriginals());
-            dto.setIsOlympiad(rating.getOlympiad() != null);
-
-            CollegeDto collegeDto = new CollegeDto(rating.getSpeciality().getCollege().getId(),
-                    rating.getSpeciality().getCollege().getAbbreviation());
-            SpecialityDto specialityDto = new SpecialityDto(rating.getSpeciality().getId(),
-                    rating.getSpeciality().getOkso(), collegeDto);
-            dto.setSpeciality(specialityDto);
-
-            Speciality speciality = specialities.stream().filter(s -> s.getId() == rating.getSpeciality().getId()).
-                    findFirst().get();
-            TreeSet<Rating> sortedRatings = new TreeSet<>(speciality.getRatings());
-
-            int place = 1;
-            int placeOriginal = 1;
-            for(Rating r : sortedRatings){
-                if(r.getStudent().getId() == studentId){
-                    break;
-                }
-                if(r.isOriginals()){
-                    placeOriginal++;
-                }
-                place++;
-            }
-            dto.setPlace(place);
-            dto.setPlaceOriginal(placeOriginal);
-            dto.setSuccess(speciality.getPlaces() >= placeOriginal);
-            ratings.add(dto);
-        }
-
         StudentResponseDto studentResponse = studentMapper.toStudentResponse(student);
-        studentResponse.setRatings(ratings);
+        if (student.getRatings().size() > 0) {
+            List<Speciality> specialities = specialityRepository.findWithRatingsAllById(student.getRatings().stream().
+                    map(r -> r.getSpeciality().getId()).collect(Collectors.toList()));
+
+            HashSet<RatingDto> ratings = new HashSet<>();
+            for(Rating rating : student.getRatings()){
+                RatingDto dto = new RatingDto();
+                dto.setTotalScore(rating.getTotalScore());
+                dto.setOriginals(rating.isOriginals());
+                dto.setIsOlympiad(rating.getOlympiad() != null);
+
+                CollegeDto collegeDto = new CollegeDto(rating.getSpeciality().getCollege().getId(),
+                        rating.getSpeciality().getCollege().getAbbreviation());
+                SpecialityDto specialityDto = new SpecialityDto(rating.getSpeciality().getId(),
+                        rating.getSpeciality().getOkso(), collegeDto);
+                dto.setSpeciality(specialityDto);
+
+                Speciality speciality = specialities.stream().filter(s -> s.getId() == rating.getSpeciality().getId()).
+                        findFirst().get();
+                TreeSet<Rating> sortedRatings = new TreeSet<>(speciality.getRatings());
+
+                int place = 1;
+                int placeOriginal = 1;
+                for(Rating r : sortedRatings){
+                    if(r.getStudent().getId() == studentId){
+                        break;
+                    }
+                    if(r.isOriginals()){
+                        placeOriginal++;
+                    }
+                    place++;
+                }
+                dto.setPlace(place);
+                dto.setPlaceOriginal(placeOriginal);
+                dto.setSuccess(speciality.getPlaces() >= placeOriginal);
+                ratings.add(dto);
+            }
+            studentResponse.setRatings(ratings);
+        }
         return studentResponse;
     }
 }
