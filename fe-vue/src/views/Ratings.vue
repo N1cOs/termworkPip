@@ -4,24 +4,24 @@
       <el-row :gutter="20" class="scores">
         <el-col :md="12" :sm="24" :xs="24" class="exams">
           <el-card>
-          <el-form
-            ref="form"
-            :model="form"
-          >
-            <el-form-item label="Подать оригиналы?" prop="originals">
-              <el-switch v-model="form.originals"></el-switch>
-            </el-form-item>
-            <el-form-item label="Приоритетность специальности" prop="priority">
-              <el-radio-group v-model="form.priority">
-                <el-radio-button label="1"></el-radio-button>
-                <el-radio-button label="2"></el-radio-button>
-                <el-radio-button label="3"></el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-          </el-form>
-          <el-button @click="applyForSpeciality">
-            Подать документы на специальность
-          </el-button>
+            <el-form
+              ref="form"
+              :model="form"
+            >
+              <el-form-item label="Подать оригиналы?" prop="originals">
+                <el-switch v-model="form.originals"></el-switch>
+              </el-form-item>
+              <el-form-item label="Приоритетность специальности" prop="priority">
+                <el-radio-group v-model="form.priority">
+                  <el-radio-button label="1"></el-radio-button>
+                  <el-radio-button label="2"></el-radio-button>
+                  <el-radio-button label="3"></el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+            </el-form>
+            <el-button @click="applyForSpeciality">
+              Подать документы на специальность
+            </el-button>
             <div style="color: red;">
               {{this.errorInfo}}
             </div>
@@ -128,6 +128,7 @@
       else
         return "";
     }
+
     applyForSpeciality() {
       Axios.post("/api/student/speciality/" + this.specId, {
         specialityId: this.$route.params.specId,
@@ -139,10 +140,10 @@
           this.successfullyApplied = true;
           this.errorInfo = '';
         })
-        .catch((e: AxiosError) =>{
+        .catch((e: AxiosError) => {
           if (e.response !== undefined) {
             let errorInfo = e.response.data as Error;
-            this.errorInfo = errorInfo.info;
+            this.errorInfo = (errorInfo as any).info;
           }
         });
     }
@@ -154,10 +155,10 @@
           this.ratings = res.data as RatingRecord[];
           this.errorInfo = '';
         })
-        .catch((e: AxiosError) =>{
+        .catch((e: AxiosError) => {
           if (e.response !== undefined) {
-            this.errorInfo = e.info;
-            console.log(this.errorInfo);
+            let errorInfo = e.response.data as Error;
+            this.errorInfo = (errorInfo as any).info;
           }
         });
     }
