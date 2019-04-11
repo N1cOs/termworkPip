@@ -38,6 +38,7 @@
           :data="ratings.ege"
           :row-class-name="checkOriginalsSent"
           width="100%"
+          :default-sort = "{prop: 'place'}"
         >
           <el-table-column
             label="ФИО"
@@ -48,7 +49,9 @@
               {{ computeName(scope.row.student.surname, scope.row.student.name, scope.row.student.patronymic, ) }}
             </template>
           </el-table-column>
-          <el-table-column prop="totalScore" label="Сумма баллов" width="75" fixed/>
+          <el-table-column prop="place" label="Место" width="70" sortable fixed/>
+          <el-table-column prop="placeOriginal" label="Место по оригиналам" width="110" sortable/>
+          <el-table-column prop="totalScore" label="Сумма баллов" width="75"/>
           <el-table-column
             v-for="(subject, index) in ratings.ege[0].student.exams"
             :key="subject.id"
@@ -59,8 +62,6 @@
               {{ scope.row.student.exams[index].score }}
             </template>
           </el-table-column>
-          <el-table-column prop="place" label="Место" width="70" sortable/>
-          <el-table-column prop="placeOriginal" label="Место по оригиналам" width="110" sortable/>
           <el-table-column prop="priority" label="Приоритетность специальности"/>
           <el-table-column prop="submissionDate" label="Дата подачи заявления"/>
           <el-table-column prop="originals" label="Поданы оригиналы?">

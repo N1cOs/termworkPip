@@ -21,9 +21,8 @@
 
       <el-button type="primary" @click="submitForm('form')">Войти</el-button>
       <br/>
-      <el-button @click="fastSignIn">fast sign in</el-button>
       <br>
-      <router-link :to="{name: 'signUp'}"><el-button>Зарегестрироваться</el-button></router-link>
+      <router-link :to="{name: 'signUp'}"><el-button style="margin-top: 25px;">Зарегестрироваться</el-button></router-link>
       <!-- <el-button type="text">Забыли пароль?</el-button> -->
     </el-form>
   </el-card>

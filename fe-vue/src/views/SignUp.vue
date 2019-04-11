@@ -44,18 +44,23 @@
       <el-form-item label="Пароль" prop="password">
         <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
+      <el-button style="margin-top: 30px;" type="primary" @click="submitForm('form')">Зарегестрироваться</el-button>
       <el-row :gutter="20">
         <el-col :md="8" :sm="16" :xs="16">
           <h3>Экзамен</h3>
+          <el-button @click="addExam">Добавить экзамен</el-button>
+
           <el-form-item
             v-for="(exam, index) in form.exams"
             :key="exam.id"
+            style="border: 1px solid #EEEEEE; padding: 5px; margin-top: 15px;"
           >
             <el-row>
-              <el-row>
+              <el-row style="margin-top: 10px;">
                 <el-form-item
                   :prop="'exams.'+index+'.subjectId'"
                   :rules="{ required: true, message: 'Выберите экзамен', trigger: 'blur' }"
+                  style="width: 200px; margin: auto;  "
                 >
                   <el-select
                     v-model="form.exams[index].subjectId"
@@ -72,10 +77,11 @@
                   </el-select>
                 </el-form-item>
               </el-row>
-              <el-form-item
-                label="Количество баллов"
-                :prop="'exams.'+index+'.score'"
-                :rules="[
+              <el-row style="margin-top: 10px; margin-bottom: 20px;">
+                <el-form-item
+                  label="Количество баллов"
+                  :prop="'exams.'+index+'.score'"
+                  :rules="[
                   {required: true, message: 'Введите количество баллов', trigger: 'blur'},
                   {
                     type: 'number', min: 1, max: 100,
@@ -83,21 +89,29 @@
                     trigger: 'blur'
                   }
                 ]"
-              >
-                <el-input v-model.number="form.exams[index].score" type="number"
-                          placeholder="Введите количество баллов за экзамен"/>
-              </el-form-item>
-              <el-button @click="removeExam(exam)" icon="el-icon-delete" circle/>
+                  label-width="300"
+                  style="width: 200px; margin: auto;"
+                >
+                  <el-input v-model.number="form.exams[index].score" type="number"
+                            placeholder="Введите количество баллов за экзамен"/>
+                </el-form-item>
+              </el-row>
+              <el-row>
+                <el-button @click="removeExam(exam)" icon="el-icon-delete" circle/>
+              </el-row>
             </el-row>
           </el-form-item>
 
-          <el-button @click="addExam">Добавить экзамен</el-button>
         </el-col>
         <el-col :md="8" :sm="16" :xs="16">
           <h3>Олимпиады</h3>
+          <el-button @click="addOlympiad">
+            Добавить олимпиаду
+          </el-button>
           <el-form-item
             v-for="(olympiad, index) in form.olympiadsId"
             :key="olympiad.id"
+            style="width: 200px; margin: 20px auto; border: 1px solid #EEEEEE; padding: 5px"
           >
             <el-select
               v-model="form.olympiadsId[index]"
@@ -110,17 +124,19 @@
               >
               </el-option>
             </el-select>
-            <el-button @click="removeOlympiad(olympiad)" icon="el-icon-delete" circle/>
+            <el-button @click="removeOlympiad(olympiad)" icon="el-icon-delete" style="margin: 10px auto;" circle/>
           </el-form-item>
-          <el-button @click="addOlympiad">
-            Добавить олимпиаду
-          </el-button>
+
         </el-col>
         <el-col :md="8" :sm="16" :xs="16">
           <h3>Индивидуальные достижения</h3>
+          <el-button @click="addAchievement">
+            Добавить достижние
+          </el-button>
           <el-form-item
             v-for="(achievement, index) in form.achievementsId"
             :key="achievement.id"
+            style="width: 200px; margin: 20px auto; border: 1px solid #EEEEEE; padding: 5px"
           >
             <el-select
               v-model="form.achievementsId[index]"
@@ -133,15 +149,12 @@
               >
               </el-option>
             </el-select>
-            <el-button @click="removeAchievement(achievement)" icon="el-icon-delete" circle/>
+            <el-button @click="removeAchievement(achievement)" icon="el-icon-delete" style="margin: 10px auto;" circle/>
           </el-form-item>
-          <el-button @click="addAchievement">
-            Добавить достижние
-          </el-button>
+
         </el-col>
       </el-row>
 
-      <el-button style="margin-top: 30px;" type="primary" @click="submitForm('form')">Зарегестрироваться</el-button>
     </el-form>
   </el-card>
 </template>
