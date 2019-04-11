@@ -85,7 +85,8 @@
                   }
                 ]"
               >
-                <el-input v-model.number="form.exams[index].score" type="number" placeholder="Введите количество баллов за экзамен"/>
+                <el-input v-model.number="form.exams[index].score" type="number"
+                          placeholder="Введите количество баллов за экзамен"/>
               </el-form-item>
               <el-button @click="removeExam(exam)" icon="el-icon-delete" circle/>
             </el-row>
@@ -218,7 +219,7 @@
     private olympiadsList: any[] = [{id: 1}];
     private achievementsList: any[] = [{id: 1}];
 
-    saveValue(subjId: number){
+    saveValue(subjId: number) {
       this.lastValueChanged = subjId;
       console.log(this.lastValueChanged)
     }
@@ -311,7 +312,7 @@
         if (valid) {
           Axios.post(this.url, this.form, this.config)
             .then((response: AxiosResponse) => {
-
+              this.$router.push({name: 'signIn'});
             })
             .catch((e: AxiosError) => {
 

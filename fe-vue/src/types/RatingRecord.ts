@@ -1,9 +1,17 @@
-import Exam from "@/types/Exam";
-
 export default interface RatingRecord {
-  userFullName: string;
-  // pontsSum: number;
-  subjects: Exam[];
-  // place: number;
-  // placeWithOriginals: number;
+  bvi: []
+  ege: {
+    originals: boolean
+    place: number
+    placeOriginal: number
+    student: {
+      name: string
+      surname: string
+      patronymic: string
+      exams: {}[]
+    }
+    submissionDate: string
+    success: boolean
+    totalScore: number
+  }[]
 }

@@ -27,11 +27,6 @@
 
   @Component
   export default class NavBar extends Vue {
-
-    created() {
-      console.log(this.$router.currentRoute);
-    }
-
     signOut() {
       this.$store.state.token = '';
       this.$router.push('/sign-in');
