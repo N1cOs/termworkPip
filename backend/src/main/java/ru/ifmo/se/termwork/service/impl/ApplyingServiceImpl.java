@@ -40,7 +40,8 @@ public class ApplyingServiceImpl implements ApplyingService {
         if(ratings.size() >= 5)
             throw new ClientException(HttpStatus.BAD_REQUEST, "exception.applying.max");
 
-        if(claimDto.isOriginals() && ratings.stream().anyMatch(Rating::isOriginals))
+        if(claimDto.isOriginals() &&
+                ratings.stream().anyMatch(r -> r.isOriginals() && r.getSpeciality().getId() != speciality.getId()))
             throw new ApiException(HttpStatus.BAD_REQUEST, "exception.applying.originals.used");
 
         Olympiad olympiad = null;

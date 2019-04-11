@@ -172,10 +172,11 @@ public class Student extends User {
         }
         else{
             RatingId ratingId = new RatingId(speciality.getId(), id);
-            rating = Rating.builder().id(ratingId).student(this).speciality(speciality).olympiad(olympiad).
-                    priority(priority).originals(originals).submissionDate(new Date()).build();
+            rating = Rating.builder().id(ratingId).student(this).speciality(speciality).
+                    olympiad(olympiad).priority(priority).originals(originals).build();
             ratings.add(rating);
         }
+        rating.setSubmissionDate(new Date());
         return rating;
     }
 

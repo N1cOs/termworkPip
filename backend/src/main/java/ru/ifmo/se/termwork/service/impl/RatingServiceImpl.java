@@ -41,9 +41,11 @@ public class RatingServiceImpl implements RatingService {
             RatingDto ratingDto = new RatingDto();
 
             StudentResponseDto studentResponseDto = getStudentDto(student);
+            ratingDto.setStudent(studentResponseDto);
+            ratingDto.setSubmissionDate(rating.getSubmissionDate());
+            ratingDto.setPriority(rating.getPriority());
+
             if(rating.getOlympiad() != null){
-                ratingDto.setStudent(studentResponseDto);
-                ratingDto.setSubmissionDate(rating.getSubmissionDate());
                 ratingDto.setSuccess(true);
                 olympiads.add(ratingDto);
 
@@ -52,8 +54,6 @@ public class RatingServiceImpl implements RatingService {
             }
             else{
                 studentResponseDto.setExams(getReqExams(speciality, student));
-                ratingDto.setStudent(studentResponseDto);
-                ratingDto.setSubmissionDate(rating.getSubmissionDate());
                 ratingDto.setTotalScore(rating.getTotalScore());
                 ratingDto.setPlace(place);
                 ratingDto.setPlaceOriginal(placeOriginal);

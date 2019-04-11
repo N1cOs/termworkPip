@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.termwork.domain.*;
 import ru.ifmo.se.termwork.repository.CollegeRepository;
+import ru.ifmo.se.termwork.repository.SpecialityRepository;
 import ru.ifmo.se.termwork.repository.StudentRepository;
 import ru.ifmo.se.termwork.service.ComputeService;
 
@@ -19,6 +20,9 @@ public class ComputeServiceImpl implements ComputeService {
     @Autowired
     private CollegeRepository collegeRepository;
 
+    @Autowired
+    private SpecialityRepository specialityRepository;
+
     /**
      *
      * @param student student
@@ -30,11 +34,12 @@ public class ComputeServiceImpl implements ComputeService {
         /*College without scores, so we have to fetch it*/
         College college = collegeRepository.findWithScoresById(rating.getSpeciality().getCollege().getId()).
                 orElseThrow(IllegalArgumentException::new);
-
-        int totalScore = getExamScore(student, rating.getSpeciality()) +
-                getAchievementsScore(student, college);
-        rating.setTotalScore(totalScore);
+        Speciality speciality = specialityRepository.findWithReqsById(rating.getSpeciality().getId()).
+                orElseThrow(IllegalArgumentException::new);
         try{
+            int totalScore = getExamScore(student, speciality) +
+                    getAchievementsScore(student, college);
+            rating.setTotalScore(totalScore);
             studentRepository.save(student);
         } catch (RuntimeException e){
             log.error("Saving student", e);

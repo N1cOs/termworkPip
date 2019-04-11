@@ -15,6 +15,8 @@ public class RatingDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm dd-MM-yyyy")
     private Date submissionDate;
 
+    private int priority;
+
     private int totalScore;
 
     private boolean originals;
