@@ -53,7 +53,6 @@
           >
             <el-row>
               <el-row>
-
                 <el-form-item
                   :prop="'exams.'+index+'.subjectId'"
                   :rules="{ required: true, message: 'Выберите экзамен', trigger: 'blur' }"

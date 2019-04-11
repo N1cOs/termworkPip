@@ -22,6 +22,9 @@
           <el-button @click="applyForSpeciality">
             Подать документы на специальность
           </el-button>
+            <div style="color: red;">
+              {{this.errorInfo}}
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -45,7 +48,7 @@
               {{ computeName(scope.row.student.surname, scope.row.student.name, scope.row.student.patronymic, ) }}
             </template>
           </el-table-column>
-          <el-table-column prop="totalScore" label="Сумма баллов" width="75"/>
+          <el-table-column prop="totalScore" label="Сумма баллов" width="75" fixed/>
           <el-table-column
             v-for="(subject, index) in ratings.ege[0].student.exams"
             :key="subject.id"
@@ -56,8 +59,8 @@
               {{ scope.row.student.exams[index].score }}
             </template>
           </el-table-column>
-          <el-table-column prop="place" label="Место" width="70"/>
-          <el-table-column prop="placeOriginal" label="Место по оригиналам" width="110"/>
+          <el-table-column prop="place" label="Место" width="70" sortable/>
+          <el-table-column prop="placeOriginal" label="Место по оригиналам" width="110" sortable/>
           <el-table-column prop="priority" label="Приоритетность специальности"/>
           <el-table-column prop="submissionDate" label="Дата подачи заявления"/>
           <el-table-column prop="originals" label="Поданы оригиналы?">
@@ -79,10 +82,10 @@
 </template>
 
 <script lang="ts">
-  import {Component, Prop, Vue, Watch} from "vue-property-decorator";
+  import {Component, Prop, Vue} from "vue-property-decorator";
   import RatingRecord from "@/types/RatingRecord";
   import Speciality from "@/types/Speciality";
-  import Axios, {AxiosResponse} from 'axios';
+  import Axios, {AxiosError, AxiosResponse} from 'axios';
   import ElRadioButton from "element-ui/packages/radio/src/radio-button.vue";
 
   @Component({
@@ -99,6 +102,7 @@
     speciality?: Speciality;
 
     loading = true;
+    errorInfo: string = '';
 
     priority: number = 1;
     originals: boolean = false;
@@ -124,12 +128,6 @@
       else
         return "";
     }
-
-    @Watch('successfullyApplied')
-    logApplication() {
-      console.log("APPLIED!!!!!!");
-    }
-
     applyForSpeciality() {
       Axios.post("/api/student/speciality/" + this.specId, {
         specialityId: this.$route.params.specId,
@@ -139,6 +137,13 @@
       }, this.config)
         .then((res: AxiosResponse) => {
           this.successfullyApplied = true;
+          this.errorInfo = '';
+        })
+        .catch((e: AxiosError) =>{
+          if (e.response !== undefined) {
+            let errorInfo = e.response.data as Error;
+            this.errorInfo = errorInfo.info;
+          }
         });
     }
 
@@ -147,6 +152,13 @@
         .then((res: AxiosResponse) => {
           this.loading = false;
           this.ratings = res.data as RatingRecord[];
+          this.errorInfo = '';
+        })
+        .catch((e: AxiosError) =>{
+          if (e.response !== undefined) {
+            this.errorInfo = e.info;
+            console.log(this.errorInfo);
+          }
         });
     }
 
