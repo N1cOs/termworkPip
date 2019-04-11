@@ -145,9 +145,6 @@
         .then((res: AxiosResponse) => {
           this.successfullyApplied = true;
           this.errorInfo = '';
-          debugger
-          console.log(this.$store.state.token);
-
           Axios.get("/api/public/ratings/" + this.specId)
           .then((res: AxiosResponse) => {
             this.loading = false;

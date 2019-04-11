@@ -23,6 +23,9 @@ const store = new Vuex.Store({
       state.token = newToken;
     }
   },
+  getters:{
+    token: state => state.token
+  },
   actions: {
 
   },
