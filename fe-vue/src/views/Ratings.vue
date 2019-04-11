@@ -1,31 +1,33 @@
 <template>
-  <div class="ratings-wrapper">
+  <div class="ratings-wrapper" v-loading.fullscreen.lock="screenLock">
     <div class="form-apply">
       <el-row :gutter="20" class="scores">
         <el-col :md="12" :sm="24" :xs="24" class="exams">
-          <el-card>
-            <el-form
-              ref="form"
-              :model="form"
-            >
-              <el-form-item label="Подать оригиналы?" prop="originals">
-                <el-switch v-model="form.originals"></el-switch>
-              </el-form-item>
-              <el-form-item label="Приоритетность специальности" prop="priority">
-                <el-radio-group v-model="form.priority">
-                  <el-radio-button label="1"></el-radio-button>
-                  <el-radio-button label="2"></el-radio-button>
-                  <el-radio-button label="3"></el-radio-button>
-                </el-radio-group>
-              </el-form-item>
-            </el-form>
-            <el-button @click="applyForSpeciality">
-              Подать документы на специальность
-            </el-button>
-            <div style="color: red;">
-              {{this.errorInfo}}
-            </div>
-          </el-card>
+          <div class="form-wrapper">
+            <el-card>
+              <el-form
+                ref="form"
+                :model="form"
+              >
+                <el-form-item label="Подать оригиналы?" prop="originals">
+                  <el-switch v-model="form.originals"></el-switch>
+                </el-form-item>
+                <el-form-item label="Приоритетность специальности" prop="priority">
+                  <el-radio-group v-model="form.priority">
+                    <el-radio-button label="1"></el-radio-button>
+                    <el-radio-button label="2"></el-radio-button>
+                    <el-radio-button label="3"></el-radio-button>
+                  </el-radio-group>
+                </el-form-item>
+              </el-form>
+              <el-button @click="applyForSpeciality">
+                Подать документы на специальность
+              </el-button>
+              <div style="color: red;">
+                {{this.errorInfo}}
+              </div>
+            </el-card>
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -62,7 +64,7 @@
               {{ scope.row.student.exams[index].score }}
             </template>
           </el-table-column>
-          <el-table-column prop="priority" label="Приоритетность специальности"/>
+          <el-table-column prop="priority" label="Приоритет"/>
           <el-table-column prop="submissionDate" label="Дата подачи заявления"/>
           <el-table-column prop="originals" label="Поданы оригиналы?">
             <template slot-scope="scope">
@@ -110,6 +112,8 @@
     olympiadId: number = -1;
     successfullyApplied: boolean = false;
 
+    screenLock: boolean = false;
+
     private form: any = {
       priority: 3,
       originals: false,
@@ -131,8 +135,9 @@
     }
 
     applyForSpeciality() {
+      this.screenLock = true;
+
       Axios.post("/api/student/speciality/" + this.specId, {
-        specialityId: this.$route.params.specId,
         priority: this.form.priority,
         originals: this.form.originals,
         olympiadId: this.form.olympiadId
@@ -140,12 +145,33 @@
         .then((res: AxiosResponse) => {
           this.successfullyApplied = true;
           this.errorInfo = '';
+          
+          Axios.get("/api/public/ratings/" + this.specId)
+          .then((res: AxiosResponse) => {
+            this.loading = false;
+            this.ratings = res.data as RatingRecord[];
+            this.errorInfo = '';
+
+            this.$message({
+              message : "Документы успешно поданы",
+              type: 'success'
+            });
+            this.screenLock = false;
+          })
+          .catch((e: AxiosError) => {
+            if (e.response !== undefined) {
+              let errorInfo = e.response.data as Error;
+              this.errorInfo = (errorInfo as any).info;
+            }
+            this.screenLock = false;
+          });
         })
         .catch((e: AxiosError) => {
           if (e.response !== undefined) {
             let errorInfo = e.response.data as Error;
             this.errorInfo = (errorInfo as any).info;
           }
+          this.screenLock = false;
         });
     }
 
@@ -176,6 +202,10 @@
 <style lang="scss">
   .row--originals-sent {
     background: #8CB6C0 !important;
+  }
+
+  .form-wrapper{
+    
   }
 
   .ratings-wrapper {

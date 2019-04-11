@@ -1,7 +1,8 @@
 <template>
   <div style="margin-top: 20px;">
-    <h1>{{specialityInfo.name}}</h1>
-    <div style="margin-top: 30px; font-weight: 800; font-size: 22px">
+    <h1>{{specialityInfo.okso}}</h1>
+    <h2>{{specialityInfo.name}}</h2>
+    <div style="margin-top: 30px; font-weight: 800; font-size: 22px; text-align: start; padding: 5px;">
       Требуемые экзамены <br><span style="font-weight: 600; font-style: italic">(минимальное количество баллов, минимальный уровень олимпиады):</span>
     </div>
 
@@ -38,7 +39,7 @@
     }
 
     getSpecialityInfo() {
-      Axios.get("api/public/specialities/" + this.$route.params.id)
+      Axios.get("/api/public/specialities/" + this.$route.params.id)
         .then(res => this.specialityInfo = res.data);
     }
   }
